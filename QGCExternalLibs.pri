@@ -75,6 +75,7 @@ contains (CONFIG, QGC_DISABLE_APM_MAVLINK) {
 
 # Then we add the proper include paths dependent on the dialect.
 INCLUDEPATH += $$MAVLINKPATH
+INCLUDEPATH += libs\libevents\libevents\libs\cpp\parse\nlohmann_json\include
 
 exists($$MAVLINKPATH/common) {
     !isEmpty(MAVLINK_CONF) {

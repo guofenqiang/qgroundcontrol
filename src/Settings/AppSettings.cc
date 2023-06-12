@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
  *
  * (c) 2009-2020 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
  *
@@ -90,14 +90,14 @@ DECLARE_SETTINGGROUP(App, "")
 
     if (!userHasModifiedSavePath) {
 #ifdef __mobile__
-    #ifdef __ios__
+#ifdef __ios__
         // This will expose the directories directly to the File iOs app
         QDir rootDir = QDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
         savePathFact->setRawValue(rootDir.absolutePath());
-    #else
+#else
         QDir rootDir = QDir(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation));
         savePathFact->setRawValue(rootDir.filePath(appName));
-    #endif
+#endif
         savePathFact->setVisible(false);
 #else
         QDir rootDir = QDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
@@ -345,8 +345,8 @@ QLocale::Language AppSettings::_qLocaleLanguageID(void)
 
     if (settings.childKeys().contains("language")) {
         // We need to convert to the new settings key/values
-#if 0
-        // Old vales
+#if 0 \
+    // Old vales
         "enumStrings":      "System,български (Bulgarian),中文 (Chinese),Nederlands (Dutch),English,Suomi (Finnish),Français (French),Deutsche (German),Ελληνικά (Greek), עברית (Hebrew),Italiano (Italian),日本語 (Japanese),한국어 (Korean),Norsk (Norwegian),Polskie (Polish),Português (Portuguese),Pусский (Russian),Español (Spanish),Svenska (Swedish),Türk (Turkish),Azerbaijani (Azerbaijani)",
         "enumValues":       "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20",
 #endif
