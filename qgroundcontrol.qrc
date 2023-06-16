@@ -1,4 +1,4 @@
-<RCC>
+﻿<RCC>
     <qresource prefix="/unittest">
         <file alias="FactSystemTest.qml">src/FactSystem/FactSystemTest.qml</file>
     </qresource>
@@ -284,6 +284,7 @@
         <file alias="VibrationPage.qml">src/AnalyzeView/VibrationPage.qml</file>
         <file alias="VirtualJoystick.qml">src/FlightDisplay/VirtualJoystick.qml</file>
         <file alias="VTOLLandingPatternEditor.qml">src/PlanView/VTOLLandingPatternEditor.qml</file>
+        <file alias="ECM_settings.qml">src/ui/ECM_settings.qml</file>
     </qresource>
     <qresource prefix="/FirstRunPromptDialogs">
         <file alias="UnitsFirstRunPrompt.qml">src/FirstRunPromptDialogs/UnitsFirstRunPrompt.qml</file>

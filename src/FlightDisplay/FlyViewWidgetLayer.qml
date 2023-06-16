@@ -225,6 +225,72 @@ Item {
         }
     }
 
+    Rectangle {
+        id:                 ecmPanel
+        x:                  0
+        anchors.left:       parent.left
+        anchors.top:        parent.verticalCenter
+        anchors.margins:    _toolsMargin
+
+        Button {
+            id: btn
+            x: 0
+            y: 0
+            width: 200
+            text: 'Target Display'
+
+            onClicked: {
+                rect.color = Qt.rgba(Math.random(), Math.random(), Math.random(), 1)
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                drag.target: btn
+            }
+        }
+
+        // rect是Button的父对象
+        Rectangle {
+            id: rect
+            x: btn.x
+            y: btn.y + btn.height
+            width: 200
+            height: 200
+
+            Item {
+                anchors.fill: parent
+
+                ListView {
+                    id: ecmList
+                    anchors.fill: parent
+                    model: [
+                        {
+                            name: 'zhangsan',
+                            age: 26
+                        },
+                        {
+                            name: 'lisi',
+                            age: 36
+                        }
+                    ]
+
+                    delegate: ItemDelegate {
+                        id: control
+                        width: ecmList.width
+                        text: 'name : ' + modelData.name + ' age: ' + modelData.age + (ecmList.currentIndex === index ? ' √' : '')
+
+                        onClicked: {
+                            console.log(JSON.stringify(modelData))
+                            ecmList.currentIndex = index
+                        }
+                    }
+
+                    ScrollBar.vertical: ScrollBar {}
+                }
+            }
+        }
+    }
+
     //-- Virtual Joystick
     Loader {
         id:                         virtualJoystickMultiTouch

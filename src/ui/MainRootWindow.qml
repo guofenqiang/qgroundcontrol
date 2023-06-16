@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
  *
  * (c) 2009-2020 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
  *
@@ -165,6 +165,11 @@ ApplicationWindow {
 
     function showSettingsTool() {
         showTool(qsTr("Application Settings"), "AppSettings.qml", "/res/QGCLogoWhite")
+    }
+
+    function showECMTool() {
+        showTool(qsTr("Electronic countermeasures args Settings"), "ECM_settings.qml", "/res/TYZH_ECM")
+        console.log("btn click")
     }
 
     //-------------------------------------------------------------------------
@@ -344,6 +349,22 @@ ApplicationWindow {
                         }
                     }
 
+                    SubMenuButton {
+                        id:                 argsButton
+                        height:             toolSelectDialog._toolButtonHeight
+                        Layout.fillWidth:   true
+                        text:               qsTr("ECM args Settings")
+                        imageResource:      "/res/TYZH_ECM"
+                        imageColor:         "transparent"
+                        visible:            !QGroundControl.corePlugin.options.combineSettingsAndSetup
+                        onClicked: {
+                            if (!mainWindow.preventViewSwitch()) {
+                                toolSelectDialog.close()
+                                mainWindow.showECMTool()
+                            }
+                        }
+                    }
+
                     ColumnLayout {
                         width:                  innerLayout.width
                         spacing:                0
@@ -484,6 +505,7 @@ ApplicationWindow {
                 onClicked: {
                     toolDrawer.visible      = false
                     toolDrawer.toolSource   = ""
+                    console.log("btn click1")
                 }
             }
         }
