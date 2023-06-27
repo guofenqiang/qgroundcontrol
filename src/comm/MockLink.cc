@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
  *
  * (c) 2009-2020 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
  *
@@ -632,6 +632,9 @@ void MockLink::_handleIncomingMavlinkMsg(const mavlink_message_t &msg)
     case MAVLINK_MSG_ID_SET_MODE:
         _handleSetMode(msg);
         break;
+    case MAVLINK_MSG_ID_PREFLIGHT_SELFCHECK:
+        _handleSelfCheck(msg);
+        break;
     case MAVLINK_MSG_ID_PARAM_SET:
         _handleParamSet(msg);
         break;
@@ -841,6 +844,7 @@ void MockLink::_handleParamRequestList(const mavlink_message_t& msg)
     mavlink_param_request_list_t request;
 
     mavlink_msg_param_request_list_decode(&msg, &request);
+    qDebug() << "message with param_request_list is received, and message id: " << msg.msgid << "target_system: " << request.target_system << "target_component: "<< request.target_component ;
 
     Q_ASSERT(request.target_system == _vehicleSystemId);
     Q_ASSERT(request.target_component == MAV_COMP_ID_ALL);
@@ -1741,4 +1745,18 @@ void MockLink::simulateConnectionRemoved(void)
 {
     _commLost = true;
     _connectionRemoved();
+}
+
+void MockLink::_handleSelfCheck(const mavlink_message_t &msg)
+{
+    mavlink_preflight_selfcheck_t selfCheck;
+    mavlink_msg_preflight_selfcheck_decode(&msg, &selfCheck);
+    if(selfCheck.target_system == _vehicleSystemId){
+        mavlink_message_t msg;
+        mavlink_msg_preflight_selfcheck_ack_pack_chan(
+                                                    _vehicleSystemId,
+                                                    _vehicleComponentId,
+                                                    mavlinkChannel(), &msg, 1);
+        respondWithMavlinkMessage(msg);
+    }
 }

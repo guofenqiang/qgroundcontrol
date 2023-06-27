@@ -447,6 +447,10 @@ public:
     Q_INVOKABLE void centerGimbal       ();
     Q_INVOKABLE void forceArm           ();
 
+    Q_INVOKABLE void requestAllParameters(void);
+    Q_INVOKABLE void selfCheck(void);
+    void _handleSelfCheckAck(mavlink_message_t& message);
+
     /// Sends PARAM_MAP_RC message to vehicle
     Q_INVOKABLE void sendParamMapRC(const QString& paramName, double scale, double centerValue, int tuningID, double minValue, double maxValue);
 

@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
  *
  * (c) 2009-2020 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
  *
@@ -322,6 +322,44 @@ Item {
         onDisplayPreFlightChecklist: preFlightChecklistPopup.createObject(mainWindow).open()
 
         property real leftInset: x + width
+    }
+
+    Rectangle{
+        //该控件的左侧和 toolStrip 的左侧对齐
+        anchors.left: toolStrip.left
+        //该控件的顶部位于 toolStrip 的底部
+        anchors.top: toolStrip.bottom
+        //控件顶部设置一个留白间隔
+        anchors.topMargin: _margins * 2
+        //设置控件的宽度、高度、颜色
+        width: 200
+        height: 40
+        color: "red"
+        //为控件设置一个圆弧
+        radius: 4
+        visible: true
+
+        //为控件设置层级，层级低的可能会被层级高的遮挡而无法看到
+//        z: _panel.z + 4
+
+        Text{
+            //为控件添加一个 text 区域，进行文本显示
+            anchors.fill: parent
+            text: qsTr("Request All Parameters")
+        }
+
+        MouseArea{
+            //为整个控件覆盖一个鼠标操作区域，鼠标点击触发 clicked 事件，通过 onClicked 处理相关的事件
+            anchors.fill: parent
+
+            onClicked: {
+
+//                console.log("Request all Parameter is clicked!")
+//                _activeVehicle.requestAllParameters()
+
+                _activeVehicle.selfCheck()
+            }
+        }
     }
 
     FlyViewAirspaceIndicator {

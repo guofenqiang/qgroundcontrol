@@ -800,6 +800,10 @@ void Vehicle::_mavlinkMessageReceived(LinkInterface* link, mavlink_message_t mes
     case MAVLINK_MSG_ID_RANGEFINDER:
         _handleRangefinder(message);
         break;
+        
+    case MAVLINK_MSG_ID_PREFLIGHT_SELFCHECK_ACK:
+        _handleSelfCheckAck(message);
+        break;
 #endif
     }
 
@@ -4269,4 +4273,46 @@ void Vehicle::setGripperAction(GRIPPER_ACTIONS gripperAction)
             0,                                   // Param1: Gripper ID (Always set to 0)
             gripperAction,                       // Param2: Gripper Action
             0, 0, 0, 0, 0);                      // Param 3 ~ 7 : unused
+}
+
+void Vehicle::requestAllParameters()
+{
+    SharedLinkInterfacePtr sharedLink = vehicleLinkManager()->primaryLink().lock();
+    if (!sharedLink) {
+        qCDebug(VehicleLog)<< "sendJoystickDataThreadSafe: primary link gone!";
+        return;
+    }
+
+    mavlink_message_t msg;
+    mavlink_msg_param_request_list_pack_chan(
+                                            _mavlink->getSystemId(),
+                                            _mavlink->getComponentId(),
+                                            sharedLink->mavlinkChannel(),
+                                            &msg,_id,MAV_COMP_ID_ALL);
+    sendMessageOnLinkThreadSafe(sharedLink.get(), msg);
+    qDebug() << "==============send Vehicle::requestAllParameters===============" << _id << MAV_COMP_ID_ALL;
+}
+
+void Vehicle::selfCheck()
+{
+    SharedLinkInterfacePtr sharedLink = vehicleLinkManager()->primaryLink().lock();
+    if (!sharedLink) {
+        qCDebug(VehicleLog) << "_handlePing: primary link gone!";
+        return;
+    }
+
+    mavlink_message_t msg;
+    mavlink_msg_preflight_selfcheck_pack_chan(_mavlink->getSystemId(),
+                                              _mavlink->getComponentId(),
+                                              sharedLink->mavlinkChannel(),
+                                              &msg, _id);
+    sendMessageOnLinkThreadSafe(sharedLink.get(), msg);
+    qDebug() << "=== vehicle send preflight_selfcheck message === " << _id;
+}
+
+void Vehicle::_handleSelfCheckAck(mavlink_message_t &message)
+{
+    mavlink_preflight_selfcheck_ack_t ack;
+    mavlink_msg_preflight_selfcheck_ack_decode(&message, &ack);
+    qDebug() << "=== Vehicle receive selfcheck_ack_t === " << ack.ack;
 }
