@@ -227,61 +227,109 @@ Item {
 
     Rectangle {
         id:                 ecmPanel
-        x:                  0
         anchors.left:       parent.left
         anchors.top:        parent.verticalCenter
+        width:              parent.width / 4
+        anchors.bottom:     parent.bottom
         anchors.margins:    _toolsMargin
+        color:              'blue'
+        visible:            _activeVehicle ? true : false
 
-        Button {
-            id: btn
-            x: 0
-            y: 0
-            width: 200
-            text: 'Target Display'
-
-            onClicked: {
-                rect.color = Qt.rgba(Math.random(), Math.random(), Math.random(), 1)
-            }
-
-            MouseArea {
-                anchors.fill: parent
-                drag.target: btn
-            }
-        }
-
-        // rect是Button的父对象
         Rectangle {
-            id: rect
-            x: btn.x
-            y: btn.y + btn.height
-            width: 200
-            height: 200
+            id:                 rect
+            anchors.fill:       parent
+            anchors.margins:    _toolsMargin
 
-            Item {
+            ColumnLayout {
                 anchors.fill: parent
+
+                RowLayout {
+                    Text {
+                        text:                   _activeVehicle ? "time_usec: " + _activeVehicle.time_usec + " us": "time_usec: us"
+                        horizontalAlignment:    Text.AlignHCenter
+                        Layout.fillWidth:       true
+                    }
+
+                    Text {
+                        text:                   _activeVehicle ? "frame_number: " + _activeVehicle.frame_number : "frame_number: "
+                        horizontalAlignment:    Text.AlignHCenter
+                        Layout.fillWidth:       true
+                    }
+                }
 
                 ListView {
                     id: ecmList
                     anchors.fill: parent
+
                     model: [
                         {
-                            name: 'zhangsan',
-                            age: 26
+                            pwd_target_number:      _activeVehicle.pdw1_target_number,
+                            pdw_rate:               _activeVehicle.pdw1_rate,
+                            pdw_azimuth:            _activeVehicle.pdw1_azimuth,
                         },
+
                         {
-                            name: 'lisi',
-                            age: 36
-                        }
+                            pwd_target_number:      _activeVehicle.pdw2_target_number,
+                            pdw_rate:               _activeVehicle.pdw2_rate,
+                            pdw_azimuth:            _activeVehicle.pdw2_azimuth,
+                        },
+
+                        {
+                            pwd_target_number:      _activeVehicle.pdw3_target_number,
+                            pdw_rate:               _activeVehicle.pdw3_rate,
+                            pdw_azimuth:            _activeVehicle.pdw3_azimuth,
+                        },
+
+                        {
+                            pwd_target_number:      _activeVehicle.pdw4_target_number,
+                            pdw_rate:               _activeVehicle.pdw4_rate,
+                            pdw_azimuth:            _activeVehicle.pdw4_azimuth,
+                        },
+
+                        {
+                            pwd_target_number:      _activeVehicle.pdw5_target_number,
+                            pdw_rate:               _activeVehicle.pdw5_rate,
+                            pdw_azimuth:            _activeVehicle.pdw5_azimuth,
+                        },
                     ]
 
                     delegate: ItemDelegate {
                         id: control
                         width: ecmList.width
-                        text: 'name : ' + modelData.name + ' age: ' + modelData.age + (ecmList.currentIndex === index ? ' √' : '')
+                        text: 'pwd_target_number: ' + modelData.pwd_target_number + '   pdw_freq: ' + modelData.pdw_rate +  "    pdw_azimuth: " + modelData.pdw_azimuth + (ecmList.currentIndex === index ? ' √' : '')
+                        highlighted: ListView.isCurrentItem
 
                         onClicked: {
+                            console.log("--------------------start or stop----------------")
+                            _activeVehicle.radarCmd(3)
                             console.log(JSON.stringify(modelData))
                             ecmList.currentIndex = index
+                        }
+                    }
+
+                    ColumnLayout {
+                        anchors.left:       parent.left
+                        width:              parent.width
+                        anchors.bottom:     parent.bottom
+
+                        RowLayout {
+                            Button {
+                                id: start
+                                Layout.fillWidth: true
+                                text: "Radar Scan Start"
+                                onClicked: {
+                                    console.log("Radar Scan Start")
+                                }
+                            }
+
+                            Button {
+                                id: stop
+                                Layout.fillWidth: true
+                                text: "Radar Scan Stop"
+                                onClicked: {
+                                    console.log("Radar Scan Stop")
+                                }
+                            }
                         }
                     }
 
@@ -337,7 +385,7 @@ Item {
         color: "red"
         //为控件设置一个圆弧
         radius: 4
-        visible: true
+        visible: false
 
         //为控件设置层级，层级低的可能会被层级高的遮挡而无法看到
 //        z: _panel.z + 4

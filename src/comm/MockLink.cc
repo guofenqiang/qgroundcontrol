@@ -635,6 +635,9 @@ void MockLink::_handleIncomingMavlinkMsg(const mavlink_message_t &msg)
     case MAVLINK_MSG_ID_PREFLIGHT_SELFCHECK:
         _handleSelfCheck(msg);
         break;
+    case MAVLINK_MSG_ID_RADAR_CMD:
+        _handleRadarCmd(msg);
+        break;
     case MAVLINK_MSG_ID_PARAM_SET:
         _handleParamSet(msg);
         break;
@@ -1759,4 +1762,109 @@ void MockLink::_handleSelfCheck(const mavlink_message_t &msg)
                                                     mavlinkChannel(), &msg, 1);
         respondWithMavlinkMessage(msg);
     }
+}
+
+void MockLink::_handleRadarCmd(const mavlink_message_t& msg)
+{
+#define STANDBY                 0x00
+#define RESET                   0x01
+#define SET_RATE                0x02
+#define START_OR_STOP           0x03
+
+#define STANDBY_ACK             0xa0
+#define RESET_ACK               0xa1
+#define SET_RATE_ACK            0xa2
+#define START_OR_STOP_ACK       0xa3
+
+#define MSG_ERR                 0xFF
+
+#define VERIFICATION_OK         0x00
+#define VERIFICATION_ERR        0xFF
+
+    mavlink_message_t message;
+
+    mavlink_radar_cmd_t radarCmd;
+    uint8_t cmd_ack;
+    uint8_t cmd_result;
+    mavlink_msg_radar_cmd_decode(&msg, &radarCmd);
+    switch (radarCmd.cmd) {
+    case STANDBY:
+            cmd_ack = STANDBY_ACK;
+            break;
+    case RESET:
+            cmd_ack = RESET_ACK;
+            break;
+    case SET_RATE:
+            cmd_ack = SET_RATE_ACK;
+            break;
+    case START_OR_STOP:
+            cmd_ack = START_OR_STOP_ACK;
+            break;
+    default:
+            cmd_ack = MSG_ERR;
+            break;
+    }
+
+    if (radarCmd.cmd >= STANDBY && radarCmd.cmd <= START_OR_STOP)
+        cmd_result = VERIFICATION_OK;
+    else
+        cmd_result = VERIFICATION_ERR;
+
+//    qDebug() << "radarCmd.cmd" << QString("0x%1").arg(radarCmd.cmd, 0, 16);
+//    qDebug() << "radarCmd.parameter[0]" << QString("0x%1").arg(radarCmd.parameter[0], 0, 16);
+
+    mavlink_msg_radar_cmd_ack_pack_chan(
+                                        _vehicleSystemId,
+                                        _vehicleComponentId,
+                                        mavlinkChannel(),
+                                        &message,
+                                        cmd_ack,
+                                        NULL,
+                                        cmd_result);
+    respondWithMavlinkMessage(message);
+
+    uint8_t base_number = radarCmd.cmd * 10;
+    mavlink_message_t message_measure;
+    uint64_t time_usec = 1;
+    uint8_t frame_number = 2;
+    uint8_t pdw1_target_number = base_number + 1;
+    uint16_t pdw1_rate = base_number + 1;
+    int16_t pdw1_azimuth = base_number + 1;
+    uint8_t pdw2_target_number = base_number + 2;
+    uint16_t pdw2_rate = base_number + 2;
+    int16_t pdw2_azimuth = base_number + 2;
+    uint8_t pdw3_target_number = base_number + 3;
+    uint16_t pdw3_rate = base_number + 3;
+    int16_t pdw3_azimuth = base_number + 3;
+    uint8_t pdw4_target_number = base_number + 4;
+    uint16_t pdw4_rate = base_number + 4;
+    int16_t pdw4_azimuth = base_number + 4;
+    uint8_t pdw5_target_number = base_number + 5;
+    uint16_t pdw5_rate = base_number + 5;
+    int16_t pdw5_azimuth = base_number + 5;
+
+    mavlink_msg_radar_measure_pack_chan(
+                                        _vehicleSystemId,
+                                        _vehicleComponentId,
+                                        mavlinkChannel(),
+                                        &message_measure,
+                                        time_usec,
+                                        frame_number,
+                                        pdw1_target_number,
+                                        pdw1_rate,
+                                        pdw1_azimuth,
+                                        pdw2_target_number,
+                                        pdw2_rate,
+                                        pdw2_azimuth,
+                                        pdw3_target_number,
+                                        pdw3_rate,
+                                        pdw3_azimuth,
+                                        pdw4_target_number,
+                                        pdw4_rate,
+                                        pdw4_azimuth,
+                                        pdw5_target_number,
+                                        pdw5_rate,
+                                        pdw5_azimuth);
+
+    respondWithMavlinkMessage(message_measure);
 }

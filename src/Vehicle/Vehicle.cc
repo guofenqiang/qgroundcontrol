@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
  *
  * (c) 2009-2020 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
  *
@@ -270,6 +270,11 @@ Vehicle::Vehicle(LinkInterface*             link,
     // Start csv logger
     connect(&_csvLogTimer, &QTimer::timeout, this, &Vehicle::_writeCsvLine);
     _csvLogTimer.start(1000);
+
+    qRegisterMetaType<uint8_t>("uint8_t");
+    qRegisterMetaType<uint16_t>("uint16_t");
+    qRegisterMetaType<uint64_t>("uint64_t");
+    qRegisterMetaType<int16_t>("int16_t");
 }
 
 // Disconnected Vehicle for offline editing
@@ -805,6 +810,12 @@ void Vehicle::_mavlinkMessageReceived(LinkInterface* link, mavlink_message_t mes
         _handleSelfCheckAck(message);
         break;
 #endif
+    case MAVLINK_MSG_ID_RADAR_CMD_ACK:
+        _handleRadarCmdAck(message);
+        break;
+    case MAVLINK_MSG_ID_RADAR_MEASURE:
+        _handleRadarMeasure(message);
+        break;
     }
 
     // This must be emitted after the vehicle processes the message. This way the vehicle state is up to date when anyone else
@@ -3038,6 +3049,227 @@ bool Vehicle::_commandCanBeDuplicated(MAV_CMD command)
     }
 }
 
+int16_t Vehicle::getPdw5_azimuth() const
+{
+    return pdw5_azimuth;
+}
+
+void Vehicle::setPdw5_azimuth(int16_t newPdw5_azimuth)
+{
+    if (pdw5_azimuth == newPdw5_azimuth)
+        return;
+    pdw5_azimuth = newPdw5_azimuth;
+    emit pdw5_azimuthChanged();
+}
+
+uint16_t Vehicle::getPdw5_rate() const
+{
+    return pdw5_rate;
+}
+
+void Vehicle::setPdw5_rate(uint16_t newPdw5_rate)
+{
+    if (pdw5_rate == newPdw5_rate)
+        return;
+    pdw5_rate = newPdw5_rate;
+    emit pdw5_rateChanged();
+}
+
+uint8_t Vehicle::getPdw5_target_number() const
+{
+    return pdw5_target_number;
+}
+
+void Vehicle::setPdw5_target_number(uint8_t newPdw5_target_number)
+{
+    if (pdw5_target_number == newPdw5_target_number)
+        return;
+    pdw5_target_number = newPdw5_target_number;
+    emit pdw5_target_numberChanged();
+}
+
+int16_t Vehicle::getPdw4_azimuth() const
+{
+    return pdw4_azimuth;
+}
+
+void Vehicle::setPdw4_azimuth(int16_t newPdw4_azimuth)
+{
+    if (pdw4_azimuth == newPdw4_azimuth)
+        return;
+    pdw4_azimuth = newPdw4_azimuth;
+    emit pdw4_azimuthChanged();
+}
+
+uint16_t Vehicle::getPdw4_rate() const
+{
+    return pdw4_rate;
+}
+
+void Vehicle::setPdw4_rate(uint16_t newPdw4_rate)
+{
+    if (pdw4_rate == newPdw4_rate)
+        return;
+    pdw4_rate = newPdw4_rate;
+    emit pdw4_rateChanged();
+}
+
+uint8_t Vehicle::getPdw4_target_number() const
+{
+    return pdw4_target_number;
+}
+
+void Vehicle::setPdw4_target_number(uint8_t newPdw4_target_number)
+{
+    if (pdw4_target_number == newPdw4_target_number)
+        return;
+    pdw4_target_number = newPdw4_target_number;
+    emit pdw4_target_numberChanged();
+}
+
+int16_t Vehicle::getPdw3_azimuth() const
+{
+    return pdw3_azimuth;
+}
+
+void Vehicle::setPdw3_azimuth(int16_t newPdw3_azimuth)
+{
+    if (pdw3_azimuth == newPdw3_azimuth)
+        return;
+    pdw3_azimuth = newPdw3_azimuth;
+    emit pdw3_azimuthChanged();
+}
+
+uint16_t Vehicle::getPdw3_rate() const
+{
+    return pdw3_rate;
+}
+
+void Vehicle::setPdw3_rate(uint16_t newPdw3_rate)
+{
+    if (pdw3_rate == newPdw3_rate)
+        return;
+    pdw3_rate = newPdw3_rate;
+    emit pdw3_rateChanged();
+}
+
+uint8_t Vehicle::getPdw3_target_number() const
+{
+    return pdw3_target_number;
+}
+
+void Vehicle::setPdw3_target_number(uint8_t newPdw3_target_number)
+{
+    if (pdw3_target_number == newPdw3_target_number)
+        return;
+    pdw3_target_number = newPdw3_target_number;
+    emit pdw3_target_numberChanged();
+}
+
+int16_t Vehicle::getPdw2_azimuth() const
+{
+    return pdw2_azimuth;
+}
+
+void Vehicle::setPdw2_azimuth(int16_t newPdw2_azimuth)
+{
+    if (pdw2_azimuth == newPdw2_azimuth)
+        return;
+    pdw2_azimuth = newPdw2_azimuth;
+    emit pdw2_azimuthChanged();
+}
+
+uint16_t Vehicle::getPdw2_rate() const
+{
+    return pdw2_rate;
+}
+
+void Vehicle::setPdw2_rate(uint16_t newPdw2_rate)
+{
+    if (pdw2_rate == newPdw2_rate)
+        return;
+    pdw2_rate = newPdw2_rate;
+    emit pdw2_rateChanged();
+}
+
+uint8_t Vehicle::getPdw2_target_number() const
+{
+    return pdw2_target_number;
+}
+
+void Vehicle::setPdw2_target_number(uint8_t newPdw2_target_number)
+{
+    if (pdw2_target_number == newPdw2_target_number)
+        return;
+    pdw2_target_number = newPdw2_target_number;
+    emit pdw2_target_numberChanged();
+}
+
+int16_t Vehicle::getPdw1_azimuth() const
+{
+    return pdw1_azimuth;
+}
+
+void Vehicle::setPdw1_azimuth(int16_t newPdw1_azimuth)
+{
+    if (pdw1_azimuth == newPdw1_azimuth)
+        return;
+    pdw1_azimuth = newPdw1_azimuth;
+    emit pdw1_azimuthChanged();
+}
+
+uint16_t Vehicle::getPdw1_rate() const
+{
+    return pdw1_rate;
+}
+
+void Vehicle::setPdw1_rate(uint16_t newPdw1_rate)
+{
+    if (pdw1_rate == newPdw1_rate)
+        return;
+    pdw1_rate = newPdw1_rate;
+    emit pdw1_rateChanged();
+}
+
+uint8_t Vehicle::getPdw1_target_number() const
+{
+    return pdw1_target_number;
+}
+
+void Vehicle::setPdw1_target_number(uint8_t newPdw1_target_number)
+{
+    if (pdw1_target_number == newPdw1_target_number)
+        return;
+    pdw1_target_number = newPdw1_target_number;
+    emit pdw1_target_numberChanged();
+}
+
+uint8_t Vehicle::getFrame_number() const
+{
+    return frame_number;
+}
+
+void Vehicle::setFrame_number(uint8_t newFrame_number)
+{
+    if (frame_number == newFrame_number)
+        return;
+    frame_number = newFrame_number;
+    emit frame_numberChanged();
+}
+
+uint64_t Vehicle::getTime_usec() const
+{
+    return time_usec;
+}
+
+void Vehicle::setTime_usec(uint64_t newTime_usec)
+{
+    if (time_usec == newTime_usec)
+        return;
+    time_usec = newTime_usec;
+    emit time_usecChanged();
+}
+
 void Vehicle::_sendMavCommandWorker(bool commandInt, bool showError, MavCmdResultHandler resultHandler, void* resultHandlerData, int targetCompId, MAV_CMD command, MAV_FRAME frame, float param1, float param2, float param3, float param4, double param5, double param6, float param7)
 {
     if ((targetCompId == MAV_COMP_ID_ALL) || (isMavCommandPending(targetCompId, command) && !_commandCanBeDuplicated(command))) {
@@ -4315,4 +4547,84 @@ void Vehicle::_handleSelfCheckAck(mavlink_message_t &message)
     mavlink_preflight_selfcheck_ack_t ack;
     mavlink_msg_preflight_selfcheck_ack_decode(&message, &ack);
     qDebug() << "=== Vehicle receive selfcheck_ack_t === " << ack.ack;
+}
+
+void Vehicle::radarCmd(int cmd)
+{
+    SharedLinkInterfacePtr sharedLink = vehicleLinkManager()->primaryLink().lock();
+    if (!sharedLink) {
+        qCDebug(VehicleLog) << "_handlePing: primary link gone!";
+        return;
+    }
+
+    mavlink_message_t msg;
+    const uint8_t parameter[MAVLINK_MSG_RADAR_CMD_FIELD_PARAMETER_LEN] = {0, 0, 0, 0, 0};
+    mavlink_msg_radar_cmd_pack_chan(_mavlink->getSystemId(),
+                                    _mavlink->getComponentId(),
+                                    sharedLink->mavlinkChannel(),
+                                    &msg, cmd, parameter);
+    sendMessageOnLinkThreadSafe(sharedLink.get(), msg);
+    qDebug() << "vehicle: ========= send radar_cmd message ========= ";
+    qDebug() << "cmd:" << cmd;
+//    _print_mavlink(msg);
+}
+
+void Vehicle::_handleRadarCmdAck(mavlink_message_t& message)
+{
+    mavlink_radar_cmd_ack_t ack;
+    mavlink_msg_radar_cmd_ack_decode(&message, &ack);
+    qDebug() << "Vehicle: ========= receive radar_cmd_ack ========= ";
+    qDebug() << "cmd_result:" << ack.cmd_result << " cmd_ack:" << ack.cmd_ack << " parameter:" << ack.parameter;
+}
+
+void Vehicle::_handleRadarMeasure(mavlink_message_t& message)
+{
+    mavlink_radar_measure_t ack;
+    mavlink_msg_radar_measure_decode(&message, &ack);
+
+    qDebug() << "Vehicle: ========= receive radar_measure ========= ";
+    qDebug() << "time_usec" << ack.time_usec;
+    qDebug() << "frame_number" << ack.frame_number;
+    qDebug() << "pdw1_target_number:" << ack.pdw1_target_number << " pdw1_rate" << ack.pdw1_rate << "pdw1_azimuth" << ack.pdw1_azimuth;
+    qDebug() << "pdw2_target_number:" << ack.pdw2_target_number << " pdw2_rate" << ack.pdw2_rate << "pdw2_azimuth" << ack.pdw2_azimuth;
+    qDebug() << "pdw3_target_number:" << ack.pdw3_target_number << " pdw3_rate" << ack.pdw3_rate << "pdw3_azimuth" << ack.pdw3_azimuth;
+    qDebug() << "pdw4_target_number:" << ack.pdw4_target_number << " pdw4_rate" << ack.pdw4_rate << "pdw4_azimuth" << ack.pdw4_azimuth;
+    qDebug() << "pdw5_target_number:" << ack.pdw5_target_number << " pdw5_rate" << ack.pdw5_rate << "pdw5_azimuth" << ack.pdw5_azimuth;
+
+    setTime_usec(ack.time_usec);
+    setFrame_number(ack.frame_number);
+    setPdw1_target_number(ack.pdw1_target_number);
+    setPdw2_target_number(ack.pdw2_target_number);
+    setPdw3_target_number(ack.pdw3_target_number);
+    setPdw4_target_number(ack.pdw4_target_number);
+    setPdw5_target_number(ack.pdw5_target_number);
+
+    setPdw1_rate(ack.pdw1_rate);
+    setPdw2_rate(ack.pdw2_rate);
+    setPdw3_rate(ack.pdw3_rate);
+    setPdw4_rate(ack.pdw4_rate);
+    setPdw5_rate(ack.pdw5_rate);
+
+    setPdw1_azimuth(ack.pdw1_azimuth);
+    setPdw2_azimuth(ack.pdw2_azimuth);
+    setPdw3_azimuth(ack.pdw3_azimuth);
+    setPdw4_azimuth(ack.pdw4_azimuth);
+    setPdw5_azimuth(ack.pdw5_azimuth);
+}
+
+void Vehicle::_print_mavlink(mavlink_message_t& msg)
+{
+    qDebug() << "Vehicle: ========= _print_mavlink ========= ";
+    qDebug() << "checksum" << QString("0x%1").arg(msg.checksum, 0, 16);
+    qDebug() << "magic:" << QString("0x%1").arg(msg.magic, 0, 16);
+    qDebug() << "len:" << QString("0x%1").arg(msg.len, 0, 16);
+    qDebug() << "incompat_flags:" << QString("0x%1").arg(msg.incompat_flags, 0, 16);
+    qDebug() << "compat_flags:" << QString("0x%1").arg(msg.compat_flags, 0, 16);
+    qDebug() << "seq:" << QString("0x%1").arg(msg.seq, 0, 16);
+    qDebug() << "sysid:" << QString("0x%1").arg(msg.sysid, 0, 16);
+    qDebug() << "compid:" << QString("0x%1").arg(msg.compid, 0, 16);
+    qDebug() << "msgid:" << QString("0x%1").arg(msg.msgid, 0, 16);
+    qDebug() << "payload64:" << QString("0x%1").arg(msg.payload64[0], 0, 16);
+    qDebug() << "ck:" << QString("0x%1").arg(msg.ck[0], 0, 16) << QString("0x%1").arg(msg.ck[1], 0, 16);
+    qDebug() << "signature:" << QString("0x%1").arg(msg.signature[0], 0, 16);
 }

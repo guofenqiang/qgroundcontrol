@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
  *
  * (c) 2009-2020 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
  *
@@ -227,6 +227,7 @@ private:
     void _handleParamMapRC              (const mavlink_message_t& msg);
     bool _handleRequestMessage          (const mavlink_command_long_t& request, bool& noAck);
     void _handleSelfCheck(const mavlink_message_t& msg);
+    void _handleRadarCmd                (const mavlink_message_t& msg);
     float _floatUnionForParam           (int componentId, const QString& paramName);
     void _setParamFloatUnionIntoMap     (int componentId, const QString& paramName, float paramFloat);
     void _sendHomePosition              (void);

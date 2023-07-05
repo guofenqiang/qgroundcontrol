@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
  *
  * (c) 2009-2020 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
  *
@@ -450,6 +450,10 @@ public:
     Q_INVOKABLE void requestAllParameters(void);
     Q_INVOKABLE void selfCheck(void);
     void _handleSelfCheckAck(mavlink_message_t& message);
+    Q_INVOKABLE void radarCmd(int cmd);
+    void _handleRadarCmdAck(mavlink_message_t& message);
+    void _handleRadarMeasure(mavlink_message_t& message);
+    void _print_mavlink(mavlink_message_t& msg);
 
     /// Sends PARAM_MAP_RC message to vehicle
     Q_INVOKABLE void sendParamMapRC(const QString& paramName, double scale, double centerValue, int tuningID, double minValue, double maxValue);
@@ -880,6 +884,57 @@ public:
 
     HealthAndArmingCheckReport* healthAndArmingCheckReport() { return &_healthAndArmingCheckReport; }
 
+    uint64_t getTime_usec() const;
+    void setTime_usec(uint64_t newTime_usec);
+
+    uint8_t getFrame_number() const;
+    void setFrame_number(uint8_t newFrame_number);
+
+    uint8_t getPdw1_target_number() const;
+    void setPdw1_target_number(uint8_t newPdw1_target_number);
+
+    uint16_t getPdw1_rate() const;
+    void setPdw1_rate(uint16_t newPdw1_rate);
+
+    int16_t getPdw1_azimuth() const;
+    void setPdw1_azimuth(int16_t newPdw1_azimuth);
+
+    uint8_t getPdw2_target_number() const;
+    void setPdw2_target_number(uint8_t newPdw2_target_number);
+
+    uint16_t getPdw2_rate() const;
+    void setPdw2_rate(uint16_t newPdw2_rate);
+
+    int16_t getPdw2_azimuth() const;
+    void setPdw2_azimuth(int16_t newPdw2_azimuth);
+
+    uint8_t getPdw3_target_number() const;
+    void setPdw3_target_number(uint8_t newPdw3_target_number);
+
+    uint16_t getPdw3_rate() const;
+    void setPdw3_rate(uint16_t newPdw3_rate);
+
+    int16_t getPdw3_azimuth() const;
+    void setPdw3_azimuth(int16_t newPdw3_azimuth);
+
+    uint8_t getPdw4_target_number() const;
+    void setPdw4_target_number(uint8_t newPdw4_target_number);
+
+    uint16_t getPdw4_rate() const;
+    void setPdw4_rate(uint16_t newPdw4_rate);
+
+    int16_t getPdw4_azimuth() const;
+    void setPdw4_azimuth(int16_t newPdw4_azimuth);
+
+    uint8_t getPdw5_target_number() const;
+    void setPdw5_target_number(uint8_t newPdw5_target_number);
+
+    uint16_t getPdw5_rate() const;
+    void setPdw5_rate(uint16_t newPdw5_rate);
+
+    int16_t getPdw5_azimuth() const;
+    void setPdw5_azimuth(int16_t newPdw5_azimuth);
+
 public slots:
     void setVtolInFwdFlight                 (bool vtolInFwdFlight);
     void _offlineFirmwareTypeSettingChanged (QVariant varFirmwareType); // Should only be used by MissionControler to set firmware from Plan file
@@ -992,6 +1047,40 @@ signals:
     void initialConnectComplete         ();
 
     void sensorsParametersResetAck      (bool success);
+
+    void time_usecChanged();
+
+    void frame_numberChanged();
+
+    void pdw1_target_numberChanged();
+
+    void pdw1_rateChanged();
+
+    void pdw1_azimuthChanged();
+
+    void pdw2_target_numberChanged();
+
+    void pdw2_rateChanged();
+
+    void pdw2_azimuthChanged();
+
+    void pdw3_target_numberChanged();
+
+    void pdw3_rateChanged();
+
+    void pdw3_azimuthChanged();
+
+    void pdw4_target_numberChanged();
+
+    void pdw4_rateChanged();
+
+    void pdw4_azimuthChanged();
+
+    void pdw5_target_numberChanged();
+
+    void pdw5_rateChanged();
+
+    void pdw5_azimuthChanged();
 
 private slots:
     void _mavlinkMessageReceived            (LinkInterface* link, mavlink_message_t message);
@@ -1449,6 +1538,43 @@ private:
     // Settings keys
     static const char* _settingsGroup;
     static const char* _joystickEnabledSettingsKey;
+
+    // radar mesure
+    uint64_t time_usec;
+    uint8_t frame_number;
+    uint8_t pdw1_target_number;
+    uint16_t pdw1_rate;
+    int16_t pdw1_azimuth;
+    uint8_t pdw2_target_number;
+    uint16_t pdw2_rate;
+    int16_t pdw2_azimuth;
+    uint8_t pdw3_target_number;
+    uint16_t pdw3_rate;
+    int16_t pdw3_azimuth;
+    uint8_t pdw4_target_number;
+    uint16_t pdw4_rate;
+    int16_t pdw4_azimuth;
+    uint8_t pdw5_target_number;
+    uint16_t pdw5_rate;
+    int16_t pdw5_azimuth;
+
+    Q_PROPERTY(uint64_t time_usec READ getTime_usec WRITE setTime_usec NOTIFY time_usecChanged)
+    Q_PROPERTY(uint8_t frame_number READ getFrame_number WRITE setFrame_number NOTIFY frame_numberChanged)
+    Q_PROPERTY(uint8_t pdw1_target_number READ getPdw1_target_number WRITE setPdw1_target_number NOTIFY pdw1_target_numberChanged)
+    Q_PROPERTY(uint16_t pdw1_rate READ getPdw1_rate WRITE setPdw1_rate NOTIFY pdw1_rateChanged)
+    Q_PROPERTY(int16_t pdw1_azimuth READ getPdw1_azimuth WRITE setPdw1_azimuth NOTIFY pdw1_azimuthChanged)
+    Q_PROPERTY(uint8_t pdw2_target_number READ getPdw2_target_number WRITE setPdw2_target_number NOTIFY pdw2_target_numberChanged)
+    Q_PROPERTY(uint16_t pdw2_rate READ getPdw2_rate WRITE setPdw2_rate NOTIFY pdw2_rateChanged)
+    Q_PROPERTY(int16_t pdw2_azimuth READ getPdw2_azimuth WRITE setPdw2_azimuth NOTIFY pdw2_azimuthChanged)
+    Q_PROPERTY(uint8_t pdw3_target_number READ getPdw3_target_number WRITE setPdw3_target_number NOTIFY pdw3_target_numberChanged)
+    Q_PROPERTY(uint16_t pdw3_rate READ getPdw3_rate WRITE setPdw3_rate NOTIFY pdw3_rateChanged)
+    Q_PROPERTY(int16_t pdw3_azimuth READ getPdw3_azimuth WRITE setPdw3_azimuth NOTIFY pdw3_azimuthChanged)
+    Q_PROPERTY(uint8_t pdw4_target_number READ getPdw4_target_number WRITE setPdw4_target_number NOTIFY pdw4_target_numberChanged)
+    Q_PROPERTY(uint16_t pdw4_rate READ getPdw4_rate WRITE setPdw4_rate NOTIFY pdw4_rateChanged)
+    Q_PROPERTY(int16_t pdw4_azimuth READ getPdw4_azimuth WRITE setPdw4_azimuth NOTIFY pdw4_azimuthChanged)
+    Q_PROPERTY(uint8_t pdw5_target_number READ getPdw5_target_number WRITE setPdw5_target_number NOTIFY pdw5_target_numberChanged)
+    Q_PROPERTY(uint16_t pdw5_rate READ getPdw5_rate WRITE setPdw5_rate NOTIFY pdw5_rateChanged)
+    Q_PROPERTY(int16_t pdw5_azimuth READ getPdw5_azimuth WRITE setPdw5_azimuth NOTIFY pdw5_azimuthChanged)
 };
 
 Q_DECLARE_METATYPE(Vehicle::MavCmdResultFailureCode_t)
