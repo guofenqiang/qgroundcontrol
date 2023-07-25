@@ -29,6 +29,7 @@ import QGroundControl.FlightMap     1.0
 import QGroundControl.Palette       1.0
 import QGroundControl.ScreenTools   1.0
 import QGroundControl.Vehicle       1.0
+import MyObj                        1.0
 
 // This is the ui overlay layer for the widgets/tools for Fly View
 Item {
@@ -859,7 +860,78 @@ Item {
                     }
                 }
 
-             }
+                //test页面
+                Item {
+                    id: testPage
+
+                    Rectangle{
+                        anchors.fill: parent
+                        color: "lightyellow"
+                        Text{
+                            anchors.centerIn: parent
+                            text: "test页面"
+                            font.pixelSize: 20
+                        }
+                    }
+
+                    Rectangle {
+                        id:                 testPanel
+                        color:              'antiquewhite'
+                        visible:            true
+
+                        property int value: myobj.iValue
+
+                        signal qmlSig(int i, string s)
+
+                        function qmlSlot(i, s) {
+                            console.log("qml", i, s);
+                        }
+
+                        Button {
+                            objectName: "mybutton"
+                            onClicked: {
+                                myobj.cppSig(99, "lisi")
+                                myobj.func()
+                                testPanel.qmlSig(10, "zhangsan")
+                                myobj._radarCmd(0)
+                            }
+                        }
+
+                        MyObject {
+                            id: myobj
+                            iValue: 10
+                            sString: "zhangsan"
+                            Component.onCompleted: {
+                                console.log(iValue, sString)
+                            }
+                        }
+
+                        Connections {
+                            target: myobj
+
+                            function onCppSig(i, s) {
+                                testPanel.qmlSlot(i, s)
+                            }
+                        }
+
+                        Component.onCompleted: {
+                            testPanel.qmlSig.connect(myobj.cppSlot)
+                        }
+
+                        onValueChanged: {
+                            console.log(value)
+                        }
+
+                        Button {
+                            x: 200
+                            onClicked: {
+                                console.log("------")
+                                myobj.iValue = 20
+                            }
+                        }
+                    }
+                }
+            }
 
             //页面底部指示器
             PageIndicator {
