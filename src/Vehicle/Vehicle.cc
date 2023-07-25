@@ -4582,14 +4582,14 @@ void Vehicle::_handleRadarMeasure(mavlink_message_t& message)
     mavlink_radar_measure_t ack;
     mavlink_msg_radar_measure_decode(&message, &ack);
 
-    qDebug() << "Vehicle: ========= receive radar_measure ========= ";
-    qDebug() << "time_usec" << ack.time_usec;
-    qDebug() << "frame_number" << ack.frame_number;
-    qDebug() << "pdw1_target_number:" << ack.pdw1_target_number << " pdw1_rate" << ack.pdw1_rate << "pdw1_azimuth" << ack.pdw1_azimuth;
-    qDebug() << "pdw2_target_number:" << ack.pdw2_target_number << " pdw2_rate" << ack.pdw2_rate << "pdw2_azimuth" << ack.pdw2_azimuth;
-    qDebug() << "pdw3_target_number:" << ack.pdw3_target_number << " pdw3_rate" << ack.pdw3_rate << "pdw3_azimuth" << ack.pdw3_azimuth;
-    qDebug() << "pdw4_target_number:" << ack.pdw4_target_number << " pdw4_rate" << ack.pdw4_rate << "pdw4_azimuth" << ack.pdw4_azimuth;
-    qDebug() << "pdw5_target_number:" << ack.pdw5_target_number << " pdw5_rate" << ack.pdw5_rate << "pdw5_azimuth" << ack.pdw5_azimuth;
+//    qDebug() << "Vehicle: ========= receive radar_measure ========= ";
+//    qDebug() << "time_usec" << ack.time_usec;
+//    qDebug() << "frame_number" << ack.frame_number;
+//    qDebug() << "pdw1_target_number:" << ack.pdw1_target_number << " pdw1_rate" << ack.pdw1_rate << "pdw1_azimuth" << ack.pdw1_azimuth;
+//    qDebug() << "pdw2_target_number:" << ack.pdw2_target_number << " pdw2_rate" << ack.pdw2_rate << "pdw2_azimuth" << ack.pdw2_azimuth;
+//    qDebug() << "pdw3_target_number:" << ack.pdw3_target_number << " pdw3_rate" << ack.pdw3_rate << "pdw3_azimuth" << ack.pdw3_azimuth;
+//    qDebug() << "pdw4_target_number:" << ack.pdw4_target_number << " pdw4_rate" << ack.pdw4_rate << "pdw4_azimuth" << ack.pdw4_azimuth;
+//    qDebug() << "pdw5_target_number:" << ack.pdw5_target_number << " pdw5_rate" << ack.pdw5_rate << "pdw5_azimuth" << ack.pdw5_azimuth;
 
     setTime_usec(ack.time_usec);
     setFrame_number(ack.frame_number);

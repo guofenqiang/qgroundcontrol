@@ -1,5 +1,6 @@
 ﻿import QtQuick 2.15
-import QtQuick.Controls 1.2
+//import QtQuick.Controls 1.2
+import QtQuick.Controls 2.15
 import QtQuick.Window 2.15
 
 import QGroundControl               1.0
@@ -51,7 +52,7 @@ Rectangle {
             ComboBox {
                 anchors.horizontalCenter:   parent.horizontalCenter
                 anchors.verticalCenter:     parent.verticalCenter
-                model: ["自动", "手动"]
+                model: ["手动", "自动"]
 
                 onActivated: {
                     console.log("index ", model[index])
@@ -69,37 +70,243 @@ Rectangle {
             border.color:       'yellow'
             border.width:       _Margin
 
-            ColumnLayout {
-                anchors.horizontalCenter:   parent.horizontalCenter
-                anchors.verticalCenter:     parent.verticalCenter
+            Rectangle {
+                anchors.fill:           parent
+                color:                  parent.color
 
-                TextField {
-                    id:     freq_min
-                    placeholderText: qsTr("Enter frequency min")
-                    validator: IntValidator{bottom: 800; top: 6000;}
+                Rectangle {
+                    id:                 showFreqLeft
+                    anchors.left:       parent.left
+                    anchors.top:        parent.top
+                    anchors.bottom:     parent.bottom
+                    width:              parent.width * 0.5
+                    color:              qgcPal.window
 
-                    onAccepted: {
-                        console.log("min freq changed to:", text)
+                    Rectangle {
+                        anchors.fill:           parent
+                        anchors.leftMargin:     _Margin * 40
+                        anchors.rightMargin:    _Margin * 40
+                        anchors.topMargin:      _Margin * 2
+                        anchors.bottomMargin:   _Margin * 2
+
+                        Component {
+                            id: headerView
+                            Item {
+                                width: parent.width
+                                height: 30
+                                RowLayout {
+                                    anchors.left: parent.left
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    spacing: 8
+
+                                    Text {
+                                        text: "index" + "\t" + "freq min" + "\t" + "freq max"
+                                        font.bold: true
+                                        font.pixelSize: 20
+                                        Layout.preferredWidth: 120
+                                    }
+                                }
+                            }
+                        }
+
+                        Component {
+                            id: footerView
+                            Item{
+                                id: footerRootItem
+                                width: parent.width
+                                height: 30
+                                property alias text: txt.text
+
+                                // 1.自定义信号
+                                signal clean()
+                                signal add()
+
+                                Text {
+                                    anchors.left: parent.left
+                                    anchors.top: parent.top
+                                    anchors.bottom: parent.bottom
+                                    id: txt
+                                    font.italic: true
+                                    color: "blue"
+                                    verticalAlignment: Text.AlignVCenter
+                                }
+
+                                Button {
+                                    id: clearAll
+                                    anchors.right: parent.right
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    text: "Clear all"
+                                    onClicked: footerRootItem.clean()
+                                }
+
+//                                Button {
+//                                    id: addOne
+//                                    anchors.right: clearAll.left
+//                                    anchors.rightMargin: 4
+//                                    anchors.verticalCenter: parent.verticalCenter
+//                                    text: "Add"
+//                                    onClicked: footerRootItem.add()
+//                                }
+                            }
+                        }
+
+                        Component {
+                            id: phoneDelegate
+                            Item {
+                                id: wrapper
+                                width: 360
+                                height: 30
+
+                                MouseArea {
+                                    anchors.fill: parent
+
+                                    onClicked: {
+                                        wrapper.ListView.view.currentIndex = index
+                                        mouse.accepted = true
+                                    }
+
+                                    onDoubleClicked: {
+                                        wrapper.ListView.view.model.remove(index)
+                                        mouse.accepted = true
+                                        _activeVehicle.radarCmd(2)
+                                    }
+                                }
+
+                                RowLayout {
+                                    anchors.left: parent.left
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    spacing: 8
+
+                                    Text {
+                                        id: col1
+                                        text: name + "\t" + cost + "\t" +  manufacturer
+                                        color: wrapper.ListView.isCurrentItem ? "green" : "black"
+                                        font.pixelSize: wrapper.ListView.isCurrentItem ? 22 : 18
+                                        Layout.preferredWidth: 120
+                                    }
+                                }
+                            }
+                        }
+
+                        Component {
+                            id: phoneModel;
+                            ListModel {
+                                ListElement{
+                                    name: "频段"
+                                    cost: "800"
+                                    manufacturer: "6000"
+                                }
+                                // 省略。。。
+                            }
+                        }
+
+                        ListView {
+                            id: listView
+                            anchors.fill: parent
+
+                            delegate: phoneDelegate
+                            model: phoneModel.createObject(listView)
+                            header: headerView
+                            footer: footerView
+                            focus: true
+                            highlight: Rectangle{
+                                color: "lightblue"
+                            }
+
+                            onCurrentIndexChanged: {
+                                if( listView.currentIndex >=0 ){
+                                    var data = listView.model.get(listView.currentIndex)
+                                    listView.footerItem.text = data.name + " , " + data.cost + " , " + data.manufacturer
+                                }else{
+                                    listView.footerItem.text = ""
+                                }
+                            }
+
+                            // 2.槽函数：添加数据
+                            function addOne() {
+                                model.append(
+                                            {
+                                                "name": "频段",
+                                                "cost": freq_min.text,
+                                                "manufacturer": freq_max.text
+                                            }
+                                )
+                            }
+
+                            function cleanAll() {
+                                footerRootItem.clean()
+                            }
+
+                            // 3.连接信号槽
+                            Component.onCompleted: {
+                                listView.footerItem.clean.connect(listView.model.clear)
+                                listView.footerItem.add.connect(listView.addOne)
+                            }
+                        }
                     }
                 }
 
-                TextField {
-                    id:     freq_max
-                    placeholderText: qsTr("Enter frequency max")
-                    validator: IntValidator{bottom: 800; top: 6000;}
+                Rectangle {
+                    id:                 showAddRight
+                    anchors.left:       showFreqLeft.right
+                    anchors.top:        parent.top
+                    anchors.bottom:     parent.bottom
+                    width:              parent.width * 0.5
+                    color:              qgcPal.window
 
-                    onAccepted: {
-                        console.log("max freq changed to:", text)
-                    }
-                }
+                    signal addFreq()
+                    signal clearFreq()
 
-                Button {
-                    text:               "add"
+                    ColumnLayout {
+                        anchors.horizontalCenter:   parent.horizontalCenter
+                        anchors.verticalCenter:     parent.verticalCenter
 
-                    onClicked: {
-                        console.log("--------------------set frequency----------------")
-                        _activeVehicle.radarCmd(2)
-                        console.log("freq min:", freq_min.text, "   freq max:", freq_max.text)
+                        TextField {
+                            id:     freq_min
+                            placeholderText: qsTr("Enter frequency min")
+                            validator: IntValidator{bottom: 800; top: 6000;}
+
+                            onAccepted: {
+                                console.log("min freq changed to:", text)
+                            }
+                        }
+
+                        TextField {
+                            id:     freq_max
+                            placeholderText: qsTr("Enter frequency max")
+                            validator: IntValidator{bottom: 800; top: 6000;}
+
+                            onAccepted: {
+                                console.log("max freq changed to:", text)
+                            }
+                        }
+
+                        Button {
+                            text:               "Add"
+
+                            onClicked: {
+                                console.log("--------------------set frequency----------------")
+                                _activeVehicle.radarCmd(2)
+                                showAddRight.addFreq()
+                                console.log("freq min:", freq_min.text, "   freq max:", freq_max.text)
+                            }
+                        }
+
+//                        Button {
+//                            text:               "Clear all"
+
+//                            onClicked: {
+//                                console.log("--------------------set frequency----------------")
+//                                _activeVehicle.radarCmd(2)
+//                                showAddRight.clearFreq()
+//                                console.log("--------------------clear all frequency band----------------")
+//                            }
+//                        }
+
+                        Component.onCompleted: {
+                            showAddRight.addFreq.connect(listView.addOne)
+                            showAddRight.clearFreq.connect(listView.cleanAll)
+                        }
                     }
                 }
             }
