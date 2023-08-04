@@ -454,6 +454,8 @@ public:
     void _handleRadarCmdAck(mavlink_message_t& message);
     void _handleRadarMeasure(mavlink_message_t& message);
     void _print_mavlink(mavlink_message_t& msg);
+    void remoteCmd(mavlink_remote_cmd_t remote_cmd);
+    void _handleTelemetryCmd(mavlink_message_t& message);
 
     /// Sends PARAM_MAP_RC message to vehicle
     Q_INVOKABLE void sendParamMapRC(const QString& paramName, double scale, double centerValue, int tuningID, double minValue, double maxValue);

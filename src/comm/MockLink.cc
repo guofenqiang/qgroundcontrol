@@ -11,6 +11,7 @@
 #include "QGCLoggingCategory.h"
 #include "QGCApplication.h"
 #include "LinkManager.h"
+#include "protocolconversion.h"
 
 #ifdef UNITTEST_BUILD
 #include "UnitTest.h"
@@ -662,6 +663,8 @@ void MockLink::_handleIncomingMavlinkMsg(const mavlink_message_t &msg)
     case MAVLINK_MSG_ID_PARAM_MAP_RC:
         _handleParamMapRC(msg);
         break;
+    case MAVLINK_MSG_ID_REMOTE_CMD:
+        _handleRemoteCmd(msg);
     default:
         break;
     }
@@ -1867,4 +1870,94 @@ void MockLink::_handleRadarCmd(const mavlink_message_t& msg)
                                         pdw5_azimuth);
 
     respondWithMavlinkMessage(message_measure);
+}
+
+void MockLink::_handleRemoteCmd(const mavlink_message_t& msg)
+{
+    enum {
+        /* 遥控命令子定义*/
+        WORK_MODE = 0x0001,
+        LIGHT_SWITCHING,
+        IMAGE_STABILIZATION_INSTRUCTION,
+        ZOOM,
+        LASER_IRRADIATION,
+        PHOTOGRAPHY,
+        CENTERING,
+        VIDEO,
+        TARGET_DETECTION_AND_RECOGNITION,
+        AUTOMATIC_TARGET_TRACKING,
+        //    GEOGRAPHIC_COORDINATE_GUIDANCE, //该指令弃用
+        PAN_TILT_CONTROL_MODE = 0X000C,
+        OPTOELECTRONIC_LOAD_STATUS_QUERY,
+
+        GJ_WORK_MODE = 0x0021,
+        ATTACK_MODE_SWITCHING,
+        INSURANCE_MODE,
+        ATTACK_STATUS,
+        GJ_AUTOMATIC_TARGET_TRACKING,
+        AUTONOMOUS_STRIKE,
+        GJ_LOAD_STATUS_QUERY,
+        ZDB_CONTROL,
+
+        VIRTUAL_ROCKER_MODE = 0x00A1,
+        AUTONOMOUS_TAKEOFF,
+        AUTONOMOUS_RETURN,
+        AUTONOMOUS_CRUISE,
+        AUTONOMOUS_FLIGHT_AND_STEERING,
+        AUTONOMOUS_OBSTACLE_AVOIDANCE,
+        ROUTE_INQUIRY,
+        SPEED_SETTING,
+        ROUTE_SETTING,
+        DIFFERENTIAL_DATA_SETTING,
+        ROUTE_FLIGHT_INSTRUCTIONS,
+        GEOGRAPHIC_COORDINATE_GUIDANCE,
+        ROUTE_DOWNLOAD_SWITCH,
+        AUTONOMOUS_NAVIGATION_POSITIONING_SETTING,
+
+        FORMATION_FLIGHT = 0x00D1,
+        FORMATION_FORMATION_TRANSFORMATION,
+        ONE_CLICK_TAKEOFF_COMMAND_FOR_FORMATION,
+        ONE_CLICK_RETURN_TO_LANDING_COMMOND_FOR_FORMATION,
+        NAVIGATOR_WAYPOING_SETTING,
+
+        /* 遥测命令子定义*/
+        IMAGE_STATUS_FEEDBACK_DATA = 0x1001,
+        VIDEO_STATUS_FEEDBACK,
+        LASER_RANGING_FEEDBACK,
+        LASEER_IRRADIATION_FEEDBACK,
+
+        ATTACK_PAYLOAD_FEEDBACK_DATA = 0x1021,
+        ZDB_FEEDBACK_DATA,
+
+        DRONE_PLATFORM_STATUS_FEEDBACK_DATA = 0x1031,
+        TASK_STATUS_FEEDBACK_DATA,
+        FORMATION_STATUS_FEEDBACK_DATA,
+
+        COMMAND_FEEDBACK_RESPONSE = 0x1051, //每收到一次遥控指令都需发送一次指令反馈回复（0X1051）
+
+        ROUTE_INQUIRY_REPLY = 0x1052,
+        ROUTE_DOWNLOAD_REPLY,
+        ROUTE_CONFIRMATION_REPLY,
+    };
+
+    mavlink_message_t message;
+    mavlink_remote_cmd_t remoteCmd;
+    mavlink_telemetry_cmd_t telemetryCmd = {0};
+    ProtocolConversion _ptconv;
+
+    mavlink_msg_remote_cmd_decode(&msg, &remoteCmd);
+
+    qDebug("Mocklink: ========= reciver remote message ========= ");
+    QByteArray print_array((char*)&remoteCmd.telecontrol[0], MAVLINK_MSG_ID_REMOTE_CMD_LEN);
+    qDebug() << print_array.toHex();
+
+    _ptconv.bz_encode(&telemetryCmd, remoteCmd);
+
+    mavlink_msg_telemetry_cmd_pack_chan(
+                                        _vehicleSystemId,
+                                        _vehicleComponentId,
+                                        mavlinkChannel(),
+                                        &message,
+                                        (uint8_t*)&telemetryCmd.telemetry[0]);
+    respondWithMavlinkMessage(message);
 }

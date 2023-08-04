@@ -30,6 +30,8 @@ import QGroundControl.Palette       1.0
 import QGroundControl.ScreenTools   1.0
 import QGroundControl.Vehicle       1.0
 import MyObj                        1.0
+import UDPClient                    1.0
+import UDPServer                    1.0
 
 // This is the ui overlay layer for the widgets/tools for Fly View
 Item {
@@ -857,6 +859,70 @@ Item {
                                 }
                             }
                         }
+                    }
+                }
+
+                // 九院协议转换
+                Item {
+                    Rectangle {
+                        anchors.fill: parent
+                        color: 'red'
+
+                        ColumnLayout {
+                            spacing:            2
+                            anchors.fill:       parent
+
+                            Rectangle {
+                                Layout.alignment: Qt.AlignCenter
+                                Layout.preferredWidth:          parent.width
+                                Layout.preferredHeight:         parent.height * 0.5
+                                color:                          "green"
+
+                                RowLayout {
+                                    spacing:    2
+
+                                    Button {
+                                        text: "Ok"
+                                        onClicked: {
+                                            console.log("send data")
+                                        }
+                                    }
+
+                                    Button {
+                                        text: "Cancel"
+                                        onClicked: {
+                                            console.log("cancel")
+                                        }
+                                    }
+                                }
+
+                            }
+
+                            Rectangle{
+                               Layout.alignment: Qt.AlignCenter
+                               Layout.preferredWidth:          parent.width
+                               Layout.preferredHeight:         parent.height * 0.5
+                               color:                          "yellow"
+
+                            }
+
+                        }
+
+                        //会初始化 UDP类
+//                        UDPClient {
+//                            id: udpclient
+//                            Component.onCompleted: {
+//                                console.log("init udpclient")
+//                            }
+//                        }
+
+                        UDPServer {
+                            id: udpserver
+                            Component.onCompleted: {
+                                console.log("init udpserver")
+                            }
+                        }
+
                     }
                 }
 

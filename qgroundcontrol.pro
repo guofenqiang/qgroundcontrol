@@ -421,6 +421,7 @@ INCLUDEPATH += \
     src/ui/toolbar \
     src/ui/uas \
     src/test \
+    src/ProtocolConversion \
 
 contains (DEFINES, QGC_ENABLE_PAIRING) {
     INCLUDEPATH += \
@@ -432,6 +433,12 @@ contains (DEFINES, QGC_ENABLE_PAIRING) {
 #
 
 HEADERS += \
+    src/ProtocolConversion/BZ_Convertion/BZConv.h \
+    src/ProtocolConversion/BZ_Convertion/CRCCheck.h \
+    src/ProtocolConversion/ProtocolType.h \
+    src/ProtocolConversion/protocolconversion.h \
+    src/ProtocolConversion/udpclient.h \
+    src/ProtocolConversion/udpserver.h \
     src/QmlControls/CustomAction.h \
     src/QmlControls/CustomActionManager.h \
     src/QmlControls/QmlUnitsConversion.h \
@@ -449,6 +456,11 @@ contains (DEFINES, QGC_ENABLE_PAIRING) {
 }
 
 SOURCES += \
+    src/ProtocolConversion/BZ_Convertion/BZConv.cpp \
+    src/ProtocolConversion/BZ_Convertion/CRCCheck.c \
+    src/ProtocolConversion/protocolconversion.cpp \
+    src/ProtocolConversion/udpclient.cpp \
+    src/ProtocolConversion/udpserver.cpp \
     src/QmlControls/CustomActionManager.cc \
     src/Vehicle/VehicleEscStatusFactGroup.cc \
     src/api/QGCCorePlugin.cc \

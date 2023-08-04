@@ -51,6 +51,8 @@
 #include "VehicleBatteryFactGroup.h"
 #include "EventHandler.h"
 #include "Actuators/Actuators.h"
+#include "protocolconversion.h"
+#include "udpclient.h"
 #ifdef QT_DEBUG
 #include "MockLink.h"
 #endif
@@ -816,6 +818,9 @@ void Vehicle::_mavlinkMessageReceived(LinkInterface* link, mavlink_message_t mes
     case MAVLINK_MSG_ID_RADAR_MEASURE:
         _handleRadarMeasure(message);
         break;
+
+    case MAVLINK_MSG_ID_TELEMETRY_CMD:
+        _handleTelemetryCmd(message);
     }
 
     // This must be emitted after the vehicle processes the message. This way the vehicle state is up to date when anyone else
@@ -4627,4 +4632,46 @@ void Vehicle::_print_mavlink(mavlink_message_t& msg)
     qDebug() << "payload64:" << QString("0x%1").arg(msg.payload64[0], 0, 16);
     qDebug() << "ck:" << QString("0x%1").arg(msg.ck[0], 0, 16) << QString("0x%1").arg(msg.ck[1], 0, 16);
     qDebug() << "signature:" << QString("0x%1").arg(msg.signature[0], 0, 16);
+}
+
+void Vehicle::remoteCmd(mavlink_remote_cmd_t remote_cmd)
+{
+    SharedLinkInterfacePtr sharedLink = vehicleLinkManager()->primaryLink().lock();
+    if (!sharedLink) {
+        qCDebug(VehicleLog) << "_handlePing: primary link gone!";
+        return;
+    }
+
+    mavlink_message_t msg = {0};
+
+    mavlink_msg_remote_cmd_pack_chan(_mavlink->getSystemId(),
+                                    _mavlink->getComponentId(),
+                                    sharedLink->mavlinkChannel(),
+                                    &msg, &remote_cmd.telecontrol[0]);
+    sendMessageOnLinkThreadSafe(sharedLink.get(), msg);
+    qDebug() << "vehicle: ========= send remote message ========= ";
+    qDebug("msg.len: %d", msg.len);
+    qDebug("msg.msgid: %d", msg.msgid);
+
+    QByteArray print_array((char*)&msg.payload64[0], msg.len);
+    qDebug() << "msg.pyload: " << print_array.toHex();
+
+}
+
+void Vehicle::_handleTelemetryCmd(mavlink_message_t& message)
+{
+    QByteArray data;
+    ProtocolConversion _ptconv;
+    UDPClient client;
+    mavlink_telemetry_cmd_t ack;
+
+    mavlink_msg_telemetry_cmd_decode(&message, &ack);
+
+    qDebug() << "Vehicle: ========= receive telemetry cmd ========= ";
+    QByteArray print_array((char*)&ack.telemetry[0], MAVLINK_MSG_ID_TELEMETRY_CMD_LEN);
+    qDebug() << print_array.toHex();
+
+    data.resize(115);
+    _ptconv.CmdFeedback(ack, data);
+    client.SendData(data);
 }

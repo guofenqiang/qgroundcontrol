@@ -106,6 +106,8 @@
 #include "CustomAction.h"
 #include "CustomActionManager.h"
 #include "myobject.h"
+#include "udpclient.h"
+#include "udpserver.h"
 
 #if defined(QGC_ENABLE_PAIRING)
 #include "PairingManager.h"
@@ -549,6 +551,8 @@ void QGCApplication::_initCommon()
     }
 
     qmlRegisterType<MyObject>("MyObj", 1, 0, "MyObject");
+    qmlRegisterType<UDPClient>("UDPClient", 1, 0, "UDPClient");
+    qmlRegisterType<UDPServer>("UDPServer", 1, 0, "UDPServer");
 }
 
 bool QGCApplication::_initForNormalAppBoot()
