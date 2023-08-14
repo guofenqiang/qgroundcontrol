@@ -56,8 +56,14 @@ void UDPClient::SendData(QByteArray data)
     {
         quint16 _port = 7043;//组播端口
         ProtocolConversion _ptconv;
-        _ptconv.print_send(data);
-        if(-1 != mUdpSocket->writeDatagram(data.data(),mGroupAddress,_port))
+
+        uint8_t *buff = (uint8_t *)malloc(data.size() * sizeof(uint8_t));
+        int len = 115;
+
+//        _ptconv.print_send(data);
+        _ptconv.qbyte_array_to_char(buff, &len, data);
+
+        if(-1 != mUdpSocket->writeDatagram((char*)buff, len, mGroupAddress, _port))
         {
             qDebug()<< "Multicast ==> Send data : "<< data.toHex();
         }

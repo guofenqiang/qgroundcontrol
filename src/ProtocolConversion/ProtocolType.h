@@ -74,7 +74,90 @@ typedef struct __bz_message_ground_up_t {
 //} telemetry_cmd_t;
 
 /* 遥控命令子定义*/
-enum class TelecontrolPhotoelectricLoad {
+//enum class TelecontrolPhotoelectricLoad {
+//    WORK_MODE = 0x0001,
+//    LIGHT_SWITCHING,
+//    IMAGE_STABILIZATION_INSTRUCTION,
+//    ZOOM,
+//    LASER_IRRADIATION,
+//    PHOTOGRAPHY,
+//    CENTERING,
+//    VIDEO,
+//    TARGET_DETECTION_AND_RECOGNITION,
+//    AUTOMATIC_TARGET_TRACKING,
+////    GEOGRAPHIC_COORDINATE_GUIDANCE, //该指令弃用
+//    PAN_TILT_CONTROL_MODE = 0X000C,
+//    OPTOELECTRONIC_LOAD_STATUS_QUERY,
+//};
+
+//enum class TelecontrolGJLoad {
+//    WORK_MODE = 0x0021,
+//    ATTACK_MODE_SWITCHING,
+//    INSURANCE_MODE,
+//    ATTACK_STATUS,
+//    AUTOMATIC_TARGET_TRACKING,
+//    AUTONOMOUS_STRIKE,
+//    GJ_LOAD_STATUS_QUERY,
+//    ZDB_CONTROL,
+//};
+
+//enum class TelecontrolDronePlatform {
+//    VIRTUAL_ROCKER_MODE = 0x00A1,
+//    AUTONOMOUS_TAKEOFF,
+//    AUTONOMOUS_RETURN,
+//    AUTONOMOUS_CRUISE,
+//    AUTONOMOUS_FLIGHT_AND_STEERING,
+//    AUTONOMOUS_OBSTACLE_AVOIDANCE,
+//    ROUTE_INQUIRY,
+//    SPEED_SETTING,
+//    ROUTE_SETTING,
+//    DIFFERENTIAL_DATA_SETTING,
+//    ROUTE_FLIGHT_INSTRUCTIONS,
+//    GEOGRAPHIC_COORDINATE_GUIDANCE,
+//    ROUTE_DOWNLOAD_SWITCH,
+//    AUTONOMOUS_NAVIGATION_POSITIONING_SETTING,
+//};
+
+//enum class TelecontrolFormationFlight {
+//    FORMATION_FLIGHT = 0x00D1,
+//    FORMATION_FORMATION_TRANSFORMATION,
+//    ONE_CLICK_TAKEOFF_COMMAND_FOR_FORMATION,
+//    ONE_CLICK_RETURN_TO_LANDING_COMMOND_FOR_FORMATION,
+//    NAVIGATOR_WAYPOING_SETTING
+//};
+
+///* 遥测命令子定义*/
+//enum class TelemetryPhotoelectricLoad {
+//    IMAGE_STATUS_FEEDBACK_DATA = 0x1001,
+//    VIDEO_STATUS_FEEDBACK,
+//    LASER_RANGING_FEEDBACK,
+//    LASEER_IRRADIATION_FEEDBACK,
+//};
+
+//enum class TelemetryGJLoad {
+//    ATTACK_PAYLOAD_FEEDBACK_DATA = 0x1021,
+//    ZDB_FEEDBACK_DATA,
+//};
+
+//// 每200ms发送一次，定时更新，类似心跳包
+//enum class TelemetryDronePlatform {
+//    DRONE_PLATFORM_STATUS_FEEDBACK_DATA = 0x1031,
+//    TASK_STATUS_FEEDBACK_DATA,
+//    FORMATION_STATUS_FEEDBACK_DATA,
+//};
+
+//enum class TelemetryInstructionFeedback {
+//    COMMAND_FEEDBACK_RESPONSE = 0x1051, //每收到一次遥控指令都需发送一次指令反馈回复（0X1051）
+//};
+
+//enum class TelemetryRouteManagement {
+//    ROUTE_INQUIRY_REPLY = 0x1052,
+//    ROUTE_DOWNLOAD_REPLY,
+//    ROUTE_CONFIRMATION_REPLY,
+//};
+
+enum {
+    /* 遥控命令子定义*/
     WORK_MODE = 0x0001,
     LIGHT_SWITCHING,
     IMAGE_STABILIZATION_INSTRUCTION,
@@ -85,23 +168,19 @@ enum class TelecontrolPhotoelectricLoad {
     VIDEO,
     TARGET_DETECTION_AND_RECOGNITION,
     AUTOMATIC_TARGET_TRACKING,
-//    GEOGRAPHIC_COORDINATE_GUIDANCE, //该指令弃用
+    //    GEOGRAPHIC_COORDINATE_GUIDANCE, //该指令弃用
     PAN_TILT_CONTROL_MODE = 0X000C,
     OPTOELECTRONIC_LOAD_STATUS_QUERY,
-};
 
-enum class TelecontrolGJLoad {
-    WORK_MODE = 0x0021,
+    GJ_WORK_MODE = 0x0021,
     ATTACK_MODE_SWITCHING,
     INSURANCE_MODE,
     ATTACK_STATUS,
-    AUTOMATIC_TARGET_TRACKING,
+    GJ_AUTOMATIC_TARGET_TRACKING,
     AUTONOMOUS_STRIKE,
     GJ_LOAD_STATUS_QUERY,
     ZDB_CONTROL,
-};
 
-enum class TelecontrolDronePlatform {
     VIRTUAL_ROCKER_MODE = 0x00A1,
     AUTONOMOUS_TAKEOFF,
     AUTONOMOUS_RETURN,
@@ -116,41 +195,28 @@ enum class TelecontrolDronePlatform {
     GEOGRAPHIC_COORDINATE_GUIDANCE,
     ROUTE_DOWNLOAD_SWITCH,
     AUTONOMOUS_NAVIGATION_POSITIONING_SETTING,
-};
 
-enum class TelecontrolFormationFlight {
     FORMATION_FLIGHT = 0x00D1,
     FORMATION_FORMATION_TRANSFORMATION,
     ONE_CLICK_TAKEOFF_COMMAND_FOR_FORMATION,
     ONE_CLICK_RETURN_TO_LANDING_COMMOND_FOR_FORMATION,
-    NAVIGATOR_WAYPOING_SETTING
-};
+    NAVIGATOR_WAYPOING_SETTING,
 
-/* 遥测命令子定义*/
-enum class TelemetryPhotoelectricLoad {
+    /* 遥测命令子定义*/
     IMAGE_STATUS_FEEDBACK_DATA = 0x1001,
     VIDEO_STATUS_FEEDBACK,
     LASER_RANGING_FEEDBACK,
     LASEER_IRRADIATION_FEEDBACK,
-};
 
-enum class TelemetryGJLoad {
     ATTACK_PAYLOAD_FEEDBACK_DATA = 0x1021,
     ZDB_FEEDBACK_DATA,
-};
 
-// 每200ms发送一次，定时更新，类似心跳包
-enum class TelemetryDronePlatform {
     DRONE_PLATFORM_STATUS_FEEDBACK_DATA = 0x1031,
     TASK_STATUS_FEEDBACK_DATA,
     FORMATION_STATUS_FEEDBACK_DATA,
-};
 
-enum class TelemetryInstructionFeedback {
     COMMAND_FEEDBACK_RESPONSE = 0x1051, //每收到一次遥控指令都需发送一次指令反馈回复（0X1051）
-};
 
-enum class TelemetryRouteManagement {
     ROUTE_INQUIRY_REPLY = 0x1052,
     ROUTE_DOWNLOAD_REPLY,
     ROUTE_CONFIRMATION_REPLY,
