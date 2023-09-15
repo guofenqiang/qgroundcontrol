@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
  *
  * (c) 2009-2020 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
  *
@@ -333,6 +333,7 @@ VisualMissionItem* MissionController::_insertSimpleMissionItemWorker(QGeoCoordin
             }
         }
     }
+    newItem->setAltitude(coordinate.altitude());
     if (visualItemIndex == -1) {
         _visualItems->append(newItem);
     } else {
@@ -2698,4 +2699,10 @@ void MissionController::setGlobalAltitudeMode(QGroundControlQmlGlobal::AltMode a
         _globalAltMode = altMode;
         emit globalAltitudeModeChanged();
     }
+}
+
+void MissionController::setAltitude()
+{
+    SimpleMissionItem * newItem = new SimpleMissionItem(_masterController, _flyView, false /* forLoad */);
+    newItem->setAltitude(100.0);
 }

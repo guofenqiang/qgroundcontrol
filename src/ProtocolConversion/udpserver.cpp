@@ -4,12 +4,14 @@
 #include "Vehicle.h"
 #include "QGCApplication.h"
 #include "protocolconversion.h"
+#include <QTimer>
 
 UDPServer::UDPServer(QObject *parent)
     : QObject{parent}
 {
     mType = 2;//Multicast
     InitSocket();
+    InitTimer();
 }
 
 void UDPServer::InitSocket()
@@ -79,17 +81,24 @@ void UDPServer::ReadPendingDataframs()
     {
         QHostAddress _peerHostAddress;
         quint16 _port;
+
         while(mUdpSocket->hasPendingDatagrams())
         {
             mUdpSocket->readDatagram(_data.data(),_data.size(),&_peerHostAddress,&_port);//接收同组的udp报文
 //            qDebug()<<"Multicast ==> Receive data : "<<QString::fromLatin1(_data);
-            qDebug()<<"Multicast ==> Receive data : "<<_data.toHex();
-            qDebug() << "_peerHostAddress: " << _peerHostAddress;
-            qDebug() << "_peer_port: " << _port;
-            _ptconv.bz_protocol_conversion(_data, &remote_cmd);
-            _ptconv.print_reciver((char*)&(remote_cmd.telecontrol[0]), MAVLINK_MSG_ID_REMOTE_CMD_LEN);
+            if (_flag == 0) {
+                _mTimer.start(10);
+                _flag = 1;
+            }
+            if (_data.toHex() == _pre_data.toHex()) {
+                continue;
+            }
 
+            qDebug()<<"Multicast ==> Receive data : "<<_data.toHex();
+            _ptconv.bz_protocol_conversion(_data, &remote_cmd);
+            _ptconv.bz_telecontrol_decode(remote_cmd);
             vehicle->remoteCmd(remote_cmd);
+            _pre_data = _data;
         }
     }
     else
@@ -97,5 +106,17 @@ void UDPServer::ReadPendingDataframs()
         qDebug()<< "mType is error! ";
         return;
     }
+}
+
+void UDPServer::InitTimer()
+{
+    connect(&_mTimer, &QTimer::timeout, this, &UDPServer::DeduplicationItem);
+    _flag = 0;
+}
+
+void UDPServer::DeduplicationItem()
+{
+    _pre_data.clear();
+    _flag = 0;
 }
 

@@ -273,6 +273,9 @@ Vehicle::Vehicle(LinkInterface*             link,
     connect(&_csvLogTimer, &QTimer::timeout, this, &Vehicle::_writeCsvLine);
     _csvLogTimer.start(1000);
 
+    connect(&_updatePlatformStatusTime, &QTimer::timeout, this, &Vehicle::_update_uav_platform_status);
+    _updatePlatformStatusTime.start(200);
+
     qRegisterMetaType<uint8_t>("uint8_t");
     qRegisterMetaType<uint16_t>("uint16_t");
     qRegisterMetaType<uint64_t>("uint64_t");
@@ -1100,6 +1103,10 @@ void Vehicle::_handleAttitudeWorker(double rollRadians, double pitchRadians, dou
     _rollFact.setRawValue(roll);
     _pitchFact.setRawValue(pitch);
     _headingFact.setRawValue(yaw);
+
+    _feedback_data.yaw_angle = (int16_t)yaw * 10;
+    _feedback_data.pitch_angle = (int16_t)pitch * 100;
+    _feedback_data.roll_angle = (int16_t)roll * 100;
 }
 
 void Vehicle::_handleAttitude(mavlink_message_t& message)
@@ -1317,6 +1324,7 @@ void Vehicle::_handleAltitude(mavlink_message_t& message)
     _altitudeMessageAvailable = true;
     _altitudeRelativeFact.setRawValue(altitude.altitude_relative);
     _altitudeAMSLFact.setRawValue(altitude.altitude_amsl);
+    _feedback_data.relative_height = (int16_t)altitude.altitude_relative * 10;
 }
 
 void Vehicle::_setCapabilities(uint64_t capabilityBits)
@@ -4642,7 +4650,7 @@ void Vehicle::remoteCmd(mavlink_remote_cmd_t remote_cmd)
         return;
     }
 
-    mavlink_message_t msg = {0};
+    mavlink_message_t msg = {};
 
     mavlink_msg_remote_cmd_pack_chan(_mavlink->getSystemId(),
                                     _mavlink->getComponentId(),
@@ -4650,11 +4658,8 @@ void Vehicle::remoteCmd(mavlink_remote_cmd_t remote_cmd)
                                     &msg, &remote_cmd.telecontrol[0]);
     sendMessageOnLinkThreadSafe(sharedLink.get(), msg);
     qDebug() << "vehicle: ========= send remote message ========= ";
-    qDebug("msg.len: %d", msg.len);
-    qDebug("msg.msgid: %d", msg.msgid);
-
     QByteArray print_array((char*)&msg.payload64[0], msg.len);
-    qDebug() << "msg.pyload: " << print_array.toHex();
+    qDebug() << print_array.toHex();
 
 }
 
@@ -4674,4 +4679,26 @@ void Vehicle::_handleTelemetryCmd(mavlink_message_t& message)
     data.resize(115);
     _ptconv.CmdFeedback(ack, data);
     client.SendData(data);
+}
+
+void Vehicle::_update_uav_platform_status()
+{
+    QByteArray data;
+    data.resize(BZ_GROUND_DOWNSTREAM_LEN);
+    ProtocolConversion _ptconv;
+    UDPClient client;
+    bz_message_ground_down_t message = {};
+    drone_platform_status_feedback_data_t feedback_data = {};
+
+    uint8_t sender_sysid = 1;
+    uint8_t receiver_sysid = 10;
+
+    feedback_data.relative_height = _feedback_data.relative_height;
+    feedback_data.yaw_angle = _feedback_data.yaw_angle;
+    feedback_data.pitch_angle = _feedback_data.pitch_angle;
+    feedback_data.roll_angle = _feedback_data.roll_angle;
+
+    _ptconv.uav_platform_feedback(&message, sender_sysid, receiver_sysid, feedback_data);
+    _ptconv.ground_down_t_to_qbyte(&data, &message);
+//    client.SendData(data);
 }

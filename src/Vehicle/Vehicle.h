@@ -18,6 +18,7 @@
 #include <QSharedPointer>
 
 #include "FactGroup.h"
+#include "ProtocolType.h"
 #include "QGCMAVLink.h"
 #include "QmlObjectListModel.h"
 #include "MAVLinkProtocol.h"
@@ -1115,6 +1116,7 @@ private slots:
     void _orbitTelemetryTimeout             ();
     void _updateFlightTime                  ();
     void _gotProgressUpdate                 (float progressValue);
+    void _update_uav_platform_status        ();
 
 private:
     void _loadSettings                  ();
@@ -1288,6 +1290,7 @@ private:
     QTimer                          _flightTimeUpdater;
     TrajectoryPoints*               _trajectoryPoints = nullptr;
     QmlObjectListModel              _cameraTriggerPoints;
+    QTimer                          _updatePlatformStatusTime;
     //QMap<QString, ADSBVehicle*>     _trafficVehicleMap;
 
     // Toolbox references
@@ -1559,6 +1562,8 @@ private:
     uint8_t pdw5_target_number;
     uint16_t pdw5_rate;
     int16_t pdw5_azimuth;
+
+    drone_platform_status_feedback_data_t _feedback_data;
 
     Q_PROPERTY(uint64_t time_usec READ getTime_usec WRITE setTime_usec NOTIFY time_usecChanged)
     Q_PROPERTY(uint8_t frame_number READ getFrame_number WRITE setFrame_number NOTIFY frame_numberChanged)

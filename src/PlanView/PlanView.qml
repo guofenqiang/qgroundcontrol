@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
  *
  * (c) 2009-2020 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
  *
@@ -26,6 +26,8 @@ import QGroundControl.Controllers       1.0
 import QGroundControl.ShapeFileHelper   1.0
 import QGroundControl.Airspace          1.0
 import QGroundControl.Airmap            1.0
+
+import RoutePlanning                    1.0
 
 Item {
     id: _root
@@ -182,6 +184,7 @@ Item {
 
     PlanMasterController {
         id:         planMasterController
+        objectName: "planMasterController"
         flyView:    false
 
         Component.onCompleted: {
@@ -284,6 +287,52 @@ Item {
                 mapFitFunctions.fitMapViewportToMissionItems()
             }
             _missionController.setCurrentPlanViewSeqNum(0, true)
+        }
+    }
+
+    RoutePlanning {
+        id: route_planning
+        objectName: "route_planning"
+
+        Component.onCompleted: {
+            console.log("RoutePlanning create route_planning")
+        }
+    }
+
+    Connections {
+        target: route_planning
+
+
+        function onInsertSimpleItem(coordinate) {
+            insertSimpleItemAfterCurrent(coordinate)
+        }
+
+        function onInsertTakeItem(coordinate) {
+            insertTakeItemAfterCurrent(coordinate)
+        }
+
+        function onInsertLandItem(coordinate) {
+            insertLandItemAfterCurrent(coordinate)
+        }
+
+//        function onInsertCruiseItem() {
+//            insertSimpleItemAfterCurrent()
+//        }
+
+//        function onInsertLevelItem() {
+//            insertSimpleItemAfterCurrent()
+//        }
+
+//        function onInsertHomewardItem() {
+//            insertSimpleItemAfterCurrent()
+//        }
+
+//        function onInsertEmergencyItem() {
+//            insertSimpleItemAfterCurrent()
+//        }
+
+        function onUploadRoute() {
+            _planMasterController.upload()
         }
     }
 

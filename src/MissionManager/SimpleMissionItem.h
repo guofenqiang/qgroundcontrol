@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
  *
  * (c) 2009-2020 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
  *
@@ -135,6 +135,8 @@ public:
     void setSequenceNumber  (int sequenceNumber) final;
     int  lastSequenceNumber (void) const final;
     void save               (QJsonArray&  missionItems) final;
+
+    void setAltitude(double altitude);
 
 signals:
     void commandChanged             (int command);

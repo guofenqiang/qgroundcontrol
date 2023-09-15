@@ -433,6 +433,7 @@ contains (DEFINES, QGC_ENABLE_PAIRING) {
 #
 
 HEADERS += \
+    routeplanning.h \
     src/ProtocolConversion/BZ_Convertion/BZConv.h \
     src/ProtocolConversion/BZ_Convertion/CRCCheck.h \
     src/ProtocolConversion/ProtocolType.h \
@@ -456,6 +457,7 @@ contains (DEFINES, QGC_ENABLE_PAIRING) {
 }
 
 SOURCES += \
+    routeplanning.cpp \
     src/ProtocolConversion/BZ_Convertion/BZConv.cpp \
     src/ProtocolConversion/BZ_Convertion/CRCCheck.c \
     src/ProtocolConversion/protocolconversion.cpp \

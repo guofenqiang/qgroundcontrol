@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
  *
  * (c) 2009-2020 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
  *
@@ -1102,4 +1102,10 @@ void SimpleMissionItem::_possibleRadiusChanged(void)
     if (isLoiterItem()) {
         emit loiterRadiusChanged(loiterRadius());
     }
+}
+
+void SimpleMissionItem::setAltitude(double altitude)
+{
+//    _altitudeChanged();
+     _missionItem._param7Fact.setRawValue(altitude);
 }

@@ -108,6 +108,7 @@
 #include "myobject.h"
 #include "udpclient.h"
 #include "udpserver.h"
+#include "routeplanning.h"
 
 #if defined(QGC_ENABLE_PAIRING)
 #include "PairingManager.h"
@@ -553,6 +554,7 @@ void QGCApplication::_initCommon()
     qmlRegisterType<MyObject>("MyObj", 1, 0, "MyObject");
     qmlRegisterType<UDPClient>("UDPClient", 1, 0, "UDPClient");
     qmlRegisterType<UDPServer>("UDPServer", 1, 0, "UDPServer");
+    qmlRegisterType<RoutePlanning>("RoutePlanning", 1, 0, "RoutePlanning");
 }
 
 bool QGCApplication::_initForNormalAppBoot()

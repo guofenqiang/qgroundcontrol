@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
  *
  * (c) 2009-2020 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
  *
@@ -14,6 +14,7 @@
 #include "QGCApplication.h"
 #include "MissionCommandTree.h"
 #include "MissionCommandUIInfo.h"
+#include "protocolconversion.h"
 
 QGC_LOGGING_CATEGORY(PlanManagerLog, "PlanManagerLog")
 
@@ -474,6 +475,11 @@ void PlanManager::_handleMissionItem(const mavlink_message_t& message)
     } else {
         _requestNextMissionItem();
     }
+
+    ProtocolConversion _ptconv;
+    //        mavlink_telemetry_cmd_t telemetryCmd = {0};
+    //        mavlink_msg_telemetry_cmd_decode(&message, &telemetryCmd);
+    _ptconv.bz_telemetry_decode(message, ROUTE_DOWNLOAD_REPLY);
 }
 
 void PlanManager::_clearMissionItems(void)

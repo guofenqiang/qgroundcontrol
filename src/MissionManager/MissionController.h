@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
  *
  * (c) 2009-2020 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
  *
@@ -257,6 +257,8 @@ public:
     QGroundControlQmlGlobal::AltMode globalAltitudeMode(void);
     QGroundControlQmlGlobal::AltMode globalAltitudeModeDefault(void);
     void setGlobalAltitudeMode(QGroundControlQmlGlobal::AltMode altMode);
+
+    void setAltitude();
 
 signals:
     void visualItemsChanged                 (void);

@@ -15,7 +15,9 @@ public:
     void bz_protocol_conversion(QByteArray buff, mavlink_remote_cmd_t* remote_cmd);
     void CmdFeedback(mavlink_telemetry_cmd_t telemetry_cmd, QByteArray &buff);
     uint16_t crc16_xmodem(uint8_t *data, uint16_t length);
-    void bz_encode(mavlink_telemetry_cmd_t *telemetryCmd,  mavlink_remote_cmd_t remote_cmd);
+    void bz_encode(mavlink_telemetry_cmd_t *telemetryCmd,  mavlink_remote_cmd_t remote_cmd, mavlink_message_t message);
+    void bz_telecontrol_decode(mavlink_remote_cmd_t remoteCmd);
+    void bz_telemetry_decode(const mavlink_message_t& message, uint16_t cmd);
     void print_mavlink_message(bz_message_t *bz_message);
     void print_mavlink_message_ground_down(bz_message_ground_down_t *bz_message);
     void print_reciver(char *buff, uint8_t len);
@@ -59,35 +61,48 @@ public:
     void geographic_coordinage_guidance(mavlink_telemetry_cmd_t *telemetryCmd,  mavlink_remote_cmd_t remoteCmd);
     void route_downlaod_switch(mavlink_telemetry_cmd_t *telemetryCmd,  mavlink_remote_cmd_t remoteCmd);
     void autonomous_navigation_positioning_setting(mavlink_telemetry_cmd_t *telemetryCmd,  mavlink_remote_cmd_t remoteCmd);
+    void autonomous_precision_land(mavlink_telemetry_cmd_t *telemetryCmd,  mavlink_remote_cmd_t remoteCmd);
 
     void formation_flight(mavlink_telemetry_cmd_t *telemetryCmd,  mavlink_remote_cmd_t remoteCmd);
     void formation_formation_transformation(mavlink_telemetry_cmd_t *telemetryCmd,  mavlink_remote_cmd_t remoteCmd);
     void one_click_takeoff_command_for_formation(mavlink_telemetry_cmd_t *telemetryCmd,  mavlink_remote_cmd_t remoteCmd);
     void one_click_retrun_to_landing_commond_for_formation(mavlink_telemetry_cmd_t *telemetryCmd,  mavlink_remote_cmd_t remoteCmd);
     void navigator_waypoing_setting(mavlink_telemetry_cmd_t *telemetryCmd,  mavlink_remote_cmd_t remoteCmd);
+    void invalid_remote_cmd(mavlink_message_t message);
 
+    void image_status_feedback_data(mavlink_message_t message);
+    void video_status_feedback(mavlink_message_t message);
+    void laser_ranging_feedback(mavlink_message_t message);
+    void laseer_irradiation_feedback(mavlink_message_t message);
 
-    void image_status_feedback_data(mavlink_telemetry_cmd_t *telemetryCmd,  mavlink_remote_cmd_t remoteCmd);
-    void video_status_feedback(mavlink_telemetry_cmd_t *telemetryCmd,  mavlink_remote_cmd_t remoteCmd);
-    void laser_ranging_feedback(mavlink_telemetry_cmd_t *telemetryCmd,  mavlink_remote_cmd_t remoteCmd);
-    void laseer_irradiation_feedback(mavlink_telemetry_cmd_t *telemetryCmd,  mavlink_remote_cmd_t remoteCmd);
+    void attack_payload_feedback_data(mavlink_message_t message);
+    void zdb_feedback_data(mavlink_message_t message);
 
-    void attack_payload_feedback_data(mavlink_telemetry_cmd_t *telemetryCmd,  mavlink_remote_cmd_t remoteCmd);
-    void zdb_feedback_data(mavlink_telemetry_cmd_t *telemetryCmd,  mavlink_remote_cmd_t remoteCmd);
+    void drone_platform_status_feedback_data(mavlink_message_t message);
+    void task_status_feedback_data(mavlink_message_t message);
+    void formation_status_feedback_data(mavlink_message_t message);
 
-    void drone_platform_status_feedback_data(mavlink_telemetry_cmd_t *telemetryCmd,  mavlink_remote_cmd_t remoteCmd);
-    void task_status_feedback_data(mavlink_telemetry_cmd_t *telemetryCmd,  mavlink_remote_cmd_t remoteCmd);
-    void formation_status_feedback_data(mavlink_telemetry_cmd_t *telemetryCmd,  mavlink_remote_cmd_t remoteCmd);
+    void command_feedback_response(mavlink_message_t message);
 
-    void command_feedback_response(mavlink_telemetry_cmd_t *telemetryCmd,  mavlink_remote_cmd_t remoteCmd);
+    void route_inquiry_reply(mavlink_message_t message);
+    void route_download_reply(const mavlink_message_t& message);
+    void route_confirmation_reply(mavlink_message_t message);
+    void invalid_telemetry_cmd(mavlink_message_t message);
 
-    void route_inquiry_reply(mavlink_telemetry_cmd_t *telemetryCmd,  mavlink_remote_cmd_t remoteCmd);
-    void route_download_reply(mavlink_telemetry_cmd_t *telemetryCmd,  mavlink_remote_cmd_t remoteCmd);
-    void route_confirmation_reply(mavlink_telemetry_cmd_t *telemetryCmd,  mavlink_remote_cmd_t remoteCmd);
-    void invalid_cmd(mavlink_telemetry_cmd_t *telemetryCmd,  mavlink_remote_cmd_t remoteCmd);
+    void uav_to_ground(uint8_t *dst, uint8_t* src);
+    void ground_to_uav(uint8_t *dst, uint8_t* src);
+    void bz_finalize_message_encode(bz_message_ground_down_t *msg, uint8_t length, uint8_t sender_sysid, uint8_t receiver_sysid, uint16_t cmd);
+    void ground_down_t_to_qbyte(QByteArray *buff, bz_message_ground_down_t *msg);
+    void uav_platform_feedback(bz_message_ground_down_t *msg, uint8_t sender_sysid, uint8_t receiver_sysid, drone_platform_status_feedback_data_t feedback_data);
+    void uav_telemetry_feedback(bz_message_ground_down_t *msg, uint8_t sender_sysid, uint8_t receiver_sysid, uint8_t *st_start_addr, uint8_t len, uint16_t cmd);
+
+private slots:
+    void _slotTimerOut();
 
 signals:
 
+private:
+    bool _mTimeout;
 };
 
 #endif // PROTOCOLCONVERSION_H

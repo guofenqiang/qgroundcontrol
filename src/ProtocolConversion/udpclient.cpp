@@ -65,7 +65,7 @@ void UDPClient::SendData(QByteArray data)
 
         if(-1 != mUdpSocket->writeDatagram((char*)buff, len, mGroupAddress, _port))
         {
-            qDebug()<< "Multicast ==> Send data : "<< data.toHex();
+//            qDebug()<< "Multicast ==> Send data : "<< data.toHex();
         }
         mUdpSocket->flush();
     }

@@ -1885,7 +1885,7 @@ void MockLink::_handleRemoteCmd(const mavlink_message_t& msg)
     QByteArray print_array((char*)&remoteCmd.telecontrol[0], MAVLINK_MSG_ID_REMOTE_CMD_LEN);
     qDebug() << print_array.toHex();
 
-    _ptconv.bz_encode(&telemetryCmd, remoteCmd);
+    _ptconv.bz_encode(&telemetryCmd, remoteCmd, msg);
 
     mavlink_msg_telemetry_cmd_pack_chan(
                                         _vehicleSystemId,

@@ -2,8 +2,9 @@
 #define MYOBJECT_H
 
 #include <QObject>
-#include <Qtqml>
+//#include <Qtqml>
 #include "mavlink_types.h"
+#include "qqml.h"
 
 class MyObject : public QObject
 {
