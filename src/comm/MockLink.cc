@@ -1808,7 +1808,7 @@ void MockLink::_handleRadarCmd(const mavlink_message_t& msg)
             break;
     }
 
-    if (radarCmd.cmd >= STANDBY && radarCmd.cmd <= START_OR_STOP)
+    if (radarCmd.cmd <= START_OR_STOP)
         cmd_result = VERIFICATION_OK;
     else
         cmd_result = VERIFICATION_ERR;

@@ -36,7 +36,8 @@ linux {
             QMAKE_CXXFLAGS_WARN_ON += -Werror \
                 -Wno-deprecated-copy \      # These come from mavlink headers
                 -Wno-unused-parameter \     # gst_plugins-good has these errors
-                -Wno-implicit-fallthrough   # gst_plugins-good has these errors
+                -Wno-implicit-fallthrough \   # gst_plugins-good has these errors
+                -Wno-address-of-packed-member # Avoiding alarm issues on Linux
         }
     } else : linux-rasp-pi2-g++ {
         message("Linux R-Pi2 build")
