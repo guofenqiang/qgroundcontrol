@@ -9,6 +9,11 @@ UDPClient::UDPClient(QObject *parent)
 //    InitTimer();
 }
 
+UDPClient::~UDPClient()
+{
+    mUdpSocket->close();
+}
+
 void UDPClient::InitSocket()
 {
     mUdpSocket = new QUdpSocket;//初始化socket

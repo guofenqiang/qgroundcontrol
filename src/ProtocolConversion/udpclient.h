@@ -12,7 +12,7 @@ class UDPClient : public QObject
     Q_OBJECT
 public:
     explicit UDPClient(QObject *parent = nullptr);
-
+    virtual ~UDPClient();
 
     void InitSocket();//初始化UDP套接字
 

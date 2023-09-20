@@ -14,6 +14,11 @@ UDPServer::UDPServer(QObject *parent)
     InitTimer();
 }
 
+UDPServer::~UDPServer()
+{
+    mUdpSocket->close();
+}
+
 void UDPServer::InitSocket()
 {
     //初始化socket，设置组播地址

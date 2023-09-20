@@ -12,6 +12,7 @@ class UDPServer : public QObject
     Q_OBJECT
 public:
     explicit UDPServer(QObject *parent = nullptr);
+    virtual ~UDPServer();
 
     void InitSocket();//初始化套接字
 

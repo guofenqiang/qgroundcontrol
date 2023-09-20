@@ -909,12 +909,13 @@ Item {
                         }
 
                         //会初始化 UDP类
-//                        UDPClient {
-//                            id: udpclient
-//                            Component.onCompleted: {
-//                                console.log("init udpclient")
-//                            }
-//                        }
+                        UDPClient {
+                            id: udpclient
+                            objectName: "udpclient"
+                            Component.onCompleted: {
+                                console.log("init udpclient")
+                            }
+                        }
 
                         UDPServer {
                             id: udpserver

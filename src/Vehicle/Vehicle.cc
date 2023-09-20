@@ -4667,7 +4667,8 @@ void Vehicle::_handleTelemetryCmd(mavlink_message_t& message)
 {
     QByteArray data;
     ProtocolConversion _ptconv;
-    UDPClient client;
+    QObject *root = qgcApp()->qmlAppEngine()->rootObjects().first();
+    UDPClient *client = root->findChild<UDPClient*>("udpclient");
     mavlink_telemetry_cmd_t ack;
 
     mavlink_msg_telemetry_cmd_decode(&message, &ack);
@@ -4678,7 +4679,7 @@ void Vehicle::_handleTelemetryCmd(mavlink_message_t& message)
 
     data.resize(115);
     _ptconv.CmdFeedback(ack, data);
-    client.SendData(data);
+    client->SendData(data);
 }
 
 void Vehicle::_update_uav_platform_status()
@@ -4686,7 +4687,8 @@ void Vehicle::_update_uav_platform_status()
     QByteArray data;
     data.resize(BZ_GROUND_DOWNSTREAM_LEN);
     ProtocolConversion _ptconv;
-    UDPClient client;
+    QObject *root = qgcApp()->qmlAppEngine()->rootObjects().first();
+    UDPClient *client = root->findChild<UDPClient*>("udpclient");
     bz_message_ground_down_t message = {};
     drone_platform_status_feedback_data_t feedback_data = {};
 
@@ -4700,5 +4702,5 @@ void Vehicle::_update_uav_platform_status()
 
     _ptconv.uav_platform_feedback(&message, sender_sysid, receiver_sysid, feedback_data);
     _ptconv.ground_down_t_to_qbyte(&data, &message);
-//    client.SendData(data);
+    client->SendData(data);
 }

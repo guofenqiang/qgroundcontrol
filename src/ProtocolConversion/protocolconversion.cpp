@@ -854,7 +854,8 @@ void ProtocolConversion::route_download_reply(const mavlink_message_t& message)
     route_setting_t download_reply;
     mavlink_mission_item_int_t missionItem;
     bz_message_ground_down_t bz_message = {};
-    UDPClient client;
+    QObject *root = qgcApp()->qmlAppEngine()->rootObjects().first();
+    UDPClient *client = root->findChild<UDPClient*>("udpclient");
     mavlink_msg_mission_item_int_decode(&message, &missionItem);
 
     //    command =       (MAV_CMD)missionItem.command;
@@ -888,7 +889,7 @@ void ProtocolConversion::route_download_reply(const mavlink_message_t& message)
 
     uav_telemetry_feedback(&bz_message, sender_sysid, receiver_sysid, (uint8_t*)&download_reply.upload, 28-9+1, ROUTE_DOWNLOAD_REPLY);
     ground_down_t_to_qbyte(&data, &bz_message);
-    client.SendData(data);
+    client->SendData(data);
 }
 
 void ProtocolConversion::route_confirmation_reply(mavlink_message_t message)
