@@ -4700,6 +4700,8 @@ void Vehicle::_update_uav_platform_status()
     feedback_data.pitch_angle = _feedback_data.pitch_angle;
     feedback_data.roll_angle = _feedback_data.roll_angle;
 
+    feedback_data.platform_status = _ptconv.cov_flight_status(flightMode());
+
     _ptconv.uav_platform_feedback(&message, sender_sysid, receiver_sysid, feedback_data);
     _ptconv.ground_down_t_to_qbyte(&data, &message);
     client->SendData(data);

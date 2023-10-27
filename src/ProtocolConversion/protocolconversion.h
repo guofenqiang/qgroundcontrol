@@ -96,6 +96,7 @@ public:
     void uav_platform_feedback(bz_message_ground_down_t *msg, uint8_t sender_sysid, uint8_t receiver_sysid, drone_platform_status_feedback_data_t feedback_data);
     void uav_telemetry_feedback(bz_message_ground_down_t *msg, uint8_t sender_sysid, uint8_t receiver_sysid, uint8_t *st_start_addr, uint8_t len, uint16_t cmd);
 
+    uint8_t cov_flight_status(QString flightMode);
 private slots:
     void _slotTimerOut();
 

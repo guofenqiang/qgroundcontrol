@@ -609,4 +609,20 @@ typedef struct __route_confirmation_reply {
 
 #pragma pack(pop)
 
+enum {
+    TAKEOFF = 0x01,
+    LAND,
+    HOLD,
+    RETURN,
+    EMERENCY_HOVER,
+    ROUTE_READY,
+    WAYPOINT_FLIGHT, //当前没有航点飞行
+    ROUTE_FLIGHT,
+    AUTO_CRUISE,
+    VIRTUAL_JOYSTICK_FLIGHT,
+    AUTO_MAUAL_FLIGHT,
+    EMERENCY_MODE,
+    STOP_SLURRY,
+};
+
 #endif // PROTOCOLTYPE_H

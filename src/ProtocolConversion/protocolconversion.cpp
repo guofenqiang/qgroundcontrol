@@ -1164,3 +1164,37 @@ void ProtocolConversion::_slotTimerOut()
     _mTimeout = true;
     qDebug()<<"timeout";
 }
+
+
+uint8_t ProtocolConversion::cov_flight_status(QString flightMode)
+{
+    uint8_t flight_mode;
+
+    if (flightMode == "Takeoff") {
+        flight_mode = TAKEOFF;
+    } else if (flightMode == "Land") {
+        flight_mode = LAND;
+    } else if (flightMode == "Hold") {
+        flight_mode = HOLD;
+    } else if (flightMode == "Return") {
+        flight_mode = RETURN;
+    } else if (flightMode == "Mission") {
+        flight_mode = ROUTE_READY;
+    } else if (flightMode == "") {
+        flight_mode = ROUTE_FLIGHT;
+    } else if (flightMode == "") {
+        flight_mode = AUTO_CRUISE;
+    } else if (flightMode == "Manual") {
+        flight_mode = VIRTUAL_JOYSTICK_FLIGHT;
+    } else if (flightMode == "Manual") {
+        flight_mode = AUTO_MAUAL_FLIGHT;
+    } else if (flightMode == "") {
+        flight_mode = EMERENCY_MODE;
+    } else if (flightMode == "") {
+        flight_mode = STOP_SLURRY;
+    } else {
+        qDebug() << "unkown flight mode";
+        flight_mode = 0xff;
+    }
+    return flight_mode;
+}
