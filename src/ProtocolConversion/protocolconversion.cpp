@@ -1186,14 +1186,16 @@ uint8_t ProtocolConversion::cov_flight_status(QString flightMode)
         flight_mode = AUTO_CRUISE;
     } else if (flightMode == "Manual") {
         flight_mode = VIRTUAL_JOYSTICK_FLIGHT;
-    } else if (flightMode == "Manual") {
+    } else if (flightMode == "") {
+        flight_mode = AUTO_RETURN;
+    }else if (flightMode == "Position" || flightMode == "Stabilized") {
         flight_mode = AUTO_MAUAL_FLIGHT;
     } else if (flightMode == "") {
         flight_mode = EMERENCY_MODE;
     } else if (flightMode == "") {
         flight_mode = STOP_SLURRY;
     } else {
-        qDebug() << "unkown flight mode";
+        // cout << "unkown flight mode " << flightMode << endl;
         flight_mode = 0xff;
     }
     return flight_mode;
