@@ -32,6 +32,7 @@ import QGroundControl.Vehicle       1.0
 import MyObj                        1.0
 import UDPClient                    1.0
 import UDPServer                    1.0
+import Telecontrol                  1.0
 
 // This is the ui overlay layer for the widgets/tools for Fly View
 Item {
@@ -1014,6 +1015,14 @@ Item {
         }
     }
 
+    // 仅为了在qml初始化Telecontrol类
+//    Telecontrol {
+//        id: telecontrol
+//        objectName: "telecontrol"
+//        Component.onCompleted: {
+//            console.log("init telecontrol")
+//        }
+//    }
 
     //-- Virtual Joystick
     Loader {

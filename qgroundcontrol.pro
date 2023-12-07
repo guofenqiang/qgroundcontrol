@@ -438,6 +438,7 @@ HEADERS += \
     src/ProtocolConversion/BZ_Convertion/CRCCheck.h \
     src/ProtocolConversion/ProtocolType.h \
     src/ProtocolConversion/protocolconversion.h \
+    src/ProtocolConversion/telecontrol.h \
     src/ProtocolConversion/udpclient.h \
     src/ProtocolConversion/udpserver.h \
     src/QmlControls/CustomAction.h \
@@ -461,6 +462,7 @@ SOURCES += \
     src/ProtocolConversion/BZ_Convertion/BZConv.cpp \
     src/ProtocolConversion/BZ_Convertion/CRCCheck.c \
     src/ProtocolConversion/protocolconversion.cpp \
+    src/ProtocolConversion/telecontrol.cpp \
     src/ProtocolConversion/udpclient.cpp \
     src/ProtocolConversion/udpserver.cpp \
     src/QmlControls/CustomActionManager.cc \

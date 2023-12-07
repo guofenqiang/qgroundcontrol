@@ -109,6 +109,7 @@
 #include "udpclient.h"
 #include "udpserver.h"
 #include "routeplanning.h"
+#include "telecontrol.h"
 
 #if defined(QGC_ENABLE_PAIRING)
 #include "PairingManager.h"
@@ -555,6 +556,7 @@ void QGCApplication::_initCommon()
     qmlRegisterType<UDPClient>("UDPClient", 1, 0, "UDPClient");
     qmlRegisterType<UDPServer>("UDPServer", 1, 0, "UDPServer");
     qmlRegisterType<RoutePlanning>("RoutePlanning", 1, 0, "RoutePlanning");
+    qmlRegisterType<Telecontrol>("Telecontrol", 1, 0, "Telecontrol");
 }
 
 bool QGCApplication::_initForNormalAppBoot()
