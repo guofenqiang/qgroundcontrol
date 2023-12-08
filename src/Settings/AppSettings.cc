@@ -369,7 +369,7 @@ QLocale::Language AppSettings::_qLocaleLanguageID(void)
         // We need to convert to the new settings key/values
 #if 0
         // Old vales
-        "enumStrings":      "System,български (Bulgarian),中文 (Chinese),Nederlands (Dutch),English,Suomi (Finnish),Français (French),Deutsche (German),Ελληνικά (Greek), עברית (Hebrew),Italiano (Italian),日本語 (Japanese),한국어 (Korean),Norsk (Norwegian),Polskie (Polish),Português (Portuguese),Pусский (Russian),Español (Spanish),Svenska (Swedish),Türk (Turkish),Azerbaijani (Azerbaijani)",
+        "enumStrings":      "System,�ҧ�ݧԧѧ��ܧ� (Bulgarian),���� (Chinese),Nederlands (Dutch),English,Suomi (Finnish),Fran?ais (French),Deutsche (German),���˦˦Ǧͦɦ�? (Greek), ????? (Hebrew),Italiano (Italian),�ձ��Z (Japanese),??? (Korean),Norsk (Norwegian),Polskie (Polish),Portugu��s (Portuguese),P����ܧڧ� (Russian),Espa?ol (Spanish),Svenska (Swedish),T��rk (Turkish),Azerbaijani (Azerbaijani)",
         "enumValues":       "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20",
 #endif
         static QList<int> rgNewValues = { 0,20,25,30,31,36,37,42,43,48,58,59,66,85,90,91,96,111,114,125,15 };

@@ -167,6 +167,11 @@ ApplicationWindow {
         showTool(qsTr("Application Settings"), "AppSettings.qml", "/res/QGCLogoWhite")
     }
 
+    function showECMTool() {
+        showTool(qsTr("Electronic countermeasures args Settings"), "ECM_settings.qml", "/res/TYZH_ECM")
+        console.log("btn click")
+    }
+
     //-------------------------------------------------------------------------
     //-- Global simple message dialog
 
@@ -340,6 +345,22 @@ ApplicationWindow {
                             if (!mainWindow.preventViewSwitch()) {
                                 toolSelectDialog.close()
                                 mainWindow.showSettingsTool()
+                            }
+                        }
+                    }
+
+                    SubMenuButton {
+                        id:                 argsButton
+                        height:             toolSelectDialog._toolButtonHeight
+                        Layout.fillWidth:   true
+                        text:               qsTr("ECM args Settings")
+                        imageResource:      "/res/TYZH_ECM"
+                        imageColor:         "transparent"
+                        visible:            !QGroundControl.corePlugin.options.combineSettingsAndSetup
+                        onClicked: {
+                            if (!mainWindow.preventViewSwitch()) {
+                                toolSelectDialog.close()
+                                mainWindow.showECMTool()
                             }
                         }
                     }
