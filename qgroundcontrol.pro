@@ -439,6 +439,7 @@ HEADERS += \
     src/api/QGCSettings.h \
     src/api/QmlComponentInfo.h \
     src/GPS/Drivers/src/base_station.h \
+    src/tools/telecontrol.h
 
 contains (DEFINES, QGC_ENABLE_PAIRING) {
     HEADERS += \
@@ -452,6 +453,7 @@ SOURCES += \
     src/api/QGCOptions.cc \
     src/api/QGCSettings.cc \
     src/api/QmlComponentInfo.cc \
+    src/tools/telecontrol.cpp
 
 contains (DEFINES, QGC_ENABLE_PAIRING) {
     SOURCES += \
@@ -1427,7 +1429,8 @@ contains (CONFIG, QGC_DISABLE_INSTALLER_SETUP) {
 }
 
 DISTFILES += \
-    src/QmlControls/QGroundControl/Specific/qmldir
+    src/QmlControls/QGroundControl/Specific/qmldir \
+    src/tools/CMakeLists.txt
 
 #
 # Steps for "install" target on Linux

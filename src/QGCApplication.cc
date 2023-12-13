@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
  *
  * (c) 2009-2020 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
  *
@@ -16,6 +16,7 @@
  *
  */
 
+#include "tools/telecontrol.h"
 #include <QFile>
 #include <QRegularExpression>
 #include <QFontDatabase>
@@ -546,6 +547,8 @@ void QGCApplication::_initCommon()
     if(QFontDatabase::addApplicationFont(":/fonts/opensans-demibold") < 0) {
         qWarning() << "Could not load /fonts/opensans-demibold font";
     }
+
+    qmlRegisterType<Telecontrol>("Telecontrol", 1, 0, "Telecontrol");
 }
 
 bool QGCApplication::_initForNormalAppBoot()
