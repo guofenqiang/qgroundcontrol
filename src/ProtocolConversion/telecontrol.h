@@ -2,7 +2,11 @@
 #define TELECONTROL_H
 
 #include <QObject>
+#ifdef __android__
+#include "qserialport.h"
+#else
 #include <QSerialPort>
+#endif
 
 class Telecontrol : public QObject
 {
