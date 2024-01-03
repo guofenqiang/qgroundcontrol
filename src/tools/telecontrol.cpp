@@ -5,8 +5,13 @@ Telecontrol::Telecontrol(QObject *parent)
     : QObject{parent},
     m_serial(new QSerialPort)
 {
+#ifdef __android__
     connect(m_serial, &QSerialPort::readyRead, this, &Telecontrol::readData);
     openSerialPort();
+    _JoystickTimeUpdater.setInterval(40); // 25Hz, same as real joystick rate
+    connect(&_JoystickTimeUpdater, &QTimer::timeout, this, &Telecontrol::_updateJoystickTime);
+    _JoystickTimeUpdater.start();
+#endif
 }
 
 Telecontrol::~Telecontrol()
@@ -73,14 +78,13 @@ void Telecontrol::allAdc(QString ss)
                 int num = s.toUShort();
                 numList.append(num);
             }
-            qDebug() << numList;
+//            qDebug() << numList;
             dataProcess(numList);
         }
     }
 }
 
 QStringList Telecontrol::findAll(QString pattern,QString str,bool noGreedy){
-    //    QRegExp rxlen("u001B\[[0-9]+;[0-9]+m(.*)[ ]+");//构造 QRegExp 对象
     QRegExp rx(pattern);//构造 QRegExp 对象
     rx.setMinimal(noGreedy);
     int pos = 0;  //匹配的位置
@@ -94,59 +98,142 @@ QStringList Telecontrol::findAll(QString pattern,QString str,bool noGreedy){
 
 void Telecontrol::dataProcess(QList<quint16> numList)
 {
-    double roll = -((static_cast<double>(numList.at(ROLL)) / 2048) - 1);
-    double pitch = (static_cast<double>(numList.at(PITCH)) / 2048) - 1;
-    double thrust = (static_cast<double>(numList.at(THRUST)) / 4096);
-    double yaw = (static_cast<double>(numList.at(YAW)) / 2048) - 1;
+    /*
+    roll: [-1, 1]
+    pitch: [-1, 1]
+    yaw: [-1, 1]
+    thrust: [0, 1]
+*/
+    //启动后计算出一个静态误差
+    _CalculateStaticError(numList);
+
+    float roll = ((static_cast<float>(numList.at(RIGHT_X)) / 2048) - 1);
+    float pitch = ((static_cast<float>(numList.at(RIGHT_Y)) / 2048) - 1);
+    float yaw = ((static_cast<float>(numList.at(LEFT_X)) / 2048) - 1);
+    float thrust = (static_cast<float>(numList.at(LEFT_Y)) / 4096);
     quint16 armed0 = numList.at(RIGHT_BUTTON0);
     quint16 armed1 = numList.at(RIGHT_BUTTON1);
     quint16 flight_mode0 = numList.at(LEFT_BUTTON0);
     quint16 flight_mode1 = numList.at(LEFT_BUTTON1);
 
-    qDebug("roll:%f pitch: %f, yaw: %f, thrust: %f", roll, pitch, yaw, thrust);
-    qDebug("armed0: %d, armed1: %d, flight_mode0: %d, flight_mode1: %d\n", armed0, armed1, flight_mode0, flight_mode1);
-    if (qgcApp()->toolbox()->multiVehicleManager()->activeVehicle()) {
-//        qgcApp()->toolbox()->multiVehicleManager()->activeVehicle()->virtualTabletJoystickValue(roll, pitch, yaw, thrust);
+    dataRoll(roll);
+    dataPitch(pitch);
+    dataYaw(yaw);
+    dataThrust(thrust);
 
-//        set_armed(armed0, armed1);
-//        set_flight_mode(flight_mode0, flight_mode1);
+//    qDebug("roll:%f pitch: %f, yaw: %f, thrust: %f", roll, pitch, yaw, thrust);
+//    qDebug("armed0: %d, armed1: %d, flight_mode0: %d, flight_mode1: %d\n", armed0, armed1, flight_mode0, flight_mode1);
+    if (qgcApp()->toolbox()->multiVehicleManager()->activeVehicle()) {
+        set_armed(armed0, armed1);
+        set_flight_mode(flight_mode0, flight_mode1);
     }
 }
 
 
-void Telecontrol::dataRoll(quint16 num)
+void Telecontrol::dataRoll(float num)
 {
-
+    _roll = -round((num - (_static_err[RIGHT_X] - 1)) * 100) / 100;
 }
-void Telecontrol::dataPitch(quint16 num)
+void Telecontrol::dataPitch(float num)
 {
-
+    _pitch = round((num - (_static_err[RIGHT_Y] - 1)) * 100) / 100;
 }
-void Telecontrol::dataThrust(quint16 num)
+void Telecontrol::dataYaw(float num)
 {
-
+    _yaw = -round((num - (_static_err[LEFT_X] - 1)) * 100) / 100;
 }
-void Telecontrol::dataYaw(quint16 num)
+void Telecontrol::dataThrust(float num)
 {
-
+    _thrust = round((num - (_static_err[LEFT_Y] - 1)) * 100) / 100;
 }
 
 void Telecontrol::set_armed(quint16 num0, quint16 num1)
 {
-    if (num0 < 2048) {
-        qgcApp()->toolbox()->multiVehicleManager()->activeVehicle()->setArmed(false, false);
-    } else {
-        qgcApp()->toolbox()->multiVehicleManager()->activeVehicle()->setArmed(true, false);
+    static int last_state = 0;
+    static int state = 0;
+    /* 右拨钮 */
+    if (num0 < 3000 && num1 < 3000) {
+        //0 0   middle
+        state = 0;
+    } else if(num0 >= 3000 && num1 < 3000){
+        //0 1   left
+        state = 1;
+    } else if (num0 < 3000 && num1 >= 3000) {
+        //1 0   right
+        state = 2;
     }
+    if (last_state == 0 && state == 2)
+    {
+        // armed
+        qgcApp()->toolbox()->multiVehicleManager()->activeVehicle()->setArmed(true, false);
+    } else if(last_state == 2 && state == 0) {
+        // disarmed
+        qgcApp()->toolbox()->multiVehicleManager()->activeVehicle()->setArmed(false, false);
+    }
+    last_state = state;
 }
 
 void Telecontrol::set_flight_mode(quint16 num0, quint16 num1)
 {
-    if (num0 < 1360) {
-        qgcApp()->toolbox()->multiVehicleManager()->activeVehicle()->setFlightMode("Stabilized");
-    } else if (num0 >= 1360 && num0 < 2720) {
-        qgcApp()->toolbox()->multiVehicleManager()->activeVehicle()->setFlightMode("Altitude");
-    } else if (num0 >= 2720 && num0 < 4096) {
-        qgcApp()->toolbox()->multiVehicleManager()->activeVehicle()->setFlightMode("Position");
+    static int last_state = 0;
+    static int state = 0;
+
+    /* 左拨钮 */
+    if (num0 < 3000 && num1 < 3000) {
+        // 0 0 middle
+        state = 0;
+    } else if (num0 >= 3000 && num1 < 3000) {
+        // 0 1 right
+        state = 1;
+    } else if (num0 < 3000 && num1 >= 3000) {
+        // 1 0 left
+        state = 2;
+    }
+
+    if (last_state != state)
+    {
+        if (state == 0)
+        {
+            qgcApp()->toolbox()->multiVehicleManager()->activeVehicle()->setFlightMode("Altitude");
+        } else if (state == 1) {
+            qgcApp()->toolbox()->multiVehicleManager()->activeVehicle()->setFlightMode("Stabilized");
+        } else if (state == 2) {
+            qgcApp()->toolbox()->multiVehicleManager()->activeVehicle()->setFlightMode("Position");
+        }
+
+    }
+    last_state = state;
+}
+
+void Telecontrol::_updateJoystickTime()
+{
+    if (qgcApp()->toolbox()->multiVehicleManager()->activeVehicle()) {
+//        qDebug("_roll:%f pitch: %f, yaw: %f, thrust: %f", _roll, _pitch, _yaw, _thrust);
+        qgcApp()->toolbox()->multiVehicleManager()->activeVehicle()->sendJoystickDataThreadSafe(_roll, _pitch, _yaw, _thrust, 0);
     }
 }
+
+void Telecontrol::_CalculateStaticError(QList<quint16> numList)
+{
+    static int count = 0;
+    if (count == TELE_ADC_BUFF) {
+        for (int j = 0; j < TELE_ADC_NUM; j++)
+        {
+            // 除去头上的第一个数据
+            for(int k = 1; k < TELE_ADC_BUFF; k++){
+                _static_err[j] += _static_err_buff[j][k];
+            }
+            _static_err[j] = (_static_err[j] / (TELE_ADC_BUFF - 1) / 2048);
+            qDebug("static_err: %d, %f", j, _static_err[j]);
+        }
+    } else if(count > TELE_ADC_BUFF) {
+        return;
+    }
+
+    for (int i = 0; i < TELE_ADC_NUM; i++)
+    {
+        _static_err_buff[i][count] = numList.at(i);
+    }
+    count++;
+
+};
