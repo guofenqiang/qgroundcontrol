@@ -16,6 +16,7 @@ Rectangle {
 
     Item {
         anchors.fill: parent
+        visible: false
 
         Rectangle {
             id: rectTop

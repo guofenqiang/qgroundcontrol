@@ -139,6 +139,7 @@ Item {
         anchors.margins:        _toolsMargin
         anchors.right:          parent.right
         width:                  _rightPanelWidth
+        visible:                false
 
         property real rightEdgeCenterInset: visible ? parent.width - x : 0
 
@@ -169,6 +170,7 @@ Item {
         id:                 telemetryPanel
         x:                  recalcXPosition()
         anchors.margins:    _toolsMargin
+        visible:            false
 
         property real bottomEdgeCenterInset: 0
         property real rightEdgeCenterInset: 0
