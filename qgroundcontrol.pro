@@ -441,7 +441,11 @@ HEADERS += \
     src/api/QGCSettings.h \
     src/api/QmlComponentInfo.h \
     src/GPS/Drivers/src/base_station.h \
-    src/tools/telecontrol.h
+    src/tools/ecm.h \
+    src/tools/mavlinkpod.h \
+    src/tools/tcpserver.h \
+    src/tools/telecontrol.h \
+    src/tools/uavecm.h
 
 contains (DEFINES, QGC_ENABLE_PAIRING) {
     HEADERS += \
@@ -455,7 +459,11 @@ SOURCES += \
     src/api/QGCOptions.cc \
     src/api/QGCSettings.cc \
     src/api/QmlComponentInfo.cc \
-    src/tools/telecontrol.cpp
+    src/tools/ecm.cpp \
+    src/tools/mavlinkpod.cpp \
+    src/tools/tcpserver.cpp \
+    src/tools/telecontrol.cpp \
+    src/tools/uavecm.cpp
 
 contains (DEFINES, QGC_ENABLE_PAIRING) {
     SOURCES += \

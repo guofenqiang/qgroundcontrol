@@ -1,6 +1,7 @@
 
 add_library(tools
 	telecontrol.cpp
+	ecm.cpp
 )
 
 target_link_libraries(tools

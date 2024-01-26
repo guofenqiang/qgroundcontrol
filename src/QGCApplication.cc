@@ -16,7 +16,11 @@
  *
  */
 
+#include "tools/mavlinkpod.h"
+#include "tools/tcpserver.h"
+#include "tools/ecm.h"
 #include "tools/telecontrol.h"
+#include "tools/uavecm.h"
 #include <QFile>
 #include <QRegularExpression>
 #include <QFontDatabase>
@@ -549,6 +553,10 @@ void QGCApplication::_initCommon()
     }
 
     qmlRegisterType<Telecontrol>("Telecontrol", 1, 0, "Telecontrol");
+    qmlRegisterType<Ecm>("Ecm", 1, 0, "Ecm");
+    qmlRegisterType<TcpServer>("TcpServer", 1, 0, "TcpServer");
+    qmlRegisterType<UAVEcm>("UAVEcm", 1, 0, "UAVEcm");
+    qmlRegisterType<MavlinkPod>("MavlinkPod", 1, 0, "MavlinkPod");
 }
 
 bool QGCApplication::_initForNormalAppBoot()
