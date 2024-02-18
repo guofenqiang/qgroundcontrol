@@ -162,6 +162,10 @@ Item {
         id: videoControl
     }
 
+    UserCustomFlyViewLayer {
+        id: userCustomFlyViewLayer
+    }
+
     QGCPipOverlay {
         id:                     _pipOverlay
         anchors.left:           parent.left

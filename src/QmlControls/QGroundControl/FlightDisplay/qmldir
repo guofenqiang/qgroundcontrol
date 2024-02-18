@@ -1,5 +1,6 @@
 Module QGroundControl.FlightDisplay
 
+EcmActionLayer                  1.0 EcmActionLayer.qml
 FlightDisplayViewWidgets        1.0 FlightDisplayViewWidgets.qml
 FlyView                         1.0 FlyView.qml
 FlyViewCustomLayer              1.0 FlyViewCustomLayer.qml
@@ -32,7 +33,9 @@ PreFlightSoundCheck             1.0 PreFlightSoundCheck.qml
 ProximityRadarValues            1.0 ProximityRadarValues.qml
 ProximityRadarVideoView         1.0 ProximityRadarVideoView.qml
 TerrainProgress                 1.0 TerrainProgress.qml
+TelemetryData                   1.0 TelemetryData.qml
 TelemetryValuesBar              1.0 TelemetryValuesBar.qml
+UserCustomFlyViewLayer          1.0 UserCustomFlyViewLayer.qml
 VehicleWarnings                 1.0 VehicleWarnings.qml
 ObstacleDistanceOverlay         1.0 ObstacleDistanceOverlay.qml
 ObstacleDistanceOverlayMap      1.0 ObstacleDistanceOverlayMap.qml

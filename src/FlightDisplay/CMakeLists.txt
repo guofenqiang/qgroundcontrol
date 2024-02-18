@@ -2,6 +2,7 @@
 add_custom_target(FligthDisplayQml
 	SOURCES
 		DefaultChecklist.qml
+                EcmActionLayer.qml
 		FixedWingChecklist.qml
 		FlightDisplayViewDummy.qml
 		FlightDisplayViewUVC.qml
@@ -42,8 +43,10 @@ add_custom_target(FligthDisplayQml
 		ProximityRadarVideoView.qml
 		RoverChecklist.qml
 		SubChecklist.qml
+                TelemetryData.qml
 		TelemetryValuesBar.qml
 		TerrainProgress.qml
+                UserCustomFlyViewLayer.qml
 		VehicleWarnings.qml
 		VirtualJoystick.qml
 		VTOLChecklist.qml
