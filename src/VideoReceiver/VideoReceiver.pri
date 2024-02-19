@@ -36,6 +36,8 @@ LinuxBuild {
         LIBS        += -F$$(HOME)/Library/Developer/GStreamer/iPhone.sdk -framework GStreamer -framework AVFoundation -framework CoreMedia -framework CoreVideo -framework VideoToolbox -liconv -lresolv
     }
 } else:WindowsBuild {
+    QMAKE_CXXFLAGS_WARN_ON += -wd4819
+
     #- gstreamer installed by default under c:/gstreamer
     GST_ROOT = c:/gstreamer/1.0/msvc_x86_64
 
