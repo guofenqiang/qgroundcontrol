@@ -8,7 +8,7 @@ ANDROID_PACKAGE_CUSTOM_SOURCE_DIR   = $$PWD/custom/android                  # Or
 
 # We always move the package files to the ANDROID_PACKAGE_SOURCE_DIR build dir so we can modify the manifest as needed
 
-android_source_dir_target.target = $$ANDROID_PACKAGE_SOURCE_DIR/AndroidManifest.xml
+android_source_dir_target.target = $$ANDROID_PACKAGE_QGC_SOURCE_DIR/AndroidManifest.xml
 android_source_dir_target.commands = \
     $$QMAKE_MKDIR $$ANDROID_PACKAGE_SOURCE_DIR && \
     $$QMAKE_COPY_DIR $$ANDROID_PACKAGE_QGC_SOURCE_DIR/* $$ANDROID_PACKAGE_SOURCE_DIR
