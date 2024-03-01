@@ -1,4 +1,4 @@
-﻿#include "telecontrol.h"
+#include "telecontrol.h"
 #include "QGCApplication.h"
 
 Telecontrol::Telecontrol(QObject *parent)
@@ -8,7 +8,7 @@ Telecontrol::Telecontrol(QObject *parent)
 #ifdef __android__
     connect(m_serial, &QSerialPort::readyRead, this, &Telecontrol::readData);
     openSerialPort();
-    _JoystickTimeUpdater.setInterval(40); // 25Hz, same as real joystick rate
+    _JoystickTimeUpdater.setInterval(20); // 50Hz, same as real joystick rate
     connect(&_JoystickTimeUpdater, &QTimer::timeout, this, &Telecontrol::_updateJoystickTime);
     _JoystickTimeUpdater.start();
 #endif
@@ -22,7 +22,7 @@ Telecontrol::~Telecontrol()
 void Telecontrol::openSerialPort()
 {
     m_serial->setPortName("ttyUSB0");
-    m_serial->setBaudRate(QSerialPort::Baud115200);
+    m_serial->setBaudRate(460800);
     m_serial->setDataBits(QSerialPort::Data8);
     m_serial->setParity(QSerialPort::NoParity);
     m_serial->setStopBits(QSerialPort::OneStop);
@@ -53,22 +53,23 @@ void Telecontrol::readData()
 
 void Telecontrol::allAdc(QString ss)
 {
-    static int count = 0;
+    int pos = 0;
+    static int state = 0;
     QRegExp re_start("CH0");
-    QRegExp re_end("(\\r\\n\\r\\n)");
+    QRegExp re_end("\\r\\n\\r\\n");
 
     static QStringList strList = {};
-    if (count == 0) {
-        count++;
+    if (state == 0) {
         strList.clear();
-        if (re_start.indexIn(ss) != -1) {
-            strList << ss;
+        if ((pos = re_start.indexIn(ss)) != -1) {
+            ss.remove(0, pos);
+            state = 1;
         }
-    } else {
-        count++;
+    }
+    if (state == 1) {
         strList <<ss;
         if (re_end.indexIn(ss) != -1){
-            count = 0;
+            state = 0;
             QString str = strList.join("");
             QStringList strs = findAll(":(\\d+)", str, false);
 
@@ -79,6 +80,9 @@ void Telecontrol::allAdc(QString ss)
                 numList.append(num);
             }
 //            qDebug() << numList;
+            if (numList.length() < 16) {
+                return;
+            }
             dataProcess(numList);
         }
     }
