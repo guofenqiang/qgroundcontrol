@@ -47,8 +47,9 @@ void Telecontrol::writeData(const QByteArray &data)
 
 void Telecontrol::readData()
 {
-    const QByteArray data = m_serial->readAll();
-    allAdc(data.data());
+//    const QByteArray data = m_serial->readAll();
+//    allAdc(data.data());
+    read();
 }
 
 void Telecontrol::allAdc(QString ss)
@@ -241,3 +242,82 @@ void Telecontrol::_CalculateStaticError(QList<quint16> numList)
     count++;
 
 };
+
+void Telecontrol::read()
+{
+#define READ_BUFFER_SIZE 300
+    // 获取当前缓冲区中的所有可用字节
+    while (m_serial->bytesAvailable())
+    {
+        char buffer[READ_BUFFER_SIZE]; // 定义一个足够大的缓冲区来接收数据
+        qint64 len = m_serial->read(buffer, READ_BUFFER_SIZE); // 读取实际的数据量
+
+        // 将新读取的数据添加到整体缓冲区或解析器
+        if (len > 0)
+        {
+            // 根据你的数据包协议解析数据
+            parseBuffer(buffer, len);
+        }
+    }
+}
+
+// 假设你有一个基于某种协议的解析函数
+void Telecontrol::parseBuffer(const char* buffer, qint64 length)
+{
+#define PACKET_DELIMITER_LENGTH 4
+    static QByteArray accumulatedData; // 用于暂存未完成的数据包
+
+    // 将新读取的数据追加到累积数据中
+    accumulatedData.append(buffer, length);
+
+    while (true)
+    {
+        // 检查是否有完整的数据包（比如检查是否包含包尾）
+        int packetEndIndex = findPacketDelimiter(accumulatedData);
+
+        if (packetEndIndex != -1)
+        {
+            // 找到了完整数据包
+            QByteArray packet = accumulatedData.left(packetEndIndex + PACKET_DELIMITER_LENGTH);
+            processReceivedPacket(packet); // 处理这个数据包
+
+            // 移除已处理部分，剩余部分留在累计缓冲区
+            accumulatedData.remove(0, packetEndIndex + PACKET_DELIMITER_LENGTH);
+        }
+        else
+        {
+            // 没有找到完整的数据包，等待更多的数据到来
+            break;
+        }
+    }
+}
+
+// 假设你有一个函数来查找数据包的结束位置
+int Telecontrol::findPacketDelimiter(const QByteArray& data)
+{
+    // 这里是根据你的协议来实现的，例如，如果每个包以特定字符序列结束
+    const char* delimiter = "\r\n\r\n"; // 仅为示例，实际协议可能不同
+    return data.indexOf(delimiter);
+}
+
+// 假设你有一个函数来处理解析出的数据包内容
+void Telecontrol::processReceivedPacket(const QByteArray& packet)
+{
+    // 在这里对整个数据包进行解码或进一步处理
+    // ...
+    //    qDebug() << packet.data();
+    QString str = packet.data();
+    QStringList strs = findAll(":(\\d+)", str, false);
+
+    // QStringList里的所有字符转换为数字
+    QList<quint16> numList;
+    foreach(QString s, strs) {
+        int num = s.toUShort();
+        numList.append(num);
+    }
+    qDebug() << numList;
+    if (numList.length() < 16) {
+        return;
+    }
+    dataProcess(numList);
+}

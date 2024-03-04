@@ -1,4 +1,4 @@
-﻿#ifndef TELECONTROL_H
+#ifndef TELECONTROL_H
 #define TELECONTROL_H
 
 #include <QTimer>
@@ -69,6 +69,10 @@ private:
     void set_armed(quint16 num0, quint16 num1);
     void set_flight_mode(quint16 num0, quint16 num1);
     void _CalculateStaticError(QList<quint16> numList);
+    void read();
+    void parseBuffer(const char* buffer, qint64 length);
+    int findPacketDelimiter(const QByteArray& data);
+    void processReceivedPacket(const QByteArray& packet);
 };
 
 #endif // TELECONTROL_H
