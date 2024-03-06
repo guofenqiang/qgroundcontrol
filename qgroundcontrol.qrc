@@ -293,6 +293,7 @@
         <file alias="QGroundControl/FlightDisplay/UserCustomFlyViewLayer.qml">src/FlightDisplay/UserCustomFlyViewLayer.qml</file>
         <file alias="QGroundControl/FlightDisplay/TelemetryData.qml">src/FlightDisplay/TelemetryData.qml</file>
         <file alias="QGroundControl/FlightDisplay/EcmActionLayer.qml">src/FlightDisplay/EcmActionLayer.qml</file>
+        <file alias="QGroundControl/FlightDisplay/UserFlyViewDisplayControlLayer.qml">src/FlightDisplay/UserFlyViewDisplayControlLayer.qml</file>
     </qresource>
     <qresource prefix="/FirstRunPromptDialogs">
         <file alias="UnitsFirstRunPrompt.qml">src/FirstRunPromptDialogs/UnitsFirstRunPrompt.qml</file>

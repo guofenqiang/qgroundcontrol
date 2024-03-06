@@ -7,6 +7,12 @@ import UAVEcm                       1.0
 import MavlinkPod                   1.0
 
 Item {
+    id: _root
+    anchors.fill: parent
+
+    property var    parentToolInsets
+    property var    mapControl
+
     // 仅为了在qml初始化Telecontrol类
     Telecontrol {
       id: telecontrol
@@ -54,5 +60,19 @@ Item {
 
     EcmActionLayer {
         id: ecmActionLayer
+    }
+
+    Rectangle{
+        id: userData
+        x: parentToolInsets.width + _toolsMargin
+        y: parent.height - parentToolInsets.height - _toolsMargin
+        width: parent.width - parentToolInsets.width - _toolsMargin
+        height: parentToolInsets.height
+        anchors.margins: _margins * 2
+        visible: true
+
+        UserFlyViewDisplayControlLayer {
+
+        }
     }
 }

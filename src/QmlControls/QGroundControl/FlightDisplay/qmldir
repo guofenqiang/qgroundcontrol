@@ -36,6 +36,7 @@ TerrainProgress                 1.0 TerrainProgress.qml
 TelemetryData                   1.0 TelemetryData.qml
 TelemetryValuesBar              1.0 TelemetryValuesBar.qml
 UserCustomFlyViewLayer          1.0 UserCustomFlyViewLayer.qml
+UserFlyViewDisplayControlLayer  1.0 UserFlyViewDisplayControlLayer.qml
 VehicleWarnings                 1.0 VehicleWarnings.qml
 ObstacleDistanceOverlay         1.0 ObstacleDistanceOverlay.qml
 ObstacleDistanceOverlayMap      1.0 ObstacleDistanceOverlayMap.qml

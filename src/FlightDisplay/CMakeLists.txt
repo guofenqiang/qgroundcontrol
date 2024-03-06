@@ -47,6 +47,7 @@ add_custom_target(FligthDisplayQml
 		TelemetryValuesBar.qml
 		TerrainProgress.qml
                 UserCustomFlyViewLayer.qml
+		UserFlyViewDisplayControlLayer
 		VehicleWarnings.qml
 		VirtualJoystick.qml
 		VTOLChecklist.qml

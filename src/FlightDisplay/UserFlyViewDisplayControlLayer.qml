@@ -1,0 +1,710 @@
+import QtQuick 2.11
+import QtQuick.Controls             2.5
+import QtQuick.Layouts              1.15
+
+Rectangle {
+    id: outRect
+    anchors.fill: parent
+    color: 'blue'
+
+    Rectangle {
+        id: innerRect
+        anchors.fill: parent
+        anchors.margins: 2
+        property string backColor: "lightgray"
+        property string variableBackColor: "white"
+        property string color: "black"
+        property string borderColor: "gray"
+
+        Row {
+            id: userView
+            anchors.fill: parent
+            property real leftRectWidthRatio: 9 / 20
+            property real fixTelemetryWidthRatio: 2 / 20
+            property real rightRationWidthRatio: 9 / 20
+            /* 本机编队和飞行 */
+            Rectangle {
+                id: leftRect
+                width: parent.width * userView.leftRectWidthRatio
+                height: parent.height
+
+                TabBar {
+                    id: leftBar
+                    width: firstBtn.width
+                    TabButton {
+                        id: firstBtn
+                        text: qsTr("本机")
+                        width: leftRect.width/8
+                        height: leftRect.height/2
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.top: parent.top
+                    }
+                    TabButton {
+                        id: secondBtn
+                        text: qsTr("编队")
+                        width: leftRect.width/8
+                        height: leftRect.height/2
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.top: firstBtn.bottom
+                    }
+                }
+
+                StackLayout {
+                    id: view
+
+                    currentIndex: leftBar.currentIndex
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    anchors.left: leftBar.right
+                    anchors.right: parent.right
+                    anchors.margins: 2
+
+                    /*本机*/
+                    Rectangle {
+                        id: localUAV
+                        property int avgWidth: parent.width / 4
+                        property int avgHeight: parent.height / 5
+                        property string borderColor: "black"
+
+                        Grid {
+                            anchors.fill: parent
+                            columns: 4
+                            spacing: 1
+
+                            Rectangle {
+                                width: localUAV.avgWidth; height: localUAV.avgHeight;
+                                color: innerRect.backColor
+                                Text {
+                                    anchors.centerIn: parent
+                                    text: "飞控版本"
+                                    color: innerRect.color
+                                }
+                            }
+                            Rectangle {
+                                width: localUAV.avgWidth ; height: localUAV.avgHeight; border.color: localUAV.borderColor
+                                color: innerRect.variableBackColor
+                                TextField {
+                                    width: parent.width
+                                    height: parent.height
+                                    text: '0'
+                                }
+                            }
+                            Rectangle {
+                                width: localUAV.avgWidth ; height: localUAV.avgHeight;
+                                color: innerRect.backColor
+                                Text {
+                                    anchors.centerIn: parent
+                                    text: "平台版本"
+                                }
+                            }
+                            Rectangle {
+                                width: localUAV.avgWidth ; height: localUAV.avgHeight; border.color: localUAV.borderColor
+                                color: innerRect.variableBackColor
+                                TextField {
+                                    width: parent.width
+                                    height: parent.height
+                                    text: '0'
+                                }
+                            }
+                            Rectangle {
+                                width: localUAV.avgWidth ; height: localUAV.avgHeight;
+                                color: innerRect.backColor
+                                Text {
+                                    anchors.centerIn: parent
+                                    text: "平台状态"
+                                }
+                            }
+                            Rectangle {
+                                width: localUAV.avgWidth ; height: localUAV.avgHeight; border.color: localUAV.borderColor
+                                color: innerRect.variableBackColor
+                                TextField {
+                                    width: parent.width
+                                    height: parent.height
+                                    text: '0'
+                                }
+                            }
+                            Rectangle {
+                                width: localUAV.avgWidth ; height: localUAV.avgHeight;
+                                color: innerRect.backColor
+                                Text {
+                                    anchors.centerIn: parent
+                                    text: "开机时间"
+                                }
+                            }
+                            Rectangle {
+                                width: localUAV.avgWidth ; height: localUAV.avgHeight; border.color: localUAV.borderColor
+                                color: innerRect.variableBackColor
+                                TextField {
+                                    width: parent.width
+                                    height: parent.height
+                                    text: '0'
+                                }
+                            }
+                            Rectangle {
+                                width: localUAV.avgWidth ; height: localUAV.avgHeight;
+                                color: innerRect.backColor
+                                Text {
+                                    anchors.centerIn: parent
+                                    text: "航线总数"
+                                }
+                            }
+                            Rectangle {
+                                width: localUAV.avgWidth ; height: localUAV.avgHeight; border.color: localUAV.borderColor
+                                color: innerRect.variableBackColor
+                                TextField {
+                                    width: parent.width
+                                    height: parent.height
+                                    text: '0'
+                                }
+                            }
+                            Rectangle {
+                                width: localUAV.avgWidth ; height: localUAV.avgHeight;
+                                color: innerRect.backColor
+                                Text {
+                                    anchors.centerIn: parent
+                                    text: "当前航线号"
+                                }
+                            }
+                            Rectangle {
+                                width: localUAV.avgWidth ; height: localUAV.avgHeight; border.color: localUAV.borderColor
+                                color: innerRect.variableBackColor
+                                TextField {
+                                    width: parent.width
+                                    height: parent.height
+                                    text: '0'
+                                }
+                            }
+                            Rectangle {
+                                width: localUAV.avgWidth ; height: localUAV.avgHeight;
+                                color: innerRect.backColor
+                                Text {
+                                    anchors.centerIn: parent
+                                    text: "任务默认高度"
+                                }
+                            }
+                            Rectangle {
+                                width: localUAV.avgWidth ; height: localUAV.avgHeight; border.color: localUAV.borderColor
+                                color: innerRect.variableBackColor
+                                TextField {
+                                    width: parent.width
+                                    height: parent.height
+                                    text: '0'
+                                }
+                            }
+                            Rectangle {
+                                width: localUAV.avgWidth ; height: localUAV.avgHeight;
+                                color: innerRect.backColor
+                                Text {
+                                    anchors.centerIn: parent
+                                    text: "飞行模式"
+                                }
+                            }
+                            Rectangle {
+                                width: localUAV.avgWidth ; height: localUAV.avgHeight;
+                                color: innerRect.variableBackColor
+                                ComboBox {
+                                    width: parent.width
+                                    height: parent.height
+                                    anchors.centerIn: parent
+                                    model: ["Stabiled", "Altitude", "Position"]
+
+                                    onActivated: {
+                                        console.log("index ", model[index])
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    /*编队*/
+                    Rectangle {
+                        id: formationID
+                        property real avgWidth: width / 4
+                        property real avgHeight: height / 5
+                        property string borderColor: "black"
+                        Grid {
+                            anchors.fill: parent
+                            columns: 4
+                            spacing: 1
+                            Rectangle {
+                                width: formationID.avgWidth; height: formationID.avgHeight;
+                                Text {
+                                    anchors.horizontalCenter:   parent.horizontalCenter
+                                    anchors.verticalCenter:     parent.verticalCenter
+                                    text: "编队队形"
+                                }
+                            }
+                            Rectangle {
+                                width: formationID.avgWidth; height: formationID.avgHeight; border.color: formationID.borderColor
+                                ComboBox {
+                                    model: ["维持原队形", "一字型队形", "人字形队形", "圆形队形"]
+                                    width: parent.width
+                                    height: parent.height
+                                }
+                            }
+                            Rectangle {
+                                width: formationID.avgWidth; height: formationID.avgHeight;
+                                Text {
+                                    anchors.horizontalCenter:   parent.horizontalCenter
+                                    anchors.verticalCenter:     parent.verticalCenter
+                                    text: "领航者ID"
+                                }
+                            }
+                            Rectangle {
+                                width: formationID.avgWidth; height: formationID.avgHeight; border.color: formationID.borderColor
+                                ComboBox {
+                                    model: 8
+                                    width: parent.width
+                                    height: parent.height
+                                }
+                            }
+                            Rectangle {
+                                width: formationID.avgWidth; height: formationID.avgHeight;
+                                Button {
+                                    width: parent.width
+                                    height: parent.height
+                                    text: "编队飞行"
+                                }
+                            }
+                            Rectangle {
+                                width: formationID.avgWidth; height: formationID.avgHeight;
+                                Button {
+                                    width: parent.width
+                                    height: parent.height
+                                    text: "变换对形"
+                                }
+                            }
+                            Rectangle {
+                                width: formationID.avgWidth; height: formationID.avgHeight;
+                                Text {
+                                    anchors.horizontalCenter:   parent.horizontalCenter
+                                    anchors.verticalCenter:     parent.verticalCenter
+                                    text: "目标经度"
+                                }
+                            }
+                            Rectangle {
+                                width: formationID.avgWidth; height: formationID.avgHeight; border.color: formationID.borderColor
+                                TextField {
+                                    width: parent.width
+                                    height: parent.height
+                                    text: '0'
+                                }
+                            }
+                            Rectangle {
+                                width: formationID.avgWidth; height: formationID.avgHeight;
+                                Button {
+                                    width: parent.width
+                                    height: parent.height
+                                    text: "一键起飞"
+                                }
+                            }
+                            Rectangle {
+                                width: formationID.avgWidth; height: formationID.avgHeight;
+                                Button {
+                                    width: parent.width
+                                    height: parent.height
+                                    text: "一键返航"
+                                }
+                            }
+                            Rectangle {
+                                width: formationID.avgWidth; height: formationID.avgHeight;
+                                Text {
+                                    anchors.horizontalCenter:   parent.horizontalCenter
+                                    anchors.verticalCenter:     parent.verticalCenter
+                                    text: "目标维度"
+                                }
+                            }
+                            Rectangle {
+                                width: formationID.avgWidth; height: formationID.avgHeight; border.color: formationID.borderColor
+                                TextField {
+                                    width: parent.width
+                                    height: parent.height
+                                    text: '0'
+                                }
+                            }
+                            Rectangle {
+                                width: formationID.avgWidth; height: formationID.avgHeight;
+                                Button {
+                                    width: parent.width
+                                    height: parent.height
+                                    text: "采集坐标"
+                                }
+                            }
+                            Rectangle {
+                                width: formationID.avgWidth; height: formationID.avgHeight;
+                                Button {
+                                    width: parent.width
+                                    height: parent.height
+                                    text: "航点设置"
+                                }
+                            }
+                            Rectangle {
+                                width: formationID.avgWidth; height: formationID.avgHeight;
+                                Text {
+                                    anchors.horizontalCenter:   parent.horizontalCenter
+                                    anchors.verticalCenter:     parent.verticalCenter
+                                    text: "目标高度"
+                                }
+                            }
+                            Rectangle {
+                                width: formationID.avgWidth; height: formationID.avgHeight; border.color: formationID.borderColor
+                                TextField {
+                                    width: parent.width
+                                    height: parent.height
+                                    text: '50'
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            /* 固定显示遥测栏*/
+            Rectangle {
+                id: fixTelemetry
+                width: parent.width * userView.fixTelemetryWidthRatio
+                height: parent.height
+                anchors.margins: 20
+
+                property real avgHeight: parent.height / 7
+
+                Column {
+                    anchors.fill: parent
+                    spacing: 1
+
+                    Rectangle {
+                        width: parent.width; height: fixTelemetry.avgHeight; border.color: "black"
+                        color: "lightgray"
+                        Text {
+                            anchors.centerIn: parent
+                            text: "相对高度 0 m"
+                        }
+                    }
+                    Rectangle {
+                        width: parent.width; height: fixTelemetry.avgHeight; border.color: "black"
+                        color: "lightgray"
+                        Text {
+                            anchors.centerIn: parent
+                            text: "上升速度 0 m"
+                        }
+                    }
+                    Rectangle {
+                        width: parent.width; height: fixTelemetry.avgHeight; border.color: "black"
+                        color: "lightgray"
+                        Text {
+                            anchors.centerIn: parent
+                            text: "飞行时间 0 s"
+                        }
+                    }
+                    Rectangle {
+                        width: parent.width; height: fixTelemetry.avgHeight; border.color: "black"
+                        color: "lightgray"
+                        Text {
+                            anchors.centerIn: parent
+                            text: "对地速度 0 m"
+                        }
+                    }
+                    Rectangle {
+                        width: parent.width; height: fixTelemetry.avgHeight; border.color: "black"
+                        color: "lightgray"
+                        Text {
+                            anchors.centerIn: parent
+                            text: "维度 0"
+                        }
+                    }
+                    Rectangle {
+                        width: parent.width; height: fixTelemetry.avgHeight; border.color: "black"
+                        color: "lightgray"
+                        Text {
+                            anchors.centerIn: parent
+                            text: "经度 0"
+                        }
+                    }
+                }
+            }
+            /* 侦察和处置 */
+            Rectangle {
+                id: rightRect
+                width: parent.width * userView.rightRationWidthRatio
+                height: parent.height
+                border.color: "black"
+
+                TabBar {
+                    id: rightBar
+                    x: parent.width - rightFirstBtn.width
+                    width: rightFirstBtn.width
+                    TabButton {
+                        id: rightFirstBtn
+                        text: qsTr("侦察")
+                        width: rightRect.width/8
+                        height: rightRect.height/2
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.top: parent.top
+                    }
+                    TabButton {
+                        id: rightSecondBtn
+                        text: qsTr("处置")
+                        width: rightRect.width/8
+                        height: rightRect.height/2
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.top: rightFirstBtn.bottom
+                    }
+                }
+
+                StackLayout {
+                    id: viewRight
+
+                    currentIndex: rightBar.currentIndex
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    anchors.left: parent.left
+                    anchors.right: rightBar.left
+                    anchors.margins: 2
+
+                    /* 侦察 */
+                    Rectangle {
+                        id: scoutID
+                        property int avgWidth: width / 4
+                        property real avgHeight: height / 4.1
+                        property string borderColor: "black"
+                        Column {
+                            anchors.fill: parent
+                            spacing: 1
+                            Rectangle {
+                                width: scoutID.width; height: scoutID.avgHeight; border.color: scoutID.borderColor
+                                ComboBox {
+                                   anchors.centerIn: parent
+                                   model: ["手动", "自动"]
+
+                                   onActivated: {
+                                       console.log("index ", model[index])
+                                   }
+                                }
+                            }
+
+                            Rectangle {
+                                width: scoutID.width; height: scoutID.avgHeight; border.color: scoutID.borderColor
+                                Row {
+                                    anchors.fill: parent
+                                    anchors.margins: 2
+                                    Rectangle {
+                                        width: parent.width / 6; height: parent.height;
+                                        Text {
+                                            anchors.centerIn: parent
+                                            text: "频段设置:"
+                                        }
+                                    }
+
+                                    Rectangle {
+                                        width: parent.width * 5 / 6; height: parent.height
+                                        Row {
+                                            anchors.fill: parent
+                                            Rectangle {
+                                                width: parent.width * 1 / 8; height: parent.height; border.color: scoutID.borderColor
+                                                TextField {
+                                                    anchors.fill: parent
+                                                    anchors.centerIn: parent
+                                                    text: rangeSlider.first.value
+                                                    validator: IntValidator{bottom: 800; top: 6000;}
+
+                                                    onAccepted: {
+                                                        slider.first.value = Number(text)
+                                                    }
+                                                }
+                                            }
+                                            Rectangle {
+                                                width: parent.width * 6 / 8; height: parent.height; border.color: scoutID.borderColor
+                                                RangeSlider {
+                                                    id: rangeSlider
+                                                    anchors.fill: parent
+                                                    from: 800
+                                                    to: 6000
+                                                    first.value: 800
+                                                    second.value: 6000
+                                                }
+                                            }
+                                            Rectangle {
+                                                width: parent.width * 1 / 8; height: parent.height; border.color: scoutID.borderColor
+                                                TextField {
+                                                    anchors.fill: parent
+                                                    anchors.centerIn: parent
+                                                    text: rangeSlider.second.value
+
+                                                    validator: IntValidator{bottom: 800; top: 6000;}
+
+                                                    onAccepted: {
+                                                        rangeSlider.second.value = Number(text)
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            Rectangle {
+                                width: scoutID.width; height: scoutID.avgHeight; border.color: scoutID.borderColor
+                                Row {
+                                    anchors.fill: parent
+                                    anchors.margins: 2
+                                    Rectangle {
+                                        width: parent.width / 6; height: parent.height;
+                                        Text {
+                                            anchors.centerIn: parent
+                                            text: "频段设置:"
+                                        }
+                                    }
+
+                                    Rectangle {
+                                        width: parent.width * 5 / 6; height: parent.height
+                                        Row {
+                                            anchors.fill: parent
+                                            Rectangle {
+                                                width: parent.width * 1 / 8; height: parent.height; border.color: scoutID.borderColor
+                                                TextField {
+                                                    anchors.fill: parent
+                                                    anchors.centerIn: parent
+                                                    text: slider.value
+                                                    validator: IntValidator{bottom: 800; top: 6000;}
+
+                                                    onAccepted: {
+                                                        slider.value = Number(text)
+                                                    }
+                                                }
+                                            }
+                                            Rectangle {
+                                                width: parent.width * 7 / 8; height: parent.height; border.color: scoutID.borderColor
+                                                Slider {
+                                                    id: slider
+                                                    anchors.fill: parent
+                                                    from: 800
+                                                    to: 6000
+                                                    value: 800
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+
+                            Row {
+                                spacing: 1
+                                Rectangle {
+                                    width: scoutID.avgWidth; height: scoutID.avgHeight; border.color: scoutID.borderColor
+                                    Button {
+                                        anchors.fill: parent
+                                        anchors.centerIn: parent
+                                        text: "待机"
+                                    }
+                                }
+                                Rectangle {
+                                    width: scoutID.avgWidth; height: scoutID.avgHeight; border.color: scoutID.borderColor
+                                    Button {
+                                        anchors.fill: parent
+                                        anchors.centerIn: parent
+                                        text: "复位"
+                                    }
+                                }
+                                Rectangle {
+                                    width: scoutID.avgWidth; height: scoutID.avgHeight; border.color: scoutID.borderColor
+                                    Button {
+                                        anchors.fill: parent
+                                        anchors.centerIn: parent
+                                        text: "侦测"
+                                    }
+                                }
+                                Rectangle {
+                                    width: scoutID.avgWidth; height: scoutID.avgHeight; border.color: scoutID.borderColor
+                                    Button {
+                                        anchors.fill: parent
+                                        anchors.centerIn: parent
+                                        text: "干扰"
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    /* 处置 */
+                    Rectangle {
+                        border.color: "green"
+
+                        Rectangle {
+                            id:                 historyList
+                            anchors.fill:       parent
+
+                            ListView {
+                                anchors.fill: parent
+                                anchors.margins: 0
+
+                                clip: true
+
+                                model: 5
+
+                                delegate: numberDelegate
+                                spacing: 2
+
+                                header: headerComponent
+                                footer: footerComponent
+
+                                ScrollBar.vertical: ScrollBar {}
+                            }
+
+                            Component {
+                                id: headerComponent
+
+                                Rectangle {
+                                    width:                  historyList.width
+                                    height:                 20
+                                    color:                  "teal"
+
+                                    Row {
+                                        anchors.fill: parent
+                                        Repeater {
+                                            model: ["序号", "时标(s)", "方位", "频点(MHz)", "带宽(MHz)", "功率", "干扰"]
+                                            Text {
+                                                text: modelData + "  "
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            Component {
+                                id: footerComponent
+
+                                Rectangle {
+                                    width:                  historyList.width
+                                    height:                 20
+                                    color:                  "Purple"
+
+                                    Text {
+                                        anchors.centerIn:   parent
+                                        font.pixelSize:     10
+                                        text:               'footer'
+                                    }
+                                }
+                            }
+
+                            Component {
+                                id: numberDelegate
+
+                                SwitchDelegate {
+                                    width: historyList.width
+                                    text: index + '    ' + Math.random().toFixed(2) + '    ' + Math.random().toFixed(2)
+                                          + '    ' + Math.random().toFixed(2) + '    ' + Math.random().toFixed(2)
+                                          + '    ' + Math.random().toFixed(2)
+                                    onClicked: {
+                                        console.log("--------------------start or stop----------------")
+                                        console.log(JSON.stringify(modelData))
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
