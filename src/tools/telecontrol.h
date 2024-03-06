@@ -7,6 +7,7 @@
 
 #define TELE_ADC_NUM					16
 #define TELE_ADC_BUFF                   5
+#define TELE_BOUNDARY_ADC_VALUE         3000
 
 class Telecontrol : public QObject
 {
@@ -73,6 +74,8 @@ private:
     void parseBuffer(const char* buffer, qint64 length);
     int findPacketDelimiter(const QByteArray& data);
     void processReceivedPacket(const QByteArray& packet);
+    void regexpNumber(const QByteArray& packet);
+    void regexpNumber(const QStringList& packet);
 };
 
 #endif // TELECONTROL_H

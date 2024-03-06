@@ -71,20 +71,7 @@ void Telecontrol::allAdc(QString ss)
         strList <<ss;
         if (re_end.indexIn(ss) != -1){
             state = 0;
-            QString str = strList.join("");
-            QStringList strs = findAll(":(\\d+)", str, false);
-
-            // QStringList里的所有字符转换为数字
-            QList<quint16> numList;
-            foreach(QString s, strs) {
-                int num = s.toUShort();
-                numList.append(num);
-            }
-//            qDebug() << numList;
-            if (numList.length() < 16) {
-                return;
-            }
-            dataProcess(numList);
+            regexpNumber(strList);
         }
     }
 }
@@ -157,13 +144,13 @@ void Telecontrol::set_armed(quint16 num0, quint16 num1)
     static int last_state = 0;
     static int state = 0;
     /* 右拨钮 */
-    if (num0 < 3000 && num1 < 3000) {
+    if (num0 < TELE_BOUNDARY_ADC_VALUE && num1 < TELE_BOUNDARY_ADC_VALUE) {
         //0 0   middle
         state = 0;
-    } else if(num0 >= 3000 && num1 < 3000){
+    } else if(num0 >= TELE_BOUNDARY_ADC_VALUE && num1 < TELE_BOUNDARY_ADC_VALUE){
         //0 1   left
         state = 1;
-    } else if (num0 < 3000 && num1 >= 3000) {
+    } else if (num0 < TELE_BOUNDARY_ADC_VALUE && num1 >= TELE_BOUNDARY_ADC_VALUE) {
         //1 0   right
         state = 2;
     }
@@ -184,13 +171,13 @@ void Telecontrol::set_flight_mode(quint16 num0, quint16 num1)
     static int state = 0;
 
     /* 左拨钮 */
-    if (num0 < 3000 && num1 < 3000) {
+    if (num0 < TELE_BOUNDARY_ADC_VALUE && num1 < TELE_BOUNDARY_ADC_VALUE) {
         // 0 0 middle
         state = 0;
-    } else if (num0 >= 3000 && num1 < 3000) {
+    } else if (num0 >= TELE_BOUNDARY_ADC_VALUE && num1 < TELE_BOUNDARY_ADC_VALUE) {
         // 0 1 right
         state = 1;
-    } else if (num0 < 3000 && num1 >= 3000) {
+    } else if (num0 < TELE_BOUNDARY_ADC_VALUE && num1 >= TELE_BOUNDARY_ADC_VALUE) {
         // 1 0 left
         state = 2;
     }
@@ -306,6 +293,11 @@ void Telecontrol::processReceivedPacket(const QByteArray& packet)
     // 在这里对整个数据包进行解码或进一步处理
     // ...
     //    qDebug() << packet.data();
+    regexpNumber(packet);
+}
+
+void Telecontrol::regexpNumber(const QByteArray& packet)
+{
     QString str = packet.data();
     QStringList strs = findAll(":(\\d+)", str, false);
 
@@ -315,7 +307,23 @@ void Telecontrol::processReceivedPacket(const QByteArray& packet)
         int num = s.toUShort();
         numList.append(num);
     }
-    qDebug() << numList;
+    if (numList.length() < 16) {
+        return;
+    }
+    dataProcess(numList);
+}
+
+void Telecontrol::regexpNumber(const QStringList& packet)
+{
+    QString str = packet.join("");
+    QStringList strs = findAll(":(\\d+)", str, false);
+
+    // QStringList里的所有字符转换为数字
+    QList<quint16> numList;
+    foreach(QString s, strs) {
+        int num = s.toUShort();
+        numList.append(num);
+    }
     if (numList.length() < 16) {
         return;
     }
