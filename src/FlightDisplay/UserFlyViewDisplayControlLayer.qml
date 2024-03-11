@@ -94,9 +94,8 @@ Rectangle {
                             Rectangle {
                                 width: localUAV.avgWidth ; height: localUAV.avgHeight; border.color: localUAV.borderColor
                                 color: innerRect.variableBackColor
-                                TextField {
-                                    width: parent.width
-                                    height: parent.height
+                                Text {
+                                    anchors.centerIn: parent
                                     text: '0'
                                 }
                             }
@@ -111,9 +110,8 @@ Rectangle {
                             Rectangle {
                                 width: localUAV.avgWidth ; height: localUAV.avgHeight; border.color: localUAV.borderColor
                                 color: innerRect.variableBackColor
-                                TextField {
-                                    width: parent.width
-                                    height: parent.height
+                                Text {
+                                    anchors.centerIn: parent
                                     text: '0'
                                 }
                             }
@@ -128,9 +126,8 @@ Rectangle {
                             Rectangle {
                                 width: localUAV.avgWidth ; height: localUAV.avgHeight; border.color: localUAV.borderColor
                                 color: innerRect.variableBackColor
-                                TextField {
-                                    width: parent.width
-                                    height: parent.height
+                                Text {
+                                    anchors.centerIn: parent
                                     text: '0'
                                 }
                             }
@@ -145,9 +142,8 @@ Rectangle {
                             Rectangle {
                                 width: localUAV.avgWidth ; height: localUAV.avgHeight; border.color: localUAV.borderColor
                                 color: innerRect.variableBackColor
-                                TextField {
-                                    width: parent.width
-                                    height: parent.height
+                                Text {
+                                    anchors.centerIn: parent
                                     text: '0'
                                 }
                             }
@@ -162,9 +158,8 @@ Rectangle {
                             Rectangle {
                                 width: localUAV.avgWidth ; height: localUAV.avgHeight; border.color: localUAV.borderColor
                                 color: innerRect.variableBackColor
-                                TextField {
-                                    width: parent.width
-                                    height: parent.height
+                                Text {
+                                    anchors.centerIn: parent
                                     text: '0'
                                 }
                             }
@@ -179,9 +174,8 @@ Rectangle {
                             Rectangle {
                                 width: localUAV.avgWidth ; height: localUAV.avgHeight; border.color: localUAV.borderColor
                                 color: innerRect.variableBackColor
-                                TextField {
-                                    width: parent.width
-                                    height: parent.height
+                                Text {
+                                    anchors.centerIn: parent
                                     text: '0'
                                 }
                             }
@@ -190,16 +184,21 @@ Rectangle {
                                 color: innerRect.backColor
                                 Text {
                                     anchors.centerIn: parent
-                                    text: "任务默认高度"
+                                    text: "任务高度"
                                 }
                             }
                             Rectangle {
                                 width: localUAV.avgWidth ; height: localUAV.avgHeight; border.color: localUAV.borderColor
                                 color: innerRect.variableBackColor
-                                TextField {
+                                ComboBox {
                                     width: parent.width
                                     height: parent.height
-                                    text: '0'
+                                    anchors.centerIn: parent
+                                    model: [10, 20, 50]
+
+                                    onActivated: {
+                                        console.log("index ", model[index])
+                                    }
                                 }
                             }
                             Rectangle {
