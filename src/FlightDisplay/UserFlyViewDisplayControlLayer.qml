@@ -2,10 +2,21 @@ import QtQuick 2.11
 import QtQuick.Controls             2.5
 import QtQuick.Layouts              1.15
 
+import QGroundControl               1.0
+
 Rectangle {
     id: outRect
     anchors.fill: parent
     color: 'blue'
+    property var    vehicle:              QGroundControl.multiVehicleManager.activeVehicle
+    property string flightMode:           vehicle ? vehicle.flightMode : '0'
+    property real   roll:                 vehicle ? vehicle.roll.rawValue: 0
+    property real   groundSpeed:          vehicle ? vehicle.groundSpeed.rawValue: 0
+    property real   airSpeed:             vehicle ? vehicle.airSpeed.rawValue: 0
+    property real   climbRate:            vehicle ? vehicle.climbRate.rawValue: 0
+    property real   altitudeRelative:     vehicle ? vehicle.altitudeRelative.rawValue: 0
+    property real   flightDistance:       vehicle ? vehicle.flightDistance.rawValue: 0
+    property real   distanceToHome:       vehicle ? vehicle.distanceToHome.rawValue: 0
 
     Rectangle {
         id: innerRect
@@ -19,9 +30,9 @@ Rectangle {
         Row {
             id: userView
             anchors.fill: parent
-            property real leftRectWidthRatio: 9 / 20
-            property real fixTelemetryWidthRatio: 2 / 20
-            property real rightRationWidthRatio: 9 / 20
+            property real leftRectWidthRatio: 8 / 20
+            property real fixTelemetryWidthRatio: 4 / 20
+            property real rightRationWidthRatio: 8 / 20
             /* 本机编队和飞行 */
             Rectangle {
                 id: leftRect
@@ -365,7 +376,7 @@ Rectangle {
                 height: parent.height
                 anchors.margins: 20
 
-                property real avgHeight: parent.height / 7
+                property real avgHeight: parent.height / 5.2
 
                 Column {
                     anchors.fill: parent
@@ -376,7 +387,7 @@ Rectangle {
                         color: "lightgray"
                         Text {
                             anchors.centerIn: parent
-                            text: "相对高度 0 m"
+                            text: "相对高度 " + altitudeRelative.toFixed(1) + " m"
                         }
                     }
                     Rectangle {
@@ -384,7 +395,7 @@ Rectangle {
                         color: "lightgray"
                         Text {
                             anchors.centerIn: parent
-                            text: "上升速度 0 m"
+                            text: "上升速度 " + climbRate.toFixed(1) + " m/s"
                         }
                     }
                     Rectangle {
@@ -392,7 +403,7 @@ Rectangle {
                         color: "lightgray"
                         Text {
                             anchors.centerIn: parent
-                            text: "飞行时间 0 s"
+                            text: "到home点距离 " + distanceToHome.toFixed(1) + " m"
                         }
                     }
                     Rectangle {
@@ -400,7 +411,7 @@ Rectangle {
                         color: "lightgray"
                         Text {
                             anchors.centerIn: parent
-                            text: "对地速度 0 m"
+                            text: "地速 " + groundSpeed.toFixed(1) + " m/s"
                         }
                     }
                     Rectangle {
@@ -408,15 +419,7 @@ Rectangle {
                         color: "lightgray"
                         Text {
                             anchors.centerIn: parent
-                            text: "维度 0"
-                        }
-                    }
-                    Rectangle {
-                        width: parent.width; height: fixTelemetry.avgHeight; border.color: "black"
-                        color: "lightgray"
-                        Text {
-                            anchors.centerIn: parent
-                            text: "经度 0"
+                            text: "飞行距离 " + flightDistance.toFixed(1) + " m"
                         }
                     }
                 }
