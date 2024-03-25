@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
  *
  * (c) 2009-2020 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
  *
@@ -17,6 +17,8 @@
  */
 
 #include "tools/mavlinkpod.h"
+#include "tools/pod/podcontroller.h"
+#include "tools/pod/siyi/podsiyiprotocol.h"
 #include "tools/tcpserver.h"
 #include "tools/ecm.h"
 #include "tools/telecontrol.h"
@@ -557,6 +559,8 @@ void QGCApplication::_initCommon()
     qmlRegisterType<TcpServer>("TcpServer", 1, 0, "TcpServer");
     qmlRegisterType<UAVEcm>("UAVEcm", 1, 0, "UAVEcm");
     qmlRegisterType<MavlinkPod>("MavlinkPod", 1, 0, "MavlinkPod");
+    qmlRegisterType<PodController>("PodController", 1, 0, "PodController");
+    qmlRegisterType<PodSiYiProtocol>("PodSiYiProtocol", 1, 0, "PodSiYiProtocol");
 }
 
 bool QGCApplication::_initForNormalAppBoot()

@@ -443,6 +443,8 @@ HEADERS += \
     src/GPS/Drivers/src/base_station.h \
     src/tools/ecm.h \
     src/tools/mavlinkpod.h \
+    src/tools/pod/podcontroller.h \
+    src/tools/pod/siyi/podsiyiprotocol.h \
     src/tools/tcpserver.h \
     src/tools/telecontrol.h \
     src/tools/uavecm.h
@@ -461,6 +463,8 @@ SOURCES += \
     src/api/QmlComponentInfo.cc \
     src/tools/ecm.cpp \
     src/tools/mavlinkpod.cpp \
+    src/tools/pod/podcontroller.cpp \
+    src/tools/pod/siyi/podsiyiprotocol.cpp \
     src/tools/tcpserver.cpp \
     src/tools/telecontrol.cpp \
     src/tools/uavecm.cpp

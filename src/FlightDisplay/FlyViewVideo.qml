@@ -8,17 +8,22 @@
  ****************************************************************************/
 
 import QtQuick 2.12
+import QtQuick.Controls 2.15
 
 import QGroundControl               1.0
 import QGroundControl.Controls      1.0
 import QGroundControl.Controllers   1.0
 import QGroundControl.ScreenTools   1.0
 
+import PodController                1.0
+
 Item {
     id:         _root
     visible:    QGroundControl.videoManager.hasVideo
 
     property Item pipState: videoPipState
+    property point dragStartPos: Qt.point(0, 0)
+    property bool isDragging: false
     QGCPipState {
         id:         videoPipState
         pipOverlay: _pipOverlay
@@ -101,5 +106,60 @@ Item {
     ObstacleDistanceOverlayVideo {
         id: obstacleDistance
         showText: pipState.state === pipState.fullState
+    }
+
+    MouseArea {
+        anchors.fill: parent
+
+        onWheel: {
+            wheel.accepted = true;
+            pod_controller_id.mauanlFocus(wheel.angleDelta.x, wheel.angleDelta.y)
+        }
+
+        onPressed: {
+            dragStartPos = Qt.point(mouse.x, mouse.y)
+            isDragging = true
+        }
+
+        onPositionChanged: {
+            if (isDragging) {
+                var delta = Qt.point(mouse.x - dragStartPos.x, mouse.y - dragStartPos.y)
+                pod_controller_id.sendRotateCommand(delta.x, delta.y)
+            }
+        }
+
+        onReleased: {
+            isDragging = false
+            pod_controller_id.sendRotateCommand(0, 0)
+        }
+    }
+
+    Rectangle {
+        id: customComponent
+        x: ScreenTools.defaultFontPixelWidth * 10
+        anchors.top: parent.top
+        width: ScreenTools.defaultFontPixelWidth * 8
+        height: ScreenTools.defaultFontPixelHeight
+        color: "lightblue"
+
+        Text {
+            anchors.centerIn: parent
+            text: "一键回中"
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                pod_controller_id.oneClickReturnToCenter()
+            }
+        }
+    }
+
+    PodController {
+        id: pod_controller_id
+        objectName: "pod_controller_obj"
+        Component.onCompleted: {
+            console.log("init pod_controller")
+        }
     }
 }
