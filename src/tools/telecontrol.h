@@ -8,6 +8,9 @@
 #define TELE_ADC_NUM					16
 #define TELE_ADC_BUFF                   5
 #define TELE_BOUNDARY_ADC_VALUE         3000
+#define TELE_TOGGLE_BUTTON_LOW          800
+#define TELE_TOGGLE_BUTTON_HIGH         1630
+#define TELE_TOGGLE_BUTTON_BOUNDARY     (((TELE_TOGGLE_BUTTON_LOW) + (TELE_TOGGLE_BUTTON_HIGH)) / 2)
 
 class Telecontrol : public QObject
 {
@@ -17,8 +20,7 @@ public:
     ~Telecontrol();
 
     enum ModeType {
-/*        左拨钮0
- *        左拨钮1
+/*        左拨钮
  *        左电位器
  *        左摇杆X
  *        左摇杆Y
@@ -26,20 +28,17 @@ public:
  *        右摇杆X
  *        右摇杆Y
  *        右电位器
- *        右拨钮0
- *        右拨钮1
+ *        右拨钮
  */
-        RIGHT_BUTTON0 = 0, // ARMED_DISARMED
-        RIGHT_BUTTON1, // ARMED_DISARMED
-        RIGHT_POTENTIOMETER, //右电位器，顺时针值变小，逆时针值变大
-        RIGHT_X, // 右摇杆X, 向左值变大，向右值变小
-        RIGHT_Y, // 右摇杆Y，向上值变大, 向下值变小
-        BUTTON2,
+        LEFT_BUTTON0 = 0, // FLIGHT_MODE
+        LEFT_POTENTIOMETER, //左电位器，顺时针值变大，逆时针值变小
         LEFT_X, // 左摇杆X, 向左值变大，向右值变小
         LEFT_Y, // 左摇杆Y，向上值变大, 向下值变小
-        LEFT_BUTTON0, // FLIGHT_MODE
-        LEFT_BUTTON1, // FLIGHT_MODE
-        LEFT_POTENTIOMETER, //左电位器，顺时针值变大，逆时针值变小
+        BUTTON2,
+        RIGHT_X, // 右摇杆X, 向左值变大，向右值变小
+        RIGHT_Y, // 右摇杆Y，向上值变大, 向下值变小
+        RIGHT_POTENTIOMETER, //右电位器，顺时针值变小，逆时针值变大
+        RIGHT_BUTTON0, // ARMED_DISARMED
     };
 
 private slots:
@@ -67,8 +66,8 @@ private:
     void dataPitch(float num);
     void dataThrust(float num);
     void dataYaw(float num);
-    void set_armed(quint16 num0, quint16 num1);
-    void set_flight_mode(quint16 num0, quint16 num1);
+    void set_armed(quint16 num0);
+    void set_flight_mode(quint16 num0);
     void _CalculateStaticError(QList<quint16> numList);
     void read();
     void parseBuffer(const char* buffer, qint64 length);

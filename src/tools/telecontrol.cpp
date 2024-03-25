@@ -104,20 +104,18 @@ void Telecontrol::dataProcess(QList<quint16> numList)
     float yaw = ((static_cast<float>(numList.at(LEFT_X)) / 2048) - 1);
     float thrust = (static_cast<float>(numList.at(LEFT_Y)) / 4096);
     quint16 armed0 = numList.at(RIGHT_BUTTON0);
-    quint16 armed1 = numList.at(RIGHT_BUTTON1);
     quint16 flight_mode0 = numList.at(LEFT_BUTTON0);
-    quint16 flight_mode1 = numList.at(LEFT_BUTTON1);
 
     dataRoll(roll);
     dataPitch(pitch);
     dataYaw(yaw);
     dataThrust(thrust);
 
-//    qDebug("roll:%f pitch: %f, yaw: %f, thrust: %f", roll, pitch, yaw, thrust);
-//    qDebug("armed0: %d, armed1: %d, flight_mode0: %d, flight_mode1: %d\n", armed0, armed1, flight_mode0, flight_mode1);
+//    qDebug("_roll:%f _pitch: %f, _yaw: %f, _thrust: %f", _roll, _pitch, _yaw, _thrust);
+//    qDebug("flight_mode0: %d, armed0: %d\n", flight_mode0, armed0);
     if (qgcApp()->toolbox()->multiVehicleManager()->activeVehicle()) {
-        set_armed(armed0, armed1);
-        set_flight_mode(flight_mode0, flight_mode1);
+        set_armed(armed0);
+        set_flight_mode(flight_mode0);
     }
 }
 
@@ -139,18 +137,18 @@ void Telecontrol::dataThrust(float num)
     _thrust = round((num - (_static_err[LEFT_Y] - 1)) * 100) / 100;
 }
 
-void Telecontrol::set_armed(quint16 num0, quint16 num1)
+void Telecontrol::set_armed(quint16 num0)
 {
     static int last_state = 0;
     static int state = 0;
     /* 右拨钮 */
-    if (num0 < TELE_BOUNDARY_ADC_VALUE && num1 < TELE_BOUNDARY_ADC_VALUE) {
+    if (num0 < (TELE_TOGGLE_BUTTON_LOW / 2)) {
         //0 0   middle
         state = 0;
-    } else if(num0 >= TELE_BOUNDARY_ADC_VALUE && num1 < TELE_BOUNDARY_ADC_VALUE){
+    } else if(num0 < TELE_TOGGLE_BUTTON_BOUNDARY){
         //0 1   left
         state = 1;
-    } else if (num0 < TELE_BOUNDARY_ADC_VALUE && num1 >= TELE_BOUNDARY_ADC_VALUE) {
+    } else if (num0 >= TELE_TOGGLE_BUTTON_BOUNDARY) {
         //1 0   right
         state = 2;
     }
@@ -165,19 +163,19 @@ void Telecontrol::set_armed(quint16 num0, quint16 num1)
     last_state = state;
 }
 
-void Telecontrol::set_flight_mode(quint16 num0, quint16 num1)
+void Telecontrol::set_flight_mode(quint16 num0)
 {
     static int last_state = 0;
     static int state = 0;
 
     /* 左拨钮 */
-    if (num0 < TELE_BOUNDARY_ADC_VALUE && num1 < TELE_BOUNDARY_ADC_VALUE) {
+    if (num0 < (TELE_TOGGLE_BUTTON_LOW / 2)) {
         // 0 0 middle
         state = 0;
-    } else if (num0 >= TELE_BOUNDARY_ADC_VALUE && num1 < TELE_BOUNDARY_ADC_VALUE) {
+    } else if (num0 < TELE_TOGGLE_BUTTON_BOUNDARY) {
         // 0 1 right
         state = 1;
-    } else if (num0 < TELE_BOUNDARY_ADC_VALUE && num1 >= TELE_BOUNDARY_ADC_VALUE) {
+    } else if (num0 >= TELE_TOGGLE_BUTTON_BOUNDARY) {
         // 1 0 left
         state = 2;
     }
