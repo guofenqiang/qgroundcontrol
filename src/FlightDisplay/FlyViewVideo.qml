@@ -135,22 +135,34 @@ Item {
     }
 
     Rectangle {
-        id: customComponent
         x: ScreenTools.defaultFontPixelWidth * 10
         anchors.top: parent.top
-        width: ScreenTools.defaultFontPixelWidth * 8
-        height: ScreenTools.defaultFontPixelHeight
-        color: "lightblue"
+        width: customComponent.width
+        height: customComponent.height
+        visible: pipState.state === pipState.fullState
 
-        Text {
-            anchors.centerIn: parent
-            text: "一键回中"
-        }
+        Column {
+            id: customComponent
+            spacing: 2
 
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                pod_controller_id.oneClickReturnToCenter()
+            QGCButton {
+                text:               qsTr("reset")
+                width:              height
+                onClicked: pod_controller_id.oneClickReturnToCenter()
+            }
+
+            QGCButton {
+                text:               qsTr("+")
+                width:              height
+                opacity:            0.75
+                onClicked:          pod_controller_id.mauanlFocus(1, 1)
+            }
+
+            QGCButton {
+                text:               qsTr("-")
+                width:              height
+                opacity:            0.75
+                onClicked:          pod_controller_id.mauanlFocus(-1, -1)
             }
         }
     }
