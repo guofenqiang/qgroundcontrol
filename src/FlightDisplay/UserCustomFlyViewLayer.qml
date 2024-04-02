@@ -12,6 +12,32 @@ Item {
 
     property var    parentToolInsets
     property var    mapControl
+    property real   _controlX
+    property real   _controlY
+    property real   _controlWidth
+    property real   _controlHeight
+
+    onWidthChanged: {
+        _calPosition()
+    }
+
+    onHeightChanged: {
+        _calPosition()
+    }
+
+    function _calPosition() {
+        if (parentToolInsets.pipState.state === parentToolInsets.pipState.pipState) {
+            _controlX = parentToolInsets.width + _toolsMargin
+            _controlY = _root.height - parentToolInsets.height - _toolsMargin
+            _controlWidth = _root.width - parentToolInsets.width - _toolsMargin
+            _controlHeight = parentToolInsets.height
+        } else if (mapControl.pipState.state === mapControl.pipState.pipState) {
+            _controlX = mapControl.width + _toolsMargin
+            _controlY = _root.height - mapControl.height - _toolsMargin
+            _controlWidth = _root.width - mapControl.width - _toolsMargin
+            _controlHeight = mapControl.height
+        }
+    }
 
     // 仅为了在qml初始化Telecontrol类
     Telecontrol {
@@ -64,10 +90,11 @@ Item {
 
     Rectangle{
         id: userData
-        x: parentToolInsets.width + _toolsMargin
-        y: parent.height - parentToolInsets.height - _toolsMargin
-        width: parent.width - parentToolInsets.width - _toolsMargin
-        height: parentToolInsets.height
+        x: _controlX
+        y: _controlY
+        z: QGroundControl.zOrderTopMost
+        width: _controlWidth
+        height: _controlHeight
         anchors.margins: _margins * 2
         visible: true
 
