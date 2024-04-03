@@ -14,8 +14,8 @@ Item {
     property bool   _hasVideo: QGroundControl.videoManager.hasVideo
     property real   _controlX: _hasVideo ? parentToolInsets.width + _toolsMargin : 0
     property real   _controlY: _root.height - parentToolInsets.height - _toolsMargin
-    property real   _controlWidth: _hasVideo ? _root.width - parentToolInsets.width - _toolsMargin : _root.width - _toolsMargin
-    property real   _controlHeight: parentToolInsets.height
+    property real   _controlWidth: _hasVideo ? _root.width - parentToolInsets.width - _toolsMargin : _root.width
+    property real   _controlHeight: parentToolInsets.height + _toolsMargin
 
     // 仅为了在qml初始化Telecontrol类
     Telecontrol {
