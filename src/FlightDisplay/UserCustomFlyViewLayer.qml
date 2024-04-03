@@ -11,33 +11,11 @@ Item {
     anchors.fill: parent
 
     property var    parentToolInsets
-    property var    mapControl
-    property real   _controlX
-    property real   _controlY
-    property real   _controlWidth
-    property real   _controlHeight
-
-    onWidthChanged: {
-        _calPosition()
-    }
-
-    onHeightChanged: {
-        _calPosition()
-    }
-
-    function _calPosition() {
-        if (parentToolInsets.pipState.state === parentToolInsets.pipState.pipState) {
-            _controlX = parentToolInsets.width + _toolsMargin
-            _controlY = _root.height - parentToolInsets.height - _toolsMargin
-            _controlWidth = _root.width - parentToolInsets.width - _toolsMargin
-            _controlHeight = parentToolInsets.height
-        } else if (mapControl.pipState.state === mapControl.pipState.pipState) {
-            _controlX = mapControl.width + _toolsMargin
-            _controlY = _root.height - mapControl.height - _toolsMargin
-            _controlWidth = _root.width - mapControl.width - _toolsMargin
-            _controlHeight = mapControl.height
-        }
-    }
+    property bool   _hasVideo: QGroundControl.videoManager.hasVideo
+    property real   _controlX: _hasVideo ? parentToolInsets.width + _toolsMargin : 0
+    property real   _controlY: _root.height - parentToolInsets.height - _toolsMargin
+    property real   _controlWidth: _hasVideo ? _root.width - parentToolInsets.width - _toolsMargin : _root.width - _toolsMargin
+    property real   _controlHeight: parentToolInsets.height
 
     // 仅为了在qml初始化Telecontrol类
     Telecontrol {

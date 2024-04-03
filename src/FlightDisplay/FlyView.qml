@@ -169,8 +169,7 @@ Item {
         anchors.left:           parent.left
         anchors.right:          guidedValueSlider.visible ? guidedValueSlider.left : parent.right
         z:                      _fullItemZorder + 1
-        parentToolInsets:       videoControl
-        mapControl:             _mapControl
+        parentToolInsets:       _pipOverlay
         visible:                !QGroundControl.videoManager.fullScreen
     }
 
