@@ -76,6 +76,14 @@ Item {
         anchors.margins: _margins * 2
         visible: true
 
+        /* Using interaction and event handling to solve operations on specific elements */
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+            }
+            onWheel: {
+            }
+        }
         UserFlyViewDisplayControlLayer {
 
         }
