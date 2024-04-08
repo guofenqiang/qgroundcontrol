@@ -26,6 +26,7 @@ Rectangle {
     property real   _longitude:             vehicle ? vehicle.longitude : 0
     property string _version:               vehicle ? vehicle.firmwareMajorVersion + "." + vehicle.firmwareMinorVersion + "." + vehicle.firmwarePatchVersion + vehicle.firmwareVersionTypeString : qsTr("Unknown")
     property real   _flightTime:            vehicle ? vehicle.flightTime.rawValue : 0
+    property real   _guidedMinimumAltitude: QGroundControl.settingsManager.flyViewSettings.guidedMinimumAltitude.rawValue
 
     property var    _batteryGroup:          globals.activeVehicle && globals.activeVehicle.batteries.count ? globals.activeVehicle.batteries.get(0) : undefined
     property var    _batteryValue:          _batteryGroup ? _batteryGroup.percentRemaining.value : 0
@@ -207,11 +208,13 @@ Rectangle {
                                     width: parent.width
                                     height: parent.height
                                     anchors.centerIn: parent
-                                    model: [10, 20, 50]
+                                    model: [1, 2, 3, 4, 5, 10, 15, 20]
 
                                     onActivated: {
-                                        console.log("index ", model[index])
+                                        QGroundControl.settingsManager.flyViewSettings.guidedMinimumAltitude.rawValue = model[index]
                                     }
+
+                                    Component.onCompleted: currentIndex = indexOfValue(_guidedMinimumAltitude)
                                 }
                             }
                             Rectangle {

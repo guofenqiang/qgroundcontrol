@@ -600,6 +600,19 @@ void PX4FirmwarePlugin::guidedModeChangeEquivalentAirspeedMetersSecond(Vehicle* 
         NAN, NAN,NAN);                        // param 5-7 unused
 }
 
+double PX4FirmwarePlugin::minimumTakeoffAltitude(Vehicle* vehicle)
+{
+    double minTakeoffAlt = 0;
+
+    minTakeoffAlt = qgcApp()->toolbox()->settingsManager()->flyViewSettings()->guidedMinimumAltitude()->rawValue().toDouble();
+
+    if (minTakeoffAlt == 0) {
+        minTakeoffAlt = FirmwarePlugin::minimumTakeoffAltitude(vehicle);
+    }
+
+    return minTakeoffAlt;
+}
+
 void PX4FirmwarePlugin::startMission(Vehicle* vehicle)
 {
     if (_setFlightModeAndValidate(vehicle, missionFlightMode())) {
