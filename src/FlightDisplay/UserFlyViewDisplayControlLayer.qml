@@ -3,6 +3,8 @@ import QtQuick.Controls             2.5
 import QtQuick.Layouts              1.15
 
 import QGroundControl               1.0
+import QGroundControl.FactControls      1.0
+import QGroundControl.SettingsManager   1.0
 
 Rectangle {
     id: outRect
@@ -17,6 +19,16 @@ Rectangle {
     property real   altitudeRelative:     vehicle ? vehicle.altitudeRelative.rawValue: 0
     property real   flightDistance:       vehicle ? vehicle.flightDistance.rawValue: 0
     property real   distanceToHome:       vehicle ? vehicle.distanceToHome.rawValue: 0
+    property real   pitchAngle:             vehicle ? vehicle.pitch.rawValue : 0
+    property real   yawAngle:               vehicle ? vehicle.yawRate.rawValue : 0
+    property real   _heading:               vehicle ? vehicle.heading.rawValue : 0
+    property real   _latitude:              vehicle ? vehicle.latitude : 0
+    property real   _longitude:             vehicle ? vehicle.longitude : 0
+    property string _version:               vehicle ? vehicle.firmwareMajorVersion + "." + vehicle.firmwareMinorVersion + "." + vehicle.firmwarePatchVersion + vehicle.firmwareVersionTypeString : qsTr("Unknown")
+
+    property var    _batteryGroup:          globals.activeVehicle && globals.activeVehicle.batteries.count ? globals.activeVehicle.batteries.get(0) : undefined
+    property var    _batteryValue:          _batteryGroup ? _batteryGroup.percentRemaining.value : 0
+    property var    _batPercentRemaining:   isNaN(_batteryValue) ? 0 : _batteryValue
 
     Rectangle {
         id: innerRect
@@ -96,7 +108,7 @@ Rectangle {
                                 color: innerRect.variableBackColor
                                 Text {
                                     anchors.centerIn: parent
-                                    text: '0'
+                                    text: _version
                                 }
                             }
                             Rectangle {
@@ -112,7 +124,7 @@ Rectangle {
                                 color: innerRect.variableBackColor
                                 Text {
                                     anchors.centerIn: parent
-                                    text: '0'
+                                    text: QGroundControl.qgcVersion.substring(0, 6)
                                 }
                             }
                             Rectangle {
@@ -120,7 +132,55 @@ Rectangle {
                                 color: innerRect.backColor
                                 Text {
                                     anchors.centerIn: parent
-                                    text: "平台状态"
+                                    text: "电池电压"
+                                }
+                            }
+                            Rectangle {
+                                width: localUAV.avgWidth ; height: localUAV.avgHeight; border.color: localUAV.borderColor
+                                color: innerRect.variableBackColor
+                                Text {
+                                    anchors.centerIn: parent
+                                    text: _batteryValue
+                                }
+                            }
+                            Rectangle {
+                                width: localUAV.avgWidth ; height: localUAV.avgHeight;
+                                color: innerRect.backColor
+                                Text {
+                                    anchors.centerIn: parent
+                                    text: "电池剩余比"
+                                }
+                            }
+                            Rectangle {
+                                width: localUAV.avgWidth ; height: localUAV.avgHeight; border.color: localUAV.borderColor
+                                color: innerRect.variableBackColor
+                                Text {
+                                    anchors.centerIn: parent
+                                    text: _batPercentRemaining
+                                }
+                            }
+                            Rectangle {
+                                width: localUAV.avgWidth ; height: localUAV.avgHeight;
+                                color: innerRect.backColor
+                                Text {
+                                    anchors.centerIn: parent
+                                    text: "偏航角度"
+                                }
+                            }
+                            Rectangle {
+                                width: localUAV.avgWidth ; height: localUAV.avgHeight; border.color: localUAV.borderColor
+                                color: innerRect.variableBackColor
+                                Text {
+                                    anchors.centerIn: parent
+                                    text: _heading.toFixed(1)
+                                }
+                            }
+                            Rectangle {
+                                width: localUAV.avgWidth ; height: localUAV.avgHeight;
+                                color: innerRect.backColor
+                                Text {
+                                    anchors.centerIn: parent
+                                    text: "飞行时间"
                                 }
                             }
                             Rectangle {
@@ -136,55 +196,7 @@ Rectangle {
                                 color: innerRect.backColor
                                 Text {
                                     anchors.centerIn: parent
-                                    text: "开机时间"
-                                }
-                            }
-                            Rectangle {
-                                width: localUAV.avgWidth ; height: localUAV.avgHeight; border.color: localUAV.borderColor
-                                color: innerRect.variableBackColor
-                                Text {
-                                    anchors.centerIn: parent
-                                    text: '0'
-                                }
-                            }
-                            Rectangle {
-                                width: localUAV.avgWidth ; height: localUAV.avgHeight;
-                                color: innerRect.backColor
-                                Text {
-                                    anchors.centerIn: parent
-                                    text: "航线总数"
-                                }
-                            }
-                            Rectangle {
-                                width: localUAV.avgWidth ; height: localUAV.avgHeight; border.color: localUAV.borderColor
-                                color: innerRect.variableBackColor
-                                Text {
-                                    anchors.centerIn: parent
-                                    text: '0'
-                                }
-                            }
-                            Rectangle {
-                                width: localUAV.avgWidth ; height: localUAV.avgHeight;
-                                color: innerRect.backColor
-                                Text {
-                                    anchors.centerIn: parent
-                                    text: "当前航线号"
-                                }
-                            }
-                            Rectangle {
-                                width: localUAV.avgWidth ; height: localUAV.avgHeight; border.color: localUAV.borderColor
-                                color: innerRect.variableBackColor
-                                Text {
-                                    anchors.centerIn: parent
-                                    text: '0'
-                                }
-                            }
-                            Rectangle {
-                                width: localUAV.avgWidth ; height: localUAV.avgHeight;
-                                color: innerRect.backColor
-                                Text {
-                                    anchors.centerIn: parent
-                                    text: "任务高度"
+                                    text: "起飞高度"
                                 }
                             }
                             Rectangle {
@@ -219,8 +231,40 @@ Rectangle {
                                     model: ["Stabiled", "Altitude", "Position"]
 
                                     onActivated: {
-                                        console.log("index ", model[index])
+                                        vehicle.flightMode = model[index]
                                     }
+                                }
+                            }
+                            Rectangle {
+                                width: localUAV.avgWidth ; height: localUAV.avgHeight;
+                                color: innerRect.backColor
+                                Text {
+                                    anchors.centerIn: parent
+                                    text: qsTr('latitude')
+                                }
+                            }
+                            Rectangle {
+                                width: localUAV.avgWidth ; height: localUAV.avgHeight; border.color: localUAV.borderColor
+                                color: innerRect.variableBackColor
+                                Text {
+                                    anchors.centerIn: parent
+                                    text: _latitude.toFixed(7)
+                                }
+                            }
+                            Rectangle {
+                                width: localUAV.avgWidth ; height: localUAV.avgHeight;
+                                color: innerRect.backColor
+                                Text {
+                                    anchors.centerIn: parent
+                                    text: qsTr('longitude')
+                                }
+                            }
+                            Rectangle {
+                                width: localUAV.avgWidth ; height: localUAV.avgHeight; border.color: localUAV.borderColor
+                                color: innerRect.variableBackColor
+                                Text {
+                                    anchors.centerIn: parent
+                                    text: _longitude.toFixed(7)
                                 }
                             }
                         }
