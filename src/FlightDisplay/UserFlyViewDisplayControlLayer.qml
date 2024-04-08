@@ -25,6 +25,7 @@ Rectangle {
     property real   _latitude:              vehicle ? vehicle.latitude : 0
     property real   _longitude:             vehicle ? vehicle.longitude : 0
     property string _version:               vehicle ? vehicle.firmwareMajorVersion + "." + vehicle.firmwareMinorVersion + "." + vehicle.firmwarePatchVersion + vehicle.firmwareVersionTypeString : qsTr("Unknown")
+    property real   _flightTime:            vehicle ? vehicle.flightTime.rawValue : 0
 
     property var    _batteryGroup:          globals.activeVehicle && globals.activeVehicle.batteries.count ? globals.activeVehicle.batteries.get(0) : undefined
     property var    _batteryValue:          _batteryGroup ? _batteryGroup.percentRemaining.value : 0
@@ -188,7 +189,7 @@ Rectangle {
                                 color: innerRect.variableBackColor
                                 Text {
                                     anchors.centerIn: parent
-                                    text: '0'
+                                    text: _flightTime.toFixed(0)
                                 }
                             }
                             Rectangle {
