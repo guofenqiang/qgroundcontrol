@@ -7,7 +7,9 @@
 Ecm::Ecm(QObject *parent)
     : QObject{parent}
 {
+#ifdef Q_OS_ANDROID
     initSubprocess();
+#endif
 //    initTimer();
 }
 
