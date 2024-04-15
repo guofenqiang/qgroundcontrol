@@ -76,6 +76,7 @@ Rectangle {
             icon.source:            "/res/QGCLogoFull"
             logo:                   true
             onClicked:              mainWindow.showToolSelectDialog()
+            visible:                ScreenTools.isDebug
         }
 
         MainStatusIndicator {
