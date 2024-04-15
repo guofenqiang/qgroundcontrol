@@ -139,8 +139,8 @@ void Telecontrol::dataThrust(float num)
 
 void Telecontrol::set_armed(quint16 num0)
 {
-    static int last_state = 0;
-    static int state = 0;
+    static int last_state = -1;
+    static int state = -1;
     /* 右拨钮 */
     if (num0 < (TELE_TOGGLE_BUTTON_LOW / 2)) {
         //0 0   middle
