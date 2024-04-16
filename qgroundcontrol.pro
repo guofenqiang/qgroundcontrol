@@ -32,6 +32,7 @@ TEMPLATE = app
 QGCROOT  = $$PWD
 
 QML_IMPORT_PATH += $$PWD/src/QmlControls
+QML_IMPORT_PATH += $$PWD/src/tools/QmlControls
 
 #
 # OS Specific settings
@@ -1464,3 +1465,6 @@ LinuxBuild {
 
     INSTALLS += target share_qgroundcontrol share_icons share_metainfo share_applications
 }
+
+RESOURCES += \
+    src/tools/tools.qrc

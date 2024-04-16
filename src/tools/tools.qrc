@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/qml">
+        <file alias="CustomTools/BasicCompent/CustomButton.qml">BasicCompent/CustomButton.qml</file>
+        <file alias="CustomTools/BasicCompent/CustomComboBox.qml">BasicCompent/CustomComboBox.qml</file>
+        <file alias="CustomTools/BasicCompent/CustomText.qml">BasicCompent/CustomText.qml</file>
+        <file alias="CustomTools/BasicCompent/qmldir">QmlControls/CustomTools/BasicCompent/qmldir</file>
+        <file alias="CustomTools/Fonts/Font Awesome 6 Brands-Regular-400.otf">Fonts/Font Awesome 6 Brands-Regular-400.otf</file>
+        <file alias="CustomTools/Fonts/Font Awesome 6 Free-Regular-400.otf">Fonts/Font Awesome 6 Free-Regular-400.otf</file>
+        <file alias="CustomTools/Fonts/Font Awesome 6 Free-Solid-900.otf">Fonts/Font Awesome 6 Free-Solid-900.otf</file>
+        <file alias="CustomTools/Fonts/fonts.qml">Fonts/fonts.qml</file>
+        <file alias="CustomTools/Fonts/qmldir">QmlControls/CustomTools/Fonts/qmldir</file>
+    </qresource>
+</RCC>

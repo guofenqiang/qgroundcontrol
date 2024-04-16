@@ -9,6 +9,7 @@ import QGroundControl.Controls              1.0
 import QGroundControl.ScreenTools           1.0
 import QGroundControl.MultiVehicleManager   1.0
 import QGroundControl.Palette               1.0
+import CustomTools.BasicCompent             1.0
 
 Rectangle {
     id: outRect
@@ -130,7 +131,7 @@ Rectangle {
                                 radius: outRect._sideRadius
                                 Text {
                                     anchors.centerIn: parent
-                                    text: "电池电压: " + _batteryValue + " V"
+                                    text: "横滚: " + roll.toFixed(7)
                                     color: outRect._sideTextColor
                                 }
                             }
@@ -140,7 +141,7 @@ Rectangle {
                                 radius: outRect._sideRadius
                                 Text {
                                     anchors.centerIn: parent
-                                    text: "电池剩余比: " + _batPercentRemaining + " %"
+                                    text: "俯仰: " + pitchAngle.toFixed(7)
                                     color: outRect._sideTextColor
                                 }
                             }
@@ -187,7 +188,7 @@ Rectangle {
                                         color: outRect._sideBackgroundColor
                                         border.color: outRect._sideBorderColor
                                         radius: outRect._sideRadius
-                                        ComboBox {
+                                        CustomComboBox {
                                             width: parent.width
                                             height: parent.height
                                             anchors.centerIn: parent
@@ -224,7 +225,7 @@ Rectangle {
                                         color: outRect._sideBackgroundColor
                                         border.color: outRect._sideBorderColor
                                         radius: outRect._sideRadius
-                                        ComboBox {
+                                        CustomComboBox {
                                             width: parent.width
                                             height: parent.height
                                             anchors.centerIn: parent
@@ -311,7 +312,7 @@ Rectangle {
                                         color: outRect._sideBackgroundColor
                                         border.color: outRect._sideBorderColor
                                         radius: outRect._sideRadius
-                                        ComboBox {
+                                        CustomComboBox {
                                             width: parent.width
                                             height: parent.height
                                             anchors.centerIn: parent
@@ -342,7 +343,7 @@ Rectangle {
                                         color: outRect._sideBackgroundColor
                                         border.color: outRect._sideBorderColor
                                         radius: outRect._sideRadius
-                                        ComboBox {
+                                        CustomComboBox {
                                             width: parent.width
                                             height: parent.height
                                             anchors.centerIn: parent
@@ -355,7 +356,7 @@ Rectangle {
                                 width: formationID.avgWidth; height: formationID.avgHeight; border.color: outRect._sideBorderColor
                                 color: outRect._sideBackgroundColor
                                 radius: outRect._sideRadius
-                                ComboBox {
+                                CustomComboBox {
                                     model: ["维持原队形", "一字型队形", "人字形队形", "圆形队形"]
                                     width: parent.width
                                     height: parent.height
@@ -365,7 +366,7 @@ Rectangle {
                                 width: formationID.avgWidth; height: formationID.avgHeight;
                                 color: outRect._sideBackgroundColor
                                 radius: outRect._sideRadius
-                                Button {
+                                CustomButton {
                                     width: parent.width
                                     height: parent.height
                                     text: "编队飞行"
@@ -375,7 +376,7 @@ Rectangle {
                                 width: formationID.avgWidth; height: formationID.avgHeight;
                                 color: outRect._sideBackgroundColor
                                 radius: outRect._sideRadius
-                                Button {
+                                CustomButton {
                                     width: parent.width
                                     height: parent.height
                                     text: "一键起飞"
@@ -385,7 +386,7 @@ Rectangle {
                                 width: formationID.avgWidth; height: formationID.avgHeight;
                                 color: outRect._sideBackgroundColor
                                 radius: outRect._sideRadius
-                                Button {
+                                CustomButton {
                                     width: parent.width
                                     height: parent.height
                                     text: "一键返航"
@@ -395,7 +396,7 @@ Rectangle {
                                 width: formationID.avgWidth; height: formationID.avgHeight;
                                 color: outRect._sideBackgroundColor
                                 radius: outRect._sideRadius
-                                Button {
+                                CustomButton {
                                     width: parent.width
                                     height: parent.height
                                     text: "采集坐标"
@@ -405,7 +406,7 @@ Rectangle {
                                 width: formationID.avgWidth; height: formationID.avgHeight;
                                 color: outRect._sideBackgroundColor
                                 radius: outRect._sideRadius
-                                Button {
+                                CustomButton {
                                     width: parent.width
                                     height: parent.height
                                     text: "航点设置"
@@ -531,8 +532,9 @@ Rectangle {
                                 width: scoutID.width; height: scoutID.avgHeight; border.color: outRect._sideBorderColor
                                 color: outRect._sideBackgroundColor
                                 radius: outRect._sideRadius
-                                ComboBox {
+                                CustomComboBox {
                                    anchors.centerIn: parent
+                                   anchors.fill: parent
                                    model: ["手动", "自动"]
 
                                    onActivated: {
@@ -657,7 +659,7 @@ Rectangle {
                                 spacing: 1
                                 Rectangle {
                                     width: scoutID.avgWidth; height: scoutID.avgHeight; border.color: outRect._sideBorderColor
-                                    Button {
+                                    CustomButton {
                                         anchors.fill: parent
                                         anchors.centerIn: parent
                                         text: "待机"
@@ -665,7 +667,7 @@ Rectangle {
                                 }
                                 Rectangle {
                                     width: scoutID.avgWidth; height: scoutID.avgHeight; border.color: outRect._sideBorderColor
-                                    Button {
+                                    CustomButton {
                                         anchors.fill: parent
                                         anchors.centerIn: parent
                                         text: "复位"
@@ -673,7 +675,7 @@ Rectangle {
                                 }
                                 Rectangle {
                                     width: scoutID.avgWidth; height: scoutID.avgHeight; border.color: outRect._sideBorderColor
-                                    Button {
+                                    CustomButton {
                                         anchors.fill: parent
                                         anchors.centerIn: parent
                                         text: "侦测"
@@ -681,7 +683,7 @@ Rectangle {
                                 }
                                 Rectangle {
                                     width: scoutID.avgWidth; height: scoutID.avgHeight; border.color: outRect._sideBorderColor
-                                    Button {
+                                    CustomButton {
                                         anchors.fill: parent
                                         anchors.centerIn: parent
                                         text: "干扰"

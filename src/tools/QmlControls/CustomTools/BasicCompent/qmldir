@@ -1,0 +1,5 @@
+Module CustomTools.BasicCompent
+
+CustomText                      1.0 CustomText.qml
+CustomButton                    1.0 CustomButton.qml
+CustomComboBox                  1.0 CustomComboBox.qml
