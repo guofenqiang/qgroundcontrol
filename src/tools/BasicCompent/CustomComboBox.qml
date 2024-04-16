@@ -17,8 +17,8 @@ ComboBox {
     property color fontColor: "#00FFFF"
 
     // 默认字体
-    property string fontFamily: "Arial"
-    property int fontSize: 15
+    property string fontFamily: "Helvetica"
+    property int fontSize: 16
 
     // 默认弧度
     property int radius: 10
