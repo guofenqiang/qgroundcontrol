@@ -109,60 +109,54 @@ Rectangle {
                                 width: localUAV.avgWidth ; height: localUAV.avgHeight; border.color: outRect._sideBorderColor
                                 color: outRect._sideBackgroundColor
                                 radius: outRect._sideRadius
-                                Text {
+                                CustomText {
                                     anchors.centerIn: parent
                                     text: "飞控版本: " + _version
-                                    color: outRect._sideTextColor
                                 }
                             }
                             Rectangle {
                                 width: localUAV.avgWidth ; height: localUAV.avgHeight; border.color: outRect._sideBorderColor
                                 color: outRect._sideBackgroundColor
                                 radius: outRect._sideRadius
-                                Text {
+                                CustomText {
                                     anchors.centerIn: parent
                                     text: "平台版本: " + QGroundControl.qgcVersion.substring(0, 6)
-                                    color: outRect._sideTextColor
                                 }
                             }
                             Rectangle {
                                 width: localUAV.avgWidth ; height: localUAV.avgHeight; border.color: outRect._sideBorderColor
                                 color: outRect._sideBackgroundColor
                                 radius: outRect._sideRadius
-                                Text {
+                                CustomText {
                                     anchors.centerIn: parent
                                     text: "横滚: " + roll.toFixed(7)
-                                    color: outRect._sideTextColor
                                 }
                             }
                             Rectangle {
                                 width: localUAV.avgWidth ; height: localUAV.avgHeight; border.color: outRect._sideBorderColor
                                 color: outRect._sideBackgroundColor
                                 radius: outRect._sideRadius
-                                Text {
+                                CustomText {
                                     anchors.centerIn: parent
                                     text: "俯仰: " + pitchAngle.toFixed(7)
-                                    color: outRect._sideTextColor
                                 }
                             }
                             Rectangle {
                                 width: localUAV.avgWidth ; height: localUAV.avgHeight; border.color: outRect._sideBorderColor
                                 color: outRect._sideBackgroundColor
                                 radius: outRect._sideRadius
-                                Text {
+                                CustomText {
                                     anchors.centerIn: parent
                                     text: "偏航角度: " + _heading.toFixed(1)
-                                    color: outRect._sideTextColor
                                 }
                             }
                             Rectangle {
                                 width: localUAV.avgWidth ; height: localUAV.avgHeight; border.color: outRect._sideBorderColor
                                 color: outRect._sideBackgroundColor
                                 radius: outRect._sideRadius
-                                Text {
+                                CustomText {
                                     anchors.centerIn: parent
                                     text: "飞行时间: " + _flightTime.toFixed(0) + " s"
-                                    color: outRect._sideTextColor
                                 }
                             }
                             Rectangle {
@@ -175,10 +169,9 @@ Rectangle {
                                         color: outRect._sideBackgroundColor
                                         border.color: outRect._sideBorderColor
                                         radius: outRect._sideRadius
-                                        Text {
+                                        CustomText {
                                             anchors.centerIn: parent
                                             text: "起飞高度"
-                                            color: outRect._sideTextColor
                                         }
                                     }
 
@@ -213,10 +206,9 @@ Rectangle {
                                         color: outRect._sideBackgroundColor
                                         border.color: outRect._sideBorderColor
                                         radius: outRect._sideRadius
-                                        Text {
+                                        CustomText {
                                             anchors.centerIn: parent
                                             text: "飞行模式"
-                                            color: outRect._sideTextColor
                                         }
                                     }
                                     Rectangle {
@@ -242,20 +234,18 @@ Rectangle {
                                 width: localUAV.avgWidth ; height: localUAV.avgHeight; border.color: outRect._sideBorderColor
                                 color: outRect._sideBackgroundColor
                                 radius: outRect._sideRadius
-                                Text {
+                                CustomText {
                                     anchors.centerIn: parent
                                     text: qsTr('维度: ') + _latitude.toFixed(7)
-                                    color: outRect._sideTextColor
                                 }
                             }
                             Rectangle {
                                 width: localUAV.avgWidth ; height: localUAV.avgHeight; border.color: outRect._sideBorderColor
                                 color: outRect._sideBackgroundColor
                                 radius: outRect._sideRadius
-                                Text {
+                                CustomText {
                                     anchors.centerIn: parent
                                     text: qsTr('经度: ') + _longitude.toFixed(7)
-                                    color: outRect._sideTextColor
                                 }
                             }
                         }
@@ -274,20 +264,18 @@ Rectangle {
                                 width: formationID.avgWidth; height: formationID.avgHeight; border.color: outRect._sideBorderColor
                                 color: outRect._sideBackgroundColor
                                 radius: outRect._sideRadius
-                                Text {
+                                CustomText {
                                     anchors.centerIn: parent
                                     text: '目标维度: 0'
-                                    color: outRect._sideTextColor
                                 }
                             }
                             Rectangle {
                                 width: formationID.avgWidth; height: formationID.avgHeight; border.color: outRect._sideBorderColor
                                 color: outRect._sideBackgroundColor
                                 radius: outRect._sideRadius
-                                Text {
+                                CustomText {
                                     anchors.centerIn: parent
                                     text: '目标经度: 0'
-                                    color: outRect._sideTextColor
                                 }
                             }
                             Rectangle {
@@ -300,10 +288,9 @@ Rectangle {
                                         color: outRect._sideBackgroundColor
                                         border.color: outRect._sideBorderColor
                                         radius: outRect._sideRadius
-                                        Text {
+                                        CustomText {
                                             anchors.centerIn: parent
                                             text: "目标高度"
-                                            color: outRect._sideTextColor
                                         }
                                     }
                                     Rectangle {
@@ -331,10 +318,9 @@ Rectangle {
                                         color: outRect._sideBackgroundColor
                                         border.color: outRect._sideBorderColor
                                         radius: outRect._sideRadius
-                                        Text {
+                                        CustomText {
                                             anchors.centerIn: parent
                                             text: "领航者ID"
-                                            color: outRect._sideTextColor
                                         }
                                     }
                                     Rectangle {
@@ -433,50 +419,45 @@ Rectangle {
                         width: parent.width; height: fixTelemetry.avgHeight; border.color: outRect._fixBorderColor
                         color: outRect._fixBackgroundColor
                         radius: outRect._fixRadius
-                        Text {
+                        CustomText {
                             anchors.centerIn: parent
                             text: "相对高度 " + altitudeRelative.toFixed(1) + " m"
-                            color: outRect._fixTextColor
                         }
                     }
                     Rectangle {
                         width: parent.width; height: fixTelemetry.avgHeight; border.color: outRect._fixBorderColor
                         color: outRect._fixBackgroundColor
                         radius: outRect._fixRadius
-                        Text {
+                        CustomText {
                             anchors.centerIn: parent
                             text: "上升速度 " + climbRate.toFixed(1) + " m/s"
-                            color: outRect._fixTextColor
                         }
                     }
                     Rectangle {
                         width: parent.width; height: fixTelemetry.avgHeight; border.color: outRect._fixBorderColor
                         color: outRect._fixBackgroundColor
                         radius: outRect._fixRadius
-                        Text {
+                        CustomText {
                             anchors.centerIn: parent
                             text: "到home点距离 " + distanceToHome.toFixed(1) + " m"
-                            color: outRect._fixTextColor
                         }
                     }
                     Rectangle {
                         width: parent.width; height: fixTelemetry.avgHeight; border.color: outRect._fixBorderColor
                         color: outRect._fixBackgroundColor
                         radius: outRect._fixRadius
-                        Text {
+                        CustomText {
                             anchors.centerIn: parent
                             text: "地速 " + groundSpeed.toFixed(1) + " m/s"
-                            color: outRect._fixTextColor
                         }
                     }
                     Rectangle {
                         width: parent.width; height: fixTelemetry.avgHeight; border.color: outRect._fixBorderColor
                         color: outRect._fixBackgroundColor
                         radius: outRect._fixRadius
-                        Text {
+                        CustomText {
                             anchors.centerIn: parent
                             text: "飞行距离 " + flightDistance.toFixed(1) + " m"
-                            color: outRect._fixTextColor
                         }
                     }
                 }
@@ -552,10 +533,9 @@ Rectangle {
                                         width: parent.width / 6; height: parent.height;
                                         color: outRect._sideBackgroundColor
                                         radius: outRect._sideRadius
-                                        Text {
+                                        CustomText {
                                             anchors.centerIn: parent
                                             text: "侦察频段:"
-                                            color: outRect._sideTextColor
                                         }
                                     }
 
@@ -615,10 +595,9 @@ Rectangle {
                                         width: parent.width / 6; height: parent.height;
                                         color: outRect._sideBackgroundColor
                                         radius: outRect._sideRadius
-                                        Text {
+                                        CustomText {
                                             anchors.centerIn: parent
                                             text: "干扰功率:"
-                                            color: outRect._sideTextColor
                                         }
                                     }
 
