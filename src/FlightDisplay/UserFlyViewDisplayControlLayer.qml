@@ -409,7 +409,7 @@ Rectangle {
                 height: parent.height
                 anchors.margins: 20
 
-                property real avgHeight: parent.height / 5.2
+                property real avgHeight: parent.height / 5.1
 
                 Column {
                     anchors.fill: parent
@@ -422,6 +422,7 @@ Rectangle {
                         CustomText {
                             anchors.centerIn: parent
                             text: "相对高度 " + altitudeRelative.toFixed(1) + " m"
+                            fontColor: outRect._fixTextColor
                         }
                     }
                     Rectangle {
@@ -430,7 +431,8 @@ Rectangle {
                         radius: outRect._fixRadius
                         CustomText {
                             anchors.centerIn: parent
-                            text: "上升速度 " + climbRate.toFixed(1) + " m/s"
+                            text: "爬升速度 " + climbRate.toFixed(1) + " m/s"
+                            fontColor: outRect._fixTextColor
                         }
                     }
                     Rectangle {
@@ -440,6 +442,7 @@ Rectangle {
                         CustomText {
                             anchors.centerIn: parent
                             text: "到home点距离 " + distanceToHome.toFixed(1) + " m"
+                            fontColor: outRect._fixTextColor
                         }
                     }
                     Rectangle {
@@ -449,6 +452,7 @@ Rectangle {
                         CustomText {
                             anchors.centerIn: parent
                             text: "地速 " + groundSpeed.toFixed(1) + " m/s"
+                            fontColor: outRect._fixTextColor
                         }
                     }
                     Rectangle {
@@ -458,6 +462,7 @@ Rectangle {
                         CustomText {
                             anchors.centerIn: parent
                             text: "飞行距离 " + flightDistance.toFixed(1) + " m"
+                            fontColor: outRect._fixTextColor
                         }
                     }
                 }
