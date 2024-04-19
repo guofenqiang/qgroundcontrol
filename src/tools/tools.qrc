@@ -9,5 +9,7 @@
         <file alias="CustomTools/Fonts/Font Awesome 6 Free-Solid-900.otf">Fonts/Font Awesome 6 Free-Solid-900.otf</file>
         <file alias="CustomTools/Fonts/fonts.qml">Fonts/fonts.qml</file>
         <file alias="CustomTools/Fonts/qmldir">QmlControls/CustomTools/Fonts/qmldir</file>
+        <file alias="CustomTools/BasicCompent/CustomRangeSlider.qml">BasicCompent/CustomRangeSlider.qml</file>
+        <file alias="CustomTools/BasicCompent/CustomSlider.qml">BasicCompent/CustomSlider.qml</file>
     </qresource>
 </RCC>
