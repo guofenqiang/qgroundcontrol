@@ -7,10 +7,10 @@
 
 #define TELE_ADC_NUM					16
 #define TELE_ADC_BUFF                   5
-#define TELE_BOUNDARY_ADC_VALUE         3000
+
 #define TELE_TOGGLE_BUTTON_LOW          800
 #define TELE_TOGGLE_BUTTON_HIGH         1630
-#define TELE_TOGGLE_BUTTON_BOUNDARY     (((TELE_TOGGLE_BUTTON_LOW) + (TELE_TOGGLE_BUTTON_HIGH)) / 2)
+#define TELE_TOGGLE_BUTTON_TOLERATE     100
 
 class Telecontrol : public QObject
 {
