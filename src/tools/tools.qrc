@@ -11,5 +11,6 @@
         <file alias="CustomTools/Fonts/qmldir">QmlControls/CustomTools/Fonts/qmldir</file>
         <file alias="CustomTools/BasicCompent/CustomRangeSlider.qml">BasicCompent/CustomRangeSlider.qml</file>
         <file alias="CustomTools/BasicCompent/CustomSlider.qml">BasicCompent/CustomSlider.qml</file>
+        <file alias="CustomTools/BasicCompent/CustomSwitchDelegate.qml">BasicCompent/CustomSwitchDelegate.qml</file>
     </qresource>
 </RCC>

@@ -818,7 +818,7 @@ Rectangle {
                             Component {
                                 id: numberDelegate
 
-                                SwitchDelegate {
+                                CustomSwitchDelegate {
                                     width: historyList.width
                                     text: index + '    ' + Math.random().toFixed(2) + '    ' + Math.random().toFixed(2)
                                           + '    ' + Math.random().toFixed(2) + '    ' + Math.random().toFixed(2)

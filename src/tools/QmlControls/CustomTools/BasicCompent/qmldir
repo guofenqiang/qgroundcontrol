@@ -5,3 +5,4 @@ CustomButton                    1.0 CustomButton.qml
 CustomComboBox                  1.0 CustomComboBox.qml
 CustomSlider                    1.0 CustomSlider.qml
 CustomRangeSlider               1.0 CustomRangeSlider.qml
+CustomSwitchDelegate            1.0 CustomSwitchDelegate.qml
