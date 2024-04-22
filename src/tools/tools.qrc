@@ -12,5 +12,6 @@
         <file alias="CustomTools/BasicCompent/CustomRangeSlider.qml">BasicCompent/CustomRangeSlider.qml</file>
         <file alias="CustomTools/BasicCompent/CustomSlider.qml">BasicCompent/CustomSlider.qml</file>
         <file alias="CustomTools/BasicCompent/CustomSwitchDelegate.qml">BasicCompent/CustomSwitchDelegate.qml</file>
+        <file alias="CustomTools/BasicCompent/CustomTabButton.qml">BasicCompent/CustomTabButton.qml</file>
     </qresource>
 </RCC>
