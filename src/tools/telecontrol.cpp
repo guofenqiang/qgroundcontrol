@@ -210,7 +210,7 @@ void Telecontrol::set_flight_mode(quint16 num0)
         {
             qgcApp()->toolbox()->multiVehicleManager()->activeVehicle()->setFlightMode("Altitude");
         } else if (state == 1) {
-            qgcApp()->toolbox()->multiVehicleManager()->activeVehicle()->setFlightMode("Stabilized");
+            qgcApp()->toolbox()->multiVehicleManager()->activeVehicle()->setFlightMode("Mission");
         } else if (state == 2) {
             qgcApp()->toolbox()->multiVehicleManager()->activeVehicle()->setFlightMode("Position");
         }

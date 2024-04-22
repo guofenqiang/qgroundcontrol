@@ -221,7 +221,7 @@ Rectangle {
                                             width: parent.width
                                             height: parent.height
                                             anchors.centerIn: parent
-                                            model: ["Stabiled", "Altitude", "Position"]
+                                            model: ["Mission", "Altitude", "Position"]
 
                                             onActivated: {
                                                 vehicle.flightMode = model[index]
