@@ -4,11 +4,11 @@
 PodSiYiProtocol::PodSiYiProtocol(QObject *parent)
     : QObject{parent}
 {
-    _tcpSocket = new QUdpSocket(this);
+    _udpSocket = new QUdpSocket(this);
 
-    connect(_tcpSocket, &QUdpSocket::connected, this, &PodSiYiProtocol::connected);
-    connect(_tcpSocket, &QUdpSocket::disconnected, this, &PodSiYiProtocol::disconnected);
-//    connect(_tcpSocket, &QUdpSocket::readyRead, this, &PodSiYiProtocol::readyRead);
+    connect(_udpSocket, &QUdpSocket::connected, this, &PodSiYiProtocol::connected);
+    connect(_udpSocket, &QUdpSocket::disconnected, this, &PodSiYiProtocol::disconnected);
+//    connect(_udpSocket, &QUdpSocket::readyRead, this, &PodSiYiProtocol::readyRead);
 
     _connectToPod(POD_SIYI_A8_MINI_IP_ADDR, POD_SIYI_A8_MINI_IP_PORT);
 }
@@ -31,13 +31,13 @@ void PodSiYiProtocol::disconnected()
 
 void PodSiYiProtocol::readyRead()
 {
-    QByteArray data = _tcpSocket->readAll();
+    QByteArray data = _udpSocket->readAll();
     _siyi_message_decode(data);
 }
 
 bool PodSiYiProtocol::_connectToPod(const QString &ipAddress, quint16 port)
 {
-    _tcpSocket->connectToHost(QHostAddress(ipAddress), port);
+    _udpSocket->bind();
     return true;
 }
 
@@ -135,7 +135,7 @@ void PodSiYiProtocol::_sendMessage(siyi_message_t *message)
 //    }
 //    qDebug("0x%04x", message->crc16);
     _message_to_qbyte(buff, &len, message);
-    _tcpSocket->write(buff, len);
+    _udpSocket->writeDatagram(buff, len, QHostAddress(POD_SIYI_A8_MINI_IP_ADDR), POD_SIYI_A8_MINI_IP_PORT);
 }
 
 void PodSiYiProtocol::_msgGetHardwareIdEncode(siyi_message_t *message)

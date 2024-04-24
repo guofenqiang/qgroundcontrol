@@ -76,7 +76,7 @@ private slots:
     void readyRead();
 
 private:
-    QUdpSocket *_tcpSocket;
+    QUdpSocket *_udpSocket;
     hardware_id_ack_t _hardware;
 
     const uint16_t crc16_tab[256]=
