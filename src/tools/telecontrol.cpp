@@ -114,8 +114,8 @@ void Telecontrol::dataProcess(QList<quint16> numList)
 //    qDebug("_roll:%f _pitch: %f, _yaw: %f, _thrust: %f", _roll, _pitch, _yaw, _thrust);
 //    qDebug("flight_mode0: %d, armed0: %d\n", flight_mode0, armed0);
     if (qgcApp()->toolbox()->multiVehicleManager()->activeVehicle()) {
-        set_armed(armed0);
-        set_flight_mode(flight_mode0);
+        updateArmed(armed0);
+        updateFlightMode(flight_mode0);
     }
 }
 
@@ -139,27 +139,22 @@ void Telecontrol::dataThrust(float num)
 
 void Telecontrol::set_armed(quint16 num0)
 {
-    static int last_state = -1;
-    static int state = -1;
-    /* 右拨钮 */
-    if (num0 < (TELE_TOGGLE_BUTTON_TOLERATE)) {
-        //0 0   middle
-        state = 0;
-    } else if((num0 < (TELE_TOGGLE_BUTTON_LOW + TELE_TOGGLE_BUTTON_TOLERATE)) && (num0 > (TELE_TOGGLE_BUTTON_LOW - TELE_TOGGLE_BUTTON_TOLERATE))){
-        //0 1   left
-//        state = 1;
-    } else if (num0 >= (TELE_TOGGLE_BUTTON_HIGH - TELE_TOGGLE_BUTTON_TOLERATE)) {
-        //1 0   right
-        state = 2;
+    static int flag = 0;
+    static int pre_state = -1;
+
+    if (flag == 0 && num0 == 0) {
+        flag = 1;
     }
-    if (last_state != state) {
-        if (last_state == 0 && state == 2)
+
+    if (flag == 1) {
+        if ((pre_state == 0) && (num0 == 2))
         {
             // armed
             qDebug("armed");
             qgcApp()->toolbox()->multiVehicleManager()->activeVehicle()->setArmed(true, false);
             // Wait 1500 msecs for vehicle to arm (waiting for the next heartbeat)
             for (int i = 0; i < 15; i++) {
+                qDebug() << i << "waiting armed";
                 if (qgcApp()->toolbox()->multiVehicleManager()->activeVehicle()->armed()) {
                     break;
                 }
@@ -167,12 +162,13 @@ void Telecontrol::set_armed(quint16 num0)
                 qgcApp()->processEvents(QEventLoop::ExcludeUserInputEvents);
             }
 
-        } else if(last_state == 2 && state == 0) {
+        } else if((pre_state == 2) && (num0 == 0)) {
             // disarmed
             qDebug("disarmed");
             qgcApp()->toolbox()->multiVehicleManager()->activeVehicle()->setArmed(false, false);
             // Wait 1500 msecs for vehicle to arm (waiting for the next heartbeat)
             for (int i = 0; i < 15; i++) {
+                qDebug() << i << "waiting disarmed";
                 if (!qgcApp()->toolbox()->multiVehicleManager()->activeVehicle()->armed()) {
                     break;
                 }
@@ -180,43 +176,31 @@ void Telecontrol::set_armed(quint16 num0)
                 qgcApp()->processEvents(QEventLoop::ExcludeUserInputEvents);
             }
         } else {
-            qDebug("last_state: %d, state: %d, num: %d\n",last_state, state, num0);
+            qDebug("flag: %d, pre_state: %d, num: %d\n", flag, pre_state, num0);
         }
     }
 
-    last_state = state;
+    pre_state = num0;
 }
 
 void Telecontrol::set_flight_mode(quint16 num0)
 {
-    static int last_state = 0;
-    static int state = 0;
+    QString altitude = tr("Altitude");
+    QString mission = tr("Mission");
+    QString position = tr("Position");
 
-    /* 左拨钮 */
-    if (num0 < (TELE_TOGGLE_BUTTON_TOLERATE)) {
-        // 0 0 middle
-        state = 0;
-    } else if ((num0 < (TELE_TOGGLE_BUTTON_LOW + TELE_TOGGLE_BUTTON_TOLERATE)) && (num0 > (TELE_TOGGLE_BUTTON_LOW - TELE_TOGGLE_BUTTON_TOLERATE))) {
-        // 0 1 right
-        state = 1;
-    } else if (num0 >= (TELE_TOGGLE_BUTTON_HIGH - TELE_TOGGLE_BUTTON_TOLERATE)) {
-        // 1 0 left
-        state = 2;
-    }
-
-    if (last_state != state)
+    Vehicle* vehicle = qgcApp()->toolbox()->multiVehicleManager()->activeVehicle();
+    if (num0 == 0)
     {
-        if (state == 0)
-        {
-            qgcApp()->toolbox()->multiVehicleManager()->activeVehicle()->setFlightMode("Altitude");
-        } else if (state == 1) {
-            qgcApp()->toolbox()->multiVehicleManager()->activeVehicle()->setFlightMode("Mission");
-        } else if (state == 2) {
-            qgcApp()->toolbox()->multiVehicleManager()->activeVehicle()->setFlightMode("Position");
-        }
-
+        qDebug() << altitude;
+        _setFlightModeAndValidate(vehicle, altitude);
+    } else if (num0 == 1) {
+        qDebug() << mission;
+        _setFlightModeAndValidate(vehicle, mission);
+    } else if (num0 == 2) {
+        qDebug() << position;
+        _setFlightModeAndValidate(vehicle, position);
     }
-    last_state = state;
 }
 
 void Telecontrol::_updateJoystickTime()
@@ -350,4 +334,120 @@ void Telecontrol::regexpNumber(const QStringList& packet)
         return;
     }
     dataProcess(numList);
+}
+
+void Telecontrol::updateBuff(int newData) {
+    for (int i = 1; i < THRESHOLD; ++i) {
+        buff[i - 1] = buff[i];
+    }
+    buff[THRESHOLD - 1] = newData;
+}
+
+bool Telecontrol::detectTransition(int newData) {
+    bool isTransition = false;
+
+    if (buff[THRESHOLD - 2] == newData) {
+        consecutiveCount++;
+        if (consecutiveCount == THRESHOLD) {
+            isTransition = true;
+        }
+    } else {
+        consecutiveCount = 1;
+    }
+
+    updateBuff(newData);
+    return isTransition;
+}
+
+// 新数据到来时的处理逻辑
+void Telecontrol::handleNewData(int newData) {
+    if (detectTransition(newData)) {
+        // 触发状态机转换
+        transitionArmed(newData);
+    }
+}
+
+void Telecontrol::transitionArmed(int newData) {
+    set_armed(newData);
+}
+
+void Telecontrol::updateArmed(quint16 num) {
+    static int value = -1;
+
+    /* 左拨钮 */
+    if (num < (TELE_TOGGLE_BUTTON_TOLERATE)) {
+        // 0 0 middle
+//        value = 0;
+    } else if ((num < (TELE_TOGGLE_BUTTON_LOW + TELE_TOGGLE_BUTTON_TOLERATE)) && (num > (TELE_TOGGLE_BUTTON_LOW - TELE_TOGGLE_BUTTON_TOLERATE))) {
+        // 0 1 left
+        value = 0;
+    } else if (num >= (TELE_TOGGLE_BUTTON_HIGH - TELE_TOGGLE_BUTTON_TOLERATE)) {
+        // 1 0 right
+        value = 2;
+    }
+    handleNewData(value);
+}
+
+void Telecontrol::updateFlightMode(quint16 num) {
+    static int value = -1;
+    bool isTransition = false;
+
+    /* 左拨钮 */
+    if (num < (TELE_TOGGLE_BUTTON_TOLERATE)) {
+        // 0 0 middle
+        value = 0;
+    } else if ((num < (TELE_TOGGLE_BUTTON_LOW + TELE_TOGGLE_BUTTON_TOLERATE)) && (num > (TELE_TOGGLE_BUTTON_LOW - TELE_TOGGLE_BUTTON_TOLERATE))) {
+        // 0 1 right
+        value = 1;
+    } else if (num >= (TELE_TOGGLE_BUTTON_HIGH - TELE_TOGGLE_BUTTON_TOLERATE)) {
+        // 1 0 left
+        value = 2;
+    }
+
+    if (flightModeBuff[THRESHOLD - 2] == value) {
+        flightConsecutiveCount++;
+        if (flightConsecutiveCount == THRESHOLD) {
+            isTransition = true;
+        }
+    } else {
+        flightConsecutiveCount = 1;
+    }
+
+    for (int i = 1; i < THRESHOLD; ++i) {
+        flightModeBuff[i - 1] = flightModeBuff[i];
+    }
+    flightModeBuff[THRESHOLD - 1] = value;
+
+    if (isTransition) {
+        set_flight_mode(value);
+    }
+}
+
+bool Telecontrol::_setFlightModeAndValidate(Vehicle* vehicle, const QString& flightMode)
+{
+    if (vehicle->flightMode() == flightMode) {
+        return true;
+    }
+
+    bool flightModeChanged = false;
+
+    // We try 3 times
+    for (int retries=0; retries<3; retries++) {
+        vehicle->setFlightMode(flightMode);
+
+        // Wait for vehicle to return flight mode
+        for (int i=0; i<13; i++) {
+            if (vehicle->flightMode() == flightMode) {
+                flightModeChanged = true;
+                break;
+            }
+            QGC::SLEEP::msleep(100);
+            qgcApp()->processEvents(QEventLoop::ExcludeUserInputEvents);
+        }
+        if (flightModeChanged) {
+            break;
+        }
+    }
+
+    return flightModeChanged;
 }

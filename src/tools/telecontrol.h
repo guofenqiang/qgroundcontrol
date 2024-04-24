@@ -1,6 +1,7 @@
 #ifndef TELECONTROL_H
 #define TELECONTROL_H
 
+#include "Vehicle.h"
 #include <QTimer>
 #include <QObject>
 #include <QtSerialPort/QSerialPort>
@@ -10,7 +11,9 @@
 
 #define TELE_TOGGLE_BUTTON_LOW          800
 #define TELE_TOGGLE_BUTTON_HIGH         1630
-#define TELE_TOGGLE_BUTTON_TOLERATE     100
+#define TELE_TOGGLE_BUTTON_TOLERATE     20
+
+#define THRESHOLD                       5
 
 class Telecontrol : public QObject
 {
@@ -60,6 +63,10 @@ private:
     quint16 _static_err_buff[TELE_ADC_NUM][TELE_ADC_BUFF];
     float _static_err[TELE_ADC_NUM];
     QStringList findAll(QString pattern,QString str,bool noGreedy);
+    int buff[THRESHOLD];
+    int consecutiveCount = 0;
+    int flightModeBuff[THRESHOLD];
+    int flightConsecutiveCount = 0;
     void allAdc(QString ss);
     void dataProcess(QList<quint16> numList);
     void dataRoll(float num);
@@ -75,6 +82,13 @@ private:
     void processReceivedPacket(const QByteArray& packet);
     void regexpNumber(const QByteArray& packet);
     void regexpNumber(const QStringList& packet);
+    void updateBuff(int newData);
+    bool detectTransition(int newData);
+    void handleNewData(int newData);
+    void transitionArmed(int newData);
+    void updateArmed(quint16 num);
+    void updateFlightMode(quint16 num);
+    bool _setFlightModeAndValidate(Vehicle* vehicle, const QString& flightMode);
 };
 
 #endif // TELECONTROL_H
