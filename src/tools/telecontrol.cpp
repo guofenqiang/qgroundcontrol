@@ -185,11 +185,12 @@ void Telecontrol::set_armed(quint16 num0)
 
 void Telecontrol::set_flight_mode(quint16 num0)
 {
-    QString altitude = tr("Altitude");
-    QString mission = tr("Mission");
-    QString position = tr("Position");
-
     Vehicle* vehicle = qgcApp()->toolbox()->multiVehicleManager()->activeVehicle();
+
+    QString altitude = vehicle->flightModes().at(4);
+    QString position = vehicle->flightModes().at(6);
+    QString mission = vehicle->flightModes().at(8);
+
     if (num0 == 0)
     {
         qDebug() << altitude;
