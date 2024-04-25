@@ -16,6 +16,7 @@ Rectangle {
     anchors.fill: parent
     color: 'blue'
     property var    vehicle:              QGroundControl.multiVehicleManager.activeVehicle
+    property var    flightModes:          vehicle ? vehicle.flightModes : ["Position", "Altitude", "Mission"]
     property string flightMode:           vehicle ? vehicle.flightMode : '0'
     property real   roll:                 vehicle ? vehicle.roll.rawValue: 0
     property real   groundSpeed:          vehicle ? vehicle.groundSpeed.rawValue: 0
@@ -198,34 +199,21 @@ Rectangle {
                             }
                             Rectangle {
                                 width: localUAV.avgWidth ; height: localUAV.avgHeight;
-                                Row {
-                                    anchors.fill: parent
-                                    Rectangle {
-                                        width: parent.width / 2
+                                Rectangle {
+                                    width: parent.width
+                                    height: parent.height
+                                    color: outRect._sideBackgroundColor
+                                    border.color: outRect._sideBorderColor
+                                    radius: outRect._sideRadius
+                                    CustomComboBox {
+                                        width: parent.width
                                         height: parent.height
-                                        color: outRect._sideBackgroundColor
-                                        border.color: outRect._sideBorderColor
-                                        radius: outRect._sideRadius
-                                        CustomText {
-                                            anchors.centerIn: parent
-                                            text: "飞行模式"
-                                        }
-                                    }
-                                    Rectangle {
-                                        width: parent.width / 2
-                                        height: parent.height
-                                        color: outRect._sideBackgroundColor
-                                        border.color: outRect._sideBorderColor
-                                        radius: outRect._sideRadius
-                                        CustomComboBox {
-                                            width: parent.width
-                                            height: parent.height
-                                            anchors.centerIn: parent
-                                            model: ["Mission", "Altitude", "Position"]
+                                        anchors.centerIn: parent
+                                        model: flightModes
+                                        currentIndex: vehicle ? find(vehicle.flightMode) : 0
 
-                                            onActivated: {
-                                                vehicle.flightMode = model[index]
-                                            }
+                                        onActivated: {
+                                            vehicle.flightMode = model[index]
                                         }
                                     }
                                 }
