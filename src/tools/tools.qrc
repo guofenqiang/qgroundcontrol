@@ -13,5 +13,9 @@
         <file alias="CustomTools/BasicCompent/CustomSlider.qml">BasicCompent/CustomSlider.qml</file>
         <file alias="CustomTools/BasicCompent/CustomSwitchDelegate.qml">BasicCompent/CustomSwitchDelegate.qml</file>
         <file alias="CustomTools/BasicCompent/CustomTabButton.qml">BasicCompent/CustomTabButton.qml</file>
+        <file alias="UserTools/ui/UserSettings.qml">ui/UserSettings.qml</file>
+        <file alias="UserTools/ui/qmldir">QmlControls/UserTools/ui/qmldir</file>
+        <file alias="UserTools/ui/UserLinkSettings.qml">ui/UserLinkSettings.qml</file>
+        <file alias="UserTools/ui/UserGeneralSettings.qml">ui/UserGeneralSettings.qml</file>
     </qresource>
 </RCC>

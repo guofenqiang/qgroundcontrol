@@ -19,6 +19,7 @@ import QGroundControl.Controls      1.0
 import QGroundControl.ScreenTools   1.0
 import QGroundControl.FlightDisplay 1.0
 import QGroundControl.FlightMap     1.0
+import UserTools.ui                 1.0
 
 /// @brief Native QML top level window
 /// All properties defined here are visible to all QML pages.
@@ -167,8 +168,8 @@ ApplicationWindow {
         showTool(qsTr("Application Settings"), "AppSettings.qml", "/res/QGCLogoWhite")
     }
 
-    function showECMTool() {
-        showTool(qsTr("Electronic countermeasures args Settings"), "ECM_settings.qml", "/res/TYZH_ECM")
+    function showUserSettingsTool() {
+        showTool(qsTr("User Settings"), "qrc:/qml/UserTools/ui/UserSettings.qml", "/res/TYZH_ECM")
         console.log("btn click")
     }
 
@@ -309,6 +310,7 @@ ApplicationWindow {
                         text:               qsTr("Vehicle Setup")
                         imageColor:         qgcPal.text
                         imageResource:      "/qmlimages/Gears.svg"
+                        visible:            ScreenTools.isDebug
                         onClicked: {
                             if (!mainWindow.preventViewSwitch()) {
                                 toolSelectDialog.close()
@@ -324,7 +326,7 @@ ApplicationWindow {
                         text:               qsTr("Analyze Tools")
                         imageResource:      "/qmlimages/Analyze.svg"
                         imageColor:         qgcPal.text
-                        visible:            QGroundControl.corePlugin.showAdvancedUI
+                        visible:            QGroundControl.corePlugin.showAdvancedUI && ScreenTools.isDebug
                         onClicked: {
                             if (!mainWindow.preventViewSwitch()) {
                                 toolSelectDialog.close()
@@ -340,7 +342,7 @@ ApplicationWindow {
                         text:               qsTr("Application Settings")
                         imageResource:      "/res/QGCLogoFull"
                         imageColor:         "transparent"
-                        visible:            !QGroundControl.corePlugin.options.combineSettingsAndSetup
+                        visible:            !QGroundControl.corePlugin.options.combineSettingsAndSetup && ScreenTools.isDebug
                         onClicked: {
                             if (!mainWindow.preventViewSwitch()) {
                                 toolSelectDialog.close()
@@ -353,14 +355,14 @@ ApplicationWindow {
                         id:                 argsButton
                         height:             toolSelectDialog._toolButtonHeight
                         Layout.fillWidth:   true
-                        text:               qsTr("ECM args Settings")
+                        text:               qsTr("User Settings")
                         imageResource:      "/res/TYZH_ECM"
                         imageColor:         "transparent"
                         visible:            !QGroundControl.corePlugin.options.combineSettingsAndSetup
                         onClicked: {
                             if (!mainWindow.preventViewSwitch()) {
                                 toolSelectDialog.close()
-                                mainWindow.showECMTool()
+                                mainWindow.showUserSettingsTool()
                             }
                         }
                     }

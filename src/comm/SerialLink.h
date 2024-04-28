@@ -79,7 +79,7 @@ public:
     void        loadSettings    (QSettings& settings, const QString& root);
     void        saveSettings    (QSettings& settings, const QString& root);
     void        updateSettings  ();
-    QString     settingsURL     () { return "SerialSettings.qml"; }
+    QString     settingsURL     () { return "qrc:/qml/SerialSettings.qml"; }
     QString     settingsTitle   () { return tr("Serial Link Settings"); }
 
 signals:

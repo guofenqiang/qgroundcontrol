@@ -1,0 +1,5 @@
+Module UserTools.ui
+
+UserSettings                    1.0 UserSettings.qml
+UserGeneralSettings             1.0 UserGeneralSettings.qml
+UserLinkSettings                1.0 UserLinkSettings.qml
