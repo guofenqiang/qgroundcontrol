@@ -499,6 +499,36 @@ void LinkManager::_addZeroConfAutoConnectLink(void)
     });
 }
 
+void LinkManager::_addCustomAutoConnectLink(void)
+{
+#ifdef __android__
+#define CUSTOM_PORT_NAME    "ttyS6"
+    bool foundCustom = false;
+
+    for (int i = 0; i < _rgLinks.count(); i++) {
+        SharedLinkConfigurationPtr linkConfig = _rgLinks[i]->linkConfiguration();
+        if (linkConfig->type() == LinkConfiguration::TypeSerial && linkConfig->name() == CUSTOM_PORT_NAME) {
+            foundCustom = true;
+            break;
+        }
+    }
+
+    if (!foundCustom) {
+        auto ports = QGCSerialPortInfo::availablePorts();
+        for (const auto& portInfo: ports) {
+            if (portInfo.portName() == CUSTOM_PORT_NAME) {
+                SerialConfiguration* serialConfig = new SerialConfiguration(portInfo.portName());
+                serialConfig->setPortName(portInfo.portName());
+                serialConfig->setBaud(QSerialPort::Baud115200);
+                SharedLinkConfigurationPtr config = addConfiguration(serialConfig);
+                createConnectedLink(config);
+                break;
+            }
+        }
+    }
+#endif
+}
+
 void LinkManager::_updateAutoConnectLinks(void)
 {
     if (_connectionsSuspended || qgcApp()->runningUnitTests()) {
@@ -508,6 +538,7 @@ void LinkManager::_updateAutoConnectLinks(void)
     _addUDPAutoConnectLink();
     _addMAVLinkForwardingLink();
     _addZeroConfAutoConnectLink();
+    _addCustomAutoConnectLink();
 
 #ifndef __mobile__
 #ifndef NO_SERIAL_LINK

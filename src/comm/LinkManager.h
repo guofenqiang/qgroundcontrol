@@ -156,6 +156,7 @@ private:
     void                _addUDPAutoConnectLink      (void);
     void                _addZeroConfAutoConnectLink (void);
     void                _addMAVLinkForwardingLink   (void);
+    void                _addCustomAutoConnectLink   (void);
     bool                _isSerialPortConnected      (void);
     void                _createDynamicForwardLink   (const char* linkName, QString hostName);
 
