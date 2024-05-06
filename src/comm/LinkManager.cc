@@ -503,6 +503,13 @@ void LinkManager::_addCustomAutoConnectLink(void)
 {
 #ifdef __android__
 #define CUSTOM_PORT_NAME    "ttyS6"
+#define CUSTOM_PORT_USB_NAME    "ttyACM0"
+    QList<QSerialPortInfo> portLists = QSerialPortInfo::availablePorts();
+    for (const QSerialPortInfo &port: portLists) {
+        if (port.portName() == CUSTOM_PORT_USB_NAME) {
+            return;
+        }
+    }
     bool foundCustom = false;
 
     for (int i = 0; i < _rgLinks.count(); i++) {
