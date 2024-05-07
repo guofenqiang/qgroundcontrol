@@ -1164,7 +1164,7 @@ QGCCacheWorker::_testInternet()
         emit internetStatus(true);
         return;
     }
-    qWarning() << "No Internet Access";
+//    qWarning() << "No Internet Access";
     emit internetStatus(false);
 #else
     if(!_hostLookupID) {
