@@ -504,19 +504,23 @@ void LinkManager::_addCustomAutoConnectLink(void)
 #ifdef __android__
 #define CUSTOM_PORT_NAME    "ttyS6"
 #define CUSTOM_PORT_USB_NAME    "ttyACM0"
-    QList<QSerialPortInfo> portLists = QSerialPortInfo::availablePorts();
-    for (const QSerialPortInfo &port: portLists) {
+    QList<QGCSerialPortInfo> portLists = QGCSerialPortInfo::availablePorts();
+    for (const QGCSerialPortInfo &port: portLists) {
         if (port.portName() == CUSTOM_PORT_USB_NAME) {
             return;
         }
     }
+
     bool foundCustom = false;
 
     for (int i = 0; i < _rgLinks.count(); i++) {
         SharedLinkConfigurationPtr linkConfig = _rgLinks[i]->linkConfiguration();
-        if (linkConfig->type() == LinkConfiguration::TypeSerial && linkConfig->name() == CUSTOM_PORT_NAME) {
-            foundCustom = true;
-            break;
+        if (linkConfig->type() == LinkConfiguration::TypeSerial) {
+            SerialConfiguration* serialConfig = qobject_cast<SerialConfiguration*>(linkConfig.get());
+            if (serialConfig->portDisplayName() == CUSTOM_PORT_NAME) {
+                foundCustom = true;
+                break;
+            }
         }
     }
 
