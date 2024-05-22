@@ -11,6 +11,8 @@ import QGroundControl.MultiVehicleManager   1.0
 import QGroundControl.Palette               1.0
 import CustomTools.BasicCompent             1.0
 
+import ECMControl                           1.0
+
 Rectangle {
     id: outRect
     anchors.fill: parent
@@ -47,6 +49,14 @@ Rectangle {
     property string _sideBorderColor:           "#00FFFF"
     property string _sideTextColor:             "#00FFFF"
     property int    _sideRadius:                10
+
+    ECMControl {
+        id: ecm_control_id
+        objectName: "ecm_control_id"
+        Component.onCompleted: {
+            console.log("init ecm_control")
+        }
+    }
 
     Rectangle {
         id: innerRect

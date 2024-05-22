@@ -17,6 +17,7 @@
  */
 
 #include "tools/mavlinkpod.h"
+#include "tools/pod/ecmcontrol.h"
 #include "tools/pod/podcontroller.h"
 #include "tools/pod/siyi/podsiyiprotocol.h"
 #include "tools/tcpserver.h"
@@ -561,6 +562,7 @@ void QGCApplication::_initCommon()
     qmlRegisterType<MavlinkPod>("MavlinkPod", 1, 0, "MavlinkPod");
     qmlRegisterType<PodController>("PodController", 1, 0, "PodController");
     qmlRegisterType<PodSiYiProtocol>("PodSiYiProtocol", 1, 0, "PodSiYiProtocol");
+    qmlRegisterType<ECMControl>("ECMControl", 1, 0, "ECMControl");
 }
 
 bool QGCApplication::_initForNormalAppBoot()
