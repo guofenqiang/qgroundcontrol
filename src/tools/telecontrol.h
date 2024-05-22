@@ -12,8 +12,9 @@
 #define TELE_TOGGLE_BUTTON_LOW          800
 #define TELE_TOGGLE_BUTTON_HIGH         1630
 #define TELE_TOGGLE_BUTTON_TOLERATE     20
+#define TELE_TOGGLE_ADC_HIGH            4000
 
-#define THRESHOLD                       5
+#define THRESHOLD                       10
 
 class Telecontrol : public QObject
 {
@@ -54,6 +55,8 @@ private slots:
 signals:
 
 private:
+    int64_t test_count = 0;
+    quint16 test_buff[16] = {0};
     QSerialPort *m_serial = nullptr;
     QTimer      _JoystickTimeUpdater;
     float _roll;
@@ -63,9 +66,9 @@ private:
     quint16 _static_err_buff[TELE_ADC_NUM][TELE_ADC_BUFF];
     float _static_err[TELE_ADC_NUM];
     QStringList findAll(QString pattern,QString str,bool noGreedy);
-    int buff[THRESHOLD];
+    int buff[THRESHOLD] = {-1};
     int consecutiveCount = 0;
-    int flightModeBuff[THRESHOLD];
+    int flightModeBuff[THRESHOLD] = {-1};
     int flightConsecutiveCount = 0;
     void allAdc(QString ss);
     void dataProcess(QList<quint16> numList);

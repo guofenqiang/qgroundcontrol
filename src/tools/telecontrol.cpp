@@ -1,5 +1,6 @@
 #include "telecontrol.h"
 #include "QGCApplication.h"
+#include <iostream>
 
 Telecontrol::Telecontrol(QObject *parent)
     : QObject{parent},
@@ -151,6 +152,19 @@ void Telecontrol::set_armed(quint16 num0)
         {
             // armed
             qDebug("armed");
+            QDateTime current_date_time =QDateTime::currentDateTime();
+            QString current_date =current_date_time.toString("yyyy.MM.dd hh:mm:ss.zzz ddd");
+            qDebug() << current_date;
+            int64_t count = test_count % 16;
+            qDebug() << "test_count:" << test_count << "count: " << count;
+            for(int64_t i = count - 16; i < count; i++) {
+                qDebug("test_buff[%ld]: %u", (i + 16) % 16, test_buff[(i + 16) % 16]);
+            }
+
+            for(int8_t j = 0; j < THRESHOLD; j++) {
+                qDebug("buff[%d]: %d", j, buff[j]);
+            }
+
             qgcApp()->toolbox()->multiVehicleManager()->activeVehicle()->setArmed(true, false);
             // Wait 1500 msecs for vehicle to arm (waiting for the next heartbeat)
             for (int i = 0; i < 15; i++) {
@@ -165,6 +179,19 @@ void Telecontrol::set_armed(quint16 num0)
         } else if((pre_state == 2) && (num0 == 0)) {
             // disarmed
             qDebug("disarmed");
+            QDateTime current_date_time =QDateTime::currentDateTime();
+            QString current_date =current_date_time.toString("yyyy.MM.dd hh:mm:ss.zzz ddd");
+            qDebug() << current_date;
+            int64_t count = test_count % 16;
+            qDebug() << "test_count:" << test_count << "count: " << count;
+            for(int64_t i = count - 16; i < count; i++) {
+                qDebug("test_buff[%ld]: %u", (i + 16) % 16, test_buff[(i + 16) % 16]);
+            }
+
+            for(int8_t j = 0; j < THRESHOLD; j++) {
+                qDebug("buff[%d]: %d", j, buff[j]);
+            }
+
             qgcApp()->toolbox()->multiVehicleManager()->activeVehicle()->setArmed(false, false);
             // Wait 1500 msecs for vehicle to arm (waiting for the next heartbeat)
             for (int i = 0; i < 15; i++) {
@@ -315,7 +342,20 @@ void Telecontrol::regexpNumber(const QByteArray& packet)
         numList.append(num);
     }
     if (numList.length() < 16) {
+        QDateTime current_date_time =QDateTime::currentDateTime();
+        QString current_date =current_date_time.toString("yyyy.MM.dd hh:mm:ss.zzz ddd");
+        qDebug() << current_date;
+        qDebug() << packet;
+        qDebug() << numList;
+        qDebug() << "parase error of length less than 16";
         return;
+    } else if (numList.length() > 16) {
+        QDateTime current_date_time =QDateTime::currentDateTime();
+        QString current_date =current_date_time.toString("yyyy.MM.dd hh:mm:ss.zzz ddd");
+        qDebug() << current_date;
+        qDebug() << packet;
+        qDebug() << numList;
+        qDebug() << "parase error of length greater than 16";
     }
     dataProcess(numList);
 }
@@ -347,9 +387,9 @@ void Telecontrol::updateBuff(int newData) {
 bool Telecontrol::detectTransition(int newData) {
     bool isTransition = false;
 
-    if (buff[THRESHOLD - 2] == newData) {
+    if (buff[THRESHOLD  - 1] == newData) {
         consecutiveCount++;
-        if (consecutiveCount == THRESHOLD) {
+        if (consecutiveCount == THRESHOLD / 2) {
             isTransition = true;
         }
     } else {
@@ -377,15 +417,16 @@ void Telecontrol::updateArmed(quint16 num) {
 
     /* 左拨钮 */
     if (num < (TELE_TOGGLE_BUTTON_TOLERATE)) {
-        // 0 0 middle
-//        value = 0;
-    } else if ((num < (TELE_TOGGLE_BUTTON_LOW + TELE_TOGGLE_BUTTON_TOLERATE)) && (num > (TELE_TOGGLE_BUTTON_LOW - TELE_TOGGLE_BUTTON_TOLERATE))) {
-        // 0 1 left
+        // 0 left
         value = 0;
-    } else if (num >= (TELE_TOGGLE_BUTTON_HIGH - TELE_TOGGLE_BUTTON_TOLERATE)) {
-        // 1 0 right
+    } else if (num >= (TELE_TOGGLE_ADC_HIGH - TELE_TOGGLE_BUTTON_TOLERATE)) {
+        // 1 right
         value = 2;
+    } else {
+        qDebug("error adc num: %d, current value: %d", num, value);
     }
+    test_buff[test_count % 16] = num;
+    test_count++;
     handleNewData(value);
 }
 
