@@ -46,7 +46,6 @@ void PodSiYiProtocol::_siyi_message_decode(QByteArray data)
     siyi_message_t message;
     memcpy((uint8_t *)&message.stx, (uint8_t *)data.data(), data.size());
 
-    qDebug() << data.toHex(' ');
     switch (message.cmd_id) {
     case HARDWARE_ID:
     {
@@ -68,10 +67,6 @@ void PodSiYiProtocol::_siyi_message_decode(QByteArray data)
     {
         _oneClickReturnToCenterAck(message);
         break;
-    }
-    default:
-    {
-        qDebug() << "invalid cmd: " << message.cmd_id;
     }
     }
 }
