@@ -20,9 +20,11 @@ void UAVEcm::slotGetRootEngine()
     QObject* rootWindowPointer = qgcApp()->qmlAppEngine()->rootObjects().first();
     ecm = rootWindowPointer->findChild<Ecm*>("ecm_obj");
     tcpServer = rootWindowPointer->findChild<TcpServer*>("tcp_server_obj");
+    ecmControl = rootWindowPointer->findChild<ECMControl*>("ecm_control_obj");
     mavlinkPod = rootWindowPointer->findChild<MavlinkPod*>("mavlink_pod_obj");
     connect(ecm, &Ecm::sig_QLocalServer_to_mavlink, this, &UAVEcm::slotSendEcmToUav);
     connect(tcpServer, &TcpServer::sig_tcp_to_mavlink, this, &UAVEcm::slotSendEcmToUav);
+    connect(ecmControl, &ECMControl::sig_control_to_mavlink,this, &UAVEcm::slotSendEcmToUav);
     connect(mavlinkPod, &MavlinkPod::sig_mavlink_to_tcp, this, &UAVEcm::slotSendUavToEcm);
 }
 

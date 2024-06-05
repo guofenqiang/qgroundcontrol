@@ -52,9 +52,16 @@ Rectangle {
 
     ECMControl {
         id: ecm_control_id
-        objectName: "ecm_control_id"
+        objectName: "ecm_control_obj"
         Component.onCompleted: {
             console.log("init ecm_control")
+        }
+    }
+
+    Connections {
+        target: ecm_control_id.scoutTargetInfo
+        onSignalList: {
+            listView.model = data;
         }
     }
 
@@ -478,7 +485,7 @@ Rectangle {
                     width: rightFirstBtn.width
                     TabButton {
                         id: rightFirstBtn
-                        text: qsTr("侦察")
+                        text: qsTr("设置")
                         width: rightRect.width/8
                         height: rightRect.height/2
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -486,7 +493,7 @@ Rectangle {
                     }
                     TabButton {
                         id: rightSecondBtn
-                        text: qsTr("处置")
+                        text: qsTr("目标")
                         width: rightRect.width/8
                         height: rightRect.height/2
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -511,116 +518,7 @@ Rectangle {
                             anchors.fill: parent
                             spacing: 1
                             Rectangle {
-                                width: parent.width; height: parent.height * 2 / 5.1
-                                border.color: "black"
-                                border.width: 2
-                                Column {
-                                    anchors.fill: parent
-                                    anchors.margins: 2
-                                    Rectangle {
-                                        width: parent.width; height: parent.height / 2
-                                        CustomRangeSlider {
-                                            id: rangeSlider
-                                            anchors.fill: parent
-                                            from:  800
-                                            to: 6000
-                                            first.value: 800
-                                            second.value: 6000
-                                            stepSize: 1
-                                        }
-                                    }
-
-                                    Rectangle {
-                                        width: parent.width; height: parent.height / 2
-                                        Row {
-                                            anchors.fill: parent
-                                            anchors.margins: 2
-                                            Rectangle {
-                                                width: parent.width; height: parent.height
-                                                Row {
-                                                    anchors.fill: parent
-                                                    Rectangle {
-                                                        width: parent.width * 1 / 8; height: parent.height
-                                                        CustomButton {
-                                                            width: parent.width
-                                                            height: parent.height
-                                                            text: "-"
-                                                            onClicked: {
-                                                                rangeSlider.first.decrease()
-                                                            }
-                                                        }
-                                                    }
-                                                    Rectangle {
-                                                        width: parent.width * 1 / 8; height: parent.height
-                                                        CustomButton {
-                                                            width: parent.width
-                                                            height: parent.height
-                                                            text: "+"
-                                                            onClicked: {
-                                                                rangeSlider.first.increase()
-                                                            }
-                                                        }
-                                                    }
-                                                    Rectangle {
-                                                        width: parent.width * 2 / 8; height: parent.height; border.color: outRect._sideBorderColor
-                                                        color: outRect._sideBackgroundColor
-                                                        radius: outRect._sideRadius
-                                                        CustomText {
-                                                            anchors.centerIn: parent
-                                                            text: "侦察频段:"
-                                                        }
-                                                    }
-                                                    Rectangle {
-                                                        width: parent.width * 1 / 8; height: parent.height; border.color: outRect._sideBorderColor
-                                                        color: outRect._sideBackgroundColor
-                                                        radius: outRect._sideRadius
-                                                        CustomText {
-                                                            anchors.fill: parent
-                                                            anchors.centerIn: parent
-                                                            text: rangeSlider.first.value.toFixed(0)
-                                                        }
-                                                    }
-                                                    Rectangle {
-                                                        width: parent.width * 1 / 8; height: parent.height; border.color: outRect._sideBorderColor
-                                                        color: outRect._sideBackgroundColor
-                                                        radius: outRect._sideRadius
-                                                        CustomText {
-                                                            anchors.fill: parent
-                                                            anchors.centerIn: parent
-                                                            text: rangeSlider.second.value.toFixed(0)
-                                                        }
-                                                    }
-                                                    Rectangle {
-                                                        width: parent.width * 1 / 8; height: parent.height
-                                                        CustomButton {
-                                                            width: parent.width
-                                                            height: parent.height
-                                                            text: "-"
-                                                            onClicked: {
-                                                                rangeSlider.second.decrease()
-                                                            }
-                                                        }
-                                                    }
-                                                    Rectangle {
-                                                        width: parent.width * 1 / 8; height: parent.height
-                                                        CustomButton {
-                                                            width: parent.width
-                                                            height: parent.height
-                                                            text: "+"
-                                                            onClicked: {
-                                                                rangeSlider.second.increase()
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                            Rectangle {
-                                width: parent.width; height: parent.height * 2 / 5.1
+                                width: parent.width; height: parent.height * 2 / 4.1
                                 border.color: "black"
                                 border.width: 2
                                 Column {
@@ -629,60 +527,128 @@ Rectangle {
                                     Rectangle {
                                         width: parent.width; height: parent.height / 2
                                         CustomSlider {
-                                            id: slider
+                                            id: freqSlider
                                             anchors.fill: parent
-                                            from: 800
+                                            from:  800
                                             to: 6000
                                             value: 800
-                                            stepSize: 1
+                                            stepSize: 10
                                         }
                                     }
 
                                     Rectangle {
                                         width: parent.width; height: parent.height / 2
+                                        CustomSlider {
+                                            id: slider
+                                            anchors.fill: parent
+                                            from: 20
+                                            to: 4000
+                                            value: 20
+                                            stepSize: 10
+                                        }
+                                    }
+                                }
+                            }
+                            Rectangle {
+                                width: parent.width; height: parent.height * 1 / 4.1
+                                border.color: "black"
+                                border.width: 2
+                                Row {
+                                    anchors.fill: parent
+                                    anchors.margins: 2
+
+                                    Rectangle {
+                                        width: parent.width; height: parent.height
                                         Row {
                                             anchors.fill: parent
                                             anchors.margins: 2
                                             Rectangle {
-                                                width: parent.width * 1 / 8; height: parent.height;
-                                                color: outRect._sideBackgroundColor
-                                                radius: outRect._sideRadius
-                                                CustomButton {
-                                                    anchors.centerIn: parent
-                                                    text: "-"
-                                                    onClicked: {
-                                                        slider.decrease()
-                                                    }
-                                                }
-                                            }
-                                            Rectangle {
-                                                width: parent.width * 3 / 8; height: parent.height;
-                                                color: outRect._sideBackgroundColor
-                                                radius: outRect._sideRadius
-                                                CustomText {
-                                                    anchors.centerIn: parent
-                                                    text: "干扰功率:"
-                                                }
-                                            }
-                                            Rectangle {
-                                                width: parent.width * 3 / 8; height: parent.height;
-                                                color: outRect._sideBackgroundColor
-                                                radius: outRect._sideRadius
-                                                CustomText {
+                                                width: parent.width; height: parent.height
+                                                Row {
                                                     anchors.fill: parent
-                                                    anchors.centerIn: parent
-                                                    text: slider.value.toFixed(0)
-                                                }
-                                            }
-                                            Rectangle {
-                                                width: parent.width * 1 / 8; height: parent.height;
-                                                color: outRect._sideBackgroundColor
-                                                radius: outRect._sideRadius
-                                                CustomButton {
-                                                    anchors.centerIn: parent
-                                                    text: "+"
-                                                    onClicked: {
-                                                        slider.increase()
+                                                    Rectangle {
+                                                        width: parent.width * 2 / 10; height: parent.height; border.color: outRect._sideBorderColor
+                                                        color: outRect._sideBackgroundColor
+                                                        radius: outRect._sideRadius
+                                                        CustomText {
+                                                            anchors.centerIn: parent
+                                                            text: "频段:"
+                                                        }
+                                                    }
+                                                    Rectangle {
+                                                        width: parent.width * 1 / 10; height: parent.height
+                                                        CustomButton {
+                                                            width: parent.width
+                                                            height: parent.height
+                                                            text: "-"
+                                                            onClicked: {
+                                                                freqSlider.decrease()
+                                                            }
+                                                        }
+                                                    }
+                                                    Rectangle {
+                                                        width: parent.width * 1 / 10; height: parent.height; border.color: outRect._sideBorderColor
+                                                        color: outRect._sideBackgroundColor
+                                                        radius: outRect._sideRadius
+                                                        CustomText {
+                                                            anchors.fill: parent
+                                                            anchors.centerIn: parent
+                                                            text: freqSlider.value.toFixed(0)
+                                                        }
+                                                    }
+                                                    Rectangle {
+                                                        width: parent.width * 1 / 10; height: parent.height
+                                                        CustomButton {
+                                                            width: parent.width
+                                                            height: parent.height
+                                                            text: "+"
+                                                            onClicked: {
+                                                                freqSlider.increase()
+                                                            }
+                                                        }
+                                                    }
+                                                    Rectangle {
+                                                        width: parent.width * 2 / 10; height: parent.height;
+                                                        color: outRect._sideBackgroundColor
+                                                        radius: outRect._sideRadius
+                                                        CustomText {
+                                                            anchors.centerIn: parent
+                                                            text: "带宽:"
+                                                        }
+                                                    }
+                                                    Rectangle {
+                                                        width: parent.width * 1 / 10; height: parent.height;
+                                                        color: outRect._sideBackgroundColor
+                                                        radius: outRect._sideRadius
+                                                        CustomButton {
+                                                            anchors.centerIn: parent
+                                                            text: "-"
+                                                            onClicked: {
+                                                                slider.decrease()
+                                                            }
+                                                        }
+                                                    }
+                                                    Rectangle {
+                                                        width: parent.width * 1 / 10; height: parent.height;
+                                                        color: outRect._sideBackgroundColor
+                                                        radius: outRect._sideRadius
+                                                        CustomText {
+                                                            anchors.fill: parent
+                                                            anchors.centerIn: parent
+                                                            text: slider.value.toFixed(0)
+                                                        }
+                                                    }
+                                                    Rectangle {
+                                                        width: parent.width * 1 / 10; height: parent.height;
+                                                        color: outRect._sideBackgroundColor
+                                                        radius: outRect._sideRadius
+                                                        CustomButton {
+                                                            anchors.centerIn: parent
+                                                            text: "+"
+                                                            onClicked: {
+                                                                slider.increase()
+                                                            }
+                                                        }
                                                     }
                                                 }
                                             }
@@ -692,59 +658,45 @@ Rectangle {
                             }
 
                             Rectangle {
-                                width: parent.width; height: parent.height * 1 / 5.1
+                                width: parent.width; height: parent.height * 1 / 4.1
                                 border.color: "black"
                                 border.width: 2
                                 Row {
                                     anchors.fill: parent
                                     anchors.margins: 2
                                     spacing: 1
-                                    Rectangle {
-                                        width: parent.width / 5.1; height: parent.height;
-                                        CustomComboBox {
-                                           anchors.fill: parent
-                                           anchors.centerIn: parent
-                                           model: ["手动", "自动"]
 
-                                           onActivated: {
-                                               console.log("index ", model[index])
-                                           }
-                                        }
-                                    }
-                                    /* 此矩形当前是规避前面的CustomComboBox切换对下面Row组件字体消失的影响 */
                                     Rectangle {
-                                        width: parent.width / 5.1 / 100; height: parent.height
-                                    }
-                                    Rectangle {
-                                        width: parent.width / 5.1; height: parent.height
+                                        width: parent.width / 3; height: parent.height
                                         CustomButton {
                                             anchors.fill: parent
                                             anchors.centerIn: parent
                                             text: "待机"
+                                            onClicked: {
+                                                ecm_control_id.standbyCmd()
+                                            }
                                         }
                                     }
                                     Rectangle {
-                                        width: parent.width / 5.1; height: parent.height
+                                        width: parent.width / 3; height: parent.height
                                         CustomButton {
                                             anchors.fill: parent
                                             anchors.centerIn: parent
-                                            text: "复位"
+                                            text: "侦察"
+                                            onClicked: {
+                                                ecm_control_id.scoutCmd()
+                                            }
                                         }
                                     }
                                     Rectangle {
-                                        width: parent.width / 5.1; height: parent.height
-                                        CustomButton {
-                                            anchors.fill: parent
-                                            anchors.centerIn: parent
-                                            text: "侦测"
-                                        }
-                                    }
-                                    Rectangle {
-                                        width: parent.width / 5.1; height: parent.height
+                                        width: parent.width / 3; height: parent.height
                                         CustomButton {
                                             anchors.fill: parent
                                             anchors.centerIn: parent
                                             text: "干扰"
+                                            onClicked: {
+                                                ecm_control_id.jammingCmd(freqSlider.value, slider.value)
+                                            }
                                         }
                                     }
                                 }
@@ -761,12 +713,11 @@ Rectangle {
                             anchors.fill:       parent
 
                             ListView {
+                                id: listView
                                 anchors.fill: parent
                                 anchors.margins: 0
 
                                 clip: true
-
-                                model: 5
 
                                 delegate: numberDelegate
                                 spacing: 2
@@ -775,6 +726,7 @@ Rectangle {
                                 footer: footerComponent
 
                                 ScrollBar.vertical: ScrollBar {}
+                                focus: true
                             }
 
                             Component {
@@ -788,11 +740,18 @@ Rectangle {
                                     Row {
                                         anchors.fill: parent
                                         Repeater {
-                                            model: ["序号", "时标(s)", "方位", "频点", "带宽", "功率", "干扰"]
+                                            model: ["序号", "时标", "方位", "频点", "带宽", "功率", "干扰"]
                                             Text {
+                                                width: parent.width / 7
                                                 text: modelData + "  "
                                             }
                                         }
+                                    }
+
+                                    MouseArea
+                                    {
+                                        anchors.fill: parent
+                                        onDoubleClicked: ecm_control_id.getList()
                                     }
                                 }
                             }
@@ -816,14 +775,16 @@ Rectangle {
                             Component {
                                 id: numberDelegate
 
-                                CustomSwitchDelegate {
+                                RadioDelegate  {
                                     width: historyList.width
-                                    text: index + '    ' + Math.random().toFixed(2) + '    ' + Math.random().toFixed(2)
-                                          + '    ' + Math.random().toFixed(2) + '    ' + Math.random().toFixed(2)
-                                          + '    ' + Math.random().toFixed(2)
+                                    text : index + "       " + modelData.timeScale + "    " + modelData.azimuth +
+                                        "    " + modelData.freq + "    " + modelData.bandWidth + "    " + modelData.signalPower
+
                                     onClicked: {
-                                        console.log("--------------------start or stop----------------")
-                                        console.log(JSON.stringify(modelData))
+                                        if (checked) {
+                                            console.log(JSON.stringify(modelData))
+                                            ecm_control_id.jammingCmd(modelData.freq, modelData.bandWidth)
+                                        }
                                     }
                                 }
                             }

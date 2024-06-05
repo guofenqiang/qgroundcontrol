@@ -3,6 +3,7 @@
 
 #include "tools/ecm.h"
 #include "tools/mavlinkpod.h"
+#include "tools/pod/ecmcontrol.h"
 #include "tools/tcpserver.h"
 #include <QObject>
 
@@ -23,6 +24,7 @@ private:
     QObject* rootWindowPointer;
     Ecm *ecm = nullptr;
     TcpServer *tcpServer = nullptr;
+    ECMControl *ecmControl = nullptr;
     MavlinkPod *mavlinkPod = nullptr;
 
     void initSignle();

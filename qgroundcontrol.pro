@@ -446,6 +446,7 @@ HEADERS += \
     src/tools/mavlinkpod.h \
     src/tools/pod/ecmcontrol.h \
     src/tools/pod/podcontroller.h \
+    src/tools/pod/scouttargetinfo.h \
     src/tools/pod/siyi/podsiyiprotocol.h \
     src/tools/tcpserver.h \
     src/tools/telecontrol.h \
@@ -467,6 +468,7 @@ SOURCES += \
     src/tools/mavlinkpod.cpp \
     src/tools/pod/ecmcontrol.cpp \
     src/tools/pod/podcontroller.cpp \
+    src/tools/pod/scouttargetinfo.cpp \
     src/tools/pod/siyi/podsiyiprotocol.cpp \
     src/tools/tcpserver.cpp \
     src/tools/telecontrol.cpp \
