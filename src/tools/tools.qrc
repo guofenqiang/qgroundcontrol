@@ -17,5 +17,6 @@
         <file alias="UserTools/ui/qmldir">QmlControls/UserTools/ui/qmldir</file>
         <file alias="UserTools/ui/UserLinkSettings.qml">ui/UserLinkSettings.qml</file>
         <file alias="UserTools/ui/UserGeneralSettings.qml">ui/UserGeneralSettings.qml</file>
+        <file alias="CustomTools/BasicCompent/CustomRadioButton.qml">BasicCompent/CustomRadioButton.qml</file>
     </qresource>
 </RCC>

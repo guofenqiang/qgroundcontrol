@@ -7,3 +7,4 @@ CustomSlider                    1.0 CustomSlider.qml
 CustomRangeSlider               1.0 CustomRangeSlider.qml
 CustomSwitchDelegate            1.0 CustomSwitchDelegate.qml
 CustomTabButton                 1.0 CustomTabButton.qml
+CustomRadioButton               1.0 CustomRadioButton.qml
