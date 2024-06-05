@@ -342,20 +342,21 @@ void Telecontrol::regexpNumber(const QByteArray& packet)
         numList.append(num);
     }
     if (numList.length() < 16) {
-        QDateTime current_date_time =QDateTime::currentDateTime();
-        QString current_date =current_date_time.toString("yyyy.MM.dd hh:mm:ss.zzz ddd");
-        qDebug() << current_date;
-        qDebug() << packet;
-        qDebug() << numList;
-        qDebug() << "parase error of length less than 16";
+//        QDateTime current_date_time =QDateTime::currentDateTime();
+//        QString current_date =current_date_time.toString("yyyy.MM.dd hh:mm:ss.zzz ddd");
+//        qDebug() << current_date;
+//        qDebug() << packet;
+//        qDebug() << numList;
+//        qDebug() << "parase error of length less than 16";
         return;
     } else if (numList.length() > 16) {
-        QDateTime current_date_time =QDateTime::currentDateTime();
-        QString current_date =current_date_time.toString("yyyy.MM.dd hh:mm:ss.zzz ddd");
-        qDebug() << current_date;
-        qDebug() << packet;
-        qDebug() << numList;
-        qDebug() << "parase error of length greater than 16";
+//        QDateTime current_date_time =QDateTime::currentDateTime();
+//        QString current_date =current_date_time.toString("yyyy.MM.dd hh:mm:ss.zzz ddd");
+//        qDebug() << current_date;
+//        qDebug() << packet;
+//        qDebug() << numList;
+//        qDebug() << "parase error of length greater than 16";
+        return;
     }
     dataProcess(numList);
 }
