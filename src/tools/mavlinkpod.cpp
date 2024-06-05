@@ -38,14 +38,17 @@ void MavlinkPod::_handleTunnel(mavlink_message_t message)
 
     mavlink_msg_tunnel_decode(&message, &tunnel);
 
+    /* 0x0 代表雷达协议 */
+    if (tunnel.payload_type != 0x0) {
+        return;
+    }
+
     QByteArray byte((char*)tunnel.payload, tunnel.payload_length);
-    qDebug() << byte.toHex(' ');
     emit sig_mavlink_to_tcp(byte);
 }
 
 void MavlinkPod::tcp_to_mavlink(QByteArray data)
 {
-    qDebug() << data.toHex(' ');
     mavlink_tunnel_t tunnel;
     Vehicle *_vehicle =  qgcApp()->toolbox()->multiVehicleManager()->activeVehicle();
     if (_vehicle == NULL) {
