@@ -33,7 +33,7 @@ Button {
         border.color: customButton.borderColor
         radius: customButton.radius
         gradient: Gradient {
-            GradientStop {color: customButton.pressed ? backgroundColor : Qt.darker(backgroundColor, 1.1) }
+            GradientStop {color: customButton.pressed ? "#fff291": backgroundColor}
         }
     }
 
