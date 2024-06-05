@@ -4,7 +4,6 @@ import QtQuick.Controls 2.12
 SwitchDelegate {
     id: control
     text: qsTr("SwitchDelegate")
-    checked: true
 
     contentItem: Text {
         rightPadding: control.indicator.width + control.spacing
