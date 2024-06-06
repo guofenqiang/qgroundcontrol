@@ -73,6 +73,7 @@ public:
     ~ECMControl();
 
     Q_PROPERTY(ScoutTargetInfo* scoutTargetInfo READ scoutTargetInfo NOTIFY scoutTargetInfoChanged)
+    Q_PROPERTY(QString curModeState READ getCurModeState WRITE setCurModeState NOTIFY curModeStateChanged)
 
     Q_INVOKABLE void standbyCmd();
     Q_INVOKABLE void resetCmd();
@@ -83,12 +84,17 @@ public:
 
     Q_INVOKABLE QList<QObject*> getList();
 
+    QString getCurModeState() const;
+    void setCurModeState(const QString &newCurModeState);
+
 signals:
     void sig_control_to_mavlink(QByteArray data);
 
     void scoutTargetInfoChanged(ScoutTargetInfo &scoutTargetInfo);
     void scoutResult(scoutResult_t &scoutResult);
     void sigContinueScoutFlow();
+
+    void curModeStateChanged();
 
 private slots:
     void _mavlinkMessageReceived(LinkInterface* link, mavlink_message_t message);
@@ -124,6 +130,7 @@ private:
     QVector<jamming_message_t> curJamming;
     QTimer *pTimerJamming = nullptr;
     int interval = 100;
+    QString curModeState;
 
     void _initSignle();
     void _handleTunnel(mavlink_message_t message);

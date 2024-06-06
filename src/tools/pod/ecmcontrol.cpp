@@ -158,7 +158,7 @@ void ECMControl::_handleTunnel(mavlink_message_t message)
 
 void ECMControl::_message_decode(QByteArray data)
 {
-    ecm_message_t message;
+    ecm_message_t message = {};
     memcpy((uint8_t *)&message.stx, (uint8_t *)data.data(), data.size());
 
     switch (message.msgid) {
@@ -199,18 +199,22 @@ void ECMControl::_message_decode(QByteArray data)
 void ECMControl::_standbyCmdAck(ecm_message_t message)
 {
     qDebug() << "_standbyCmdAck";
+    setCurModeState("待机");
 }
 void ECMControl::_resetCmdAck(ecm_message_t message)
 {
     qDebug() << "_resetCmdAck";
+    setCurModeState("复位");
 }
 void ECMControl::_scoutCmdAck(ecm_message_t message)
 {
     qDebug() << "_scoutCmdAck";
+    setCurModeState("侦察");
 }
 void ECMControl::_jammingCmdAck(ecm_message_t message)
 {
     qDebug() << "_jammingCmdAck";
+    setCurModeState("干扰");
 }
 
 void ECMControl::_scoutResultAck(ecm_message_t message)
@@ -223,8 +227,8 @@ void ECMControl::_scoutResultAck(ecm_message_t message)
 void ECMControl::standbyCmd()
 {
     qDebug() << "StandbyCmd";
-    ecm_message_t message;
-    standby_message_t standby;
+    ecm_message_t message = {};
+    standby_message_t standby = {};
 
     curMode = STANDBY;
 
@@ -236,8 +240,8 @@ void ECMControl::resetCmd()
 {
     qDebug() << "ResetCmd";
 
-    ecm_message_t message;
-    reset_message_t reset;
+    ecm_message_t message = {};
+    reset_message_t reset = {};
 
     curMode = RESET;
 
@@ -248,8 +252,8 @@ void ECMControl::resetCmd()
 void ECMControl::scoutCmd()
 {
     qDebug() << "ScoutCmd";
-    ecm_message_t message;
-    scout_message_t scout;
+    ecm_message_t message = {};
+    scout_message_t scout = {};
 
     curMode = SCOUT;
     if(pTimerJamming) {
@@ -274,8 +278,8 @@ void ECMControl::scoutCmd()
 void ECMControl::jammingCmd(quint16 lsb_freq, quint16 lsb_baud)
 {
     qDebug() << "JammingCmd";
-    ecm_message_t message;
-    jamming_message_t jamming;
+    ecm_message_t message = {};
+    jamming_message_t jamming = {};
 
     jamming.lsb_freq = lsb_freq;
     jamming.lsb_baud = lsb_baud;
@@ -341,6 +345,7 @@ void ECMControl::_message_encode(ecm_message_t *message)
 {
     message->stx = 0x55AA;
     message->seq = 0;
+    message->sysid = 0;
     message->crc16 = calculateChecksum_16((uint8_t*)&message->stx, message->len - sizeof(message->crc16));
 }
 
@@ -378,8 +383,8 @@ void ECMControl::slotContinueScout()
     if(curMode != SCOUT)
         return ;
 
-    ecm_message_t message;
-    scout_message_t scout;
+    ecm_message_t message = {};
+    scout_message_t scout = {};
 
     scout.scout_nums = 5;
     scout.freq_c = 820 + ((6000 - 800) / FREQ_SEGMENT_N) * (nFreqSegmentIdx);
@@ -393,8 +398,8 @@ void ECMControl::slotContinueScout()
 
 void ECMControl::jammingFlow()
 {
-    ecm_message_t message;
-    jamming_message_t jamming;
+    ecm_message_t message = {};
+    jamming_message_t jamming = {};
 
     if (curJamming.size() == 0)
         qDebug() << "提示" <<  "请先选择干扰频点";
@@ -421,4 +426,17 @@ void ECMControl::cleanJammingParams()
     pTimerJamming->stop();
     pTimerJamming = nullptr;
     curJamming.clear();
+}
+
+QString ECMControl::getCurModeState() const
+{
+    return curModeState;
+}
+
+void ECMControl::setCurModeState(const QString &newCurModeState)
+{
+    if (curModeState == newCurModeState)
+        return;
+    curModeState = newCurModeState;
+    emit curModeStateChanged();
 }

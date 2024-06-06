@@ -667,7 +667,18 @@ Rectangle {
                                     spacing: 1
 
                                     Rectangle {
-                                        width: parent.width / 3; height: parent.height
+                                        width: parent.width / 4; height: parent.height
+                                        border.color: outRect._fixBorderColor
+                                        border.width: 5
+                                        color: outRect._fixBackgroundColor
+                                        radius: outRect._fixRadius
+                                        CustomText {
+                                            fontColor: outRect._fixTextColor
+                                            text: ecm_control_id.curModeState                                        }
+                                    }
+
+                                    Rectangle {
+                                        width: parent.width / 4; height: parent.height
                                         CustomButton {
                                             anchors.fill: parent
                                             anchors.centerIn: parent
@@ -678,7 +689,7 @@ Rectangle {
                                         }
                                     }
                                     Rectangle {
-                                        width: parent.width / 3; height: parent.height
+                                        width: parent.width / 4; height: parent.height
                                         CustomButton {
                                             anchors.fill: parent
                                             anchors.centerIn: parent
@@ -689,7 +700,7 @@ Rectangle {
                                         }
                                     }
                                     Rectangle {
-                                        width: parent.width / 3; height: parent.height
+                                        width: parent.width / 4; height: parent.height
                                         CustomButton {
                                             anchors.fill: parent
                                             anchors.centerIn: parent
@@ -740,7 +751,7 @@ Rectangle {
                                     Row {
                                         anchors.fill: parent
                                         Repeater {
-                                            model: ["序号", "时标", "方位", "频点", "带宽", "功率", "干扰"]
+                                            model: ["威胁度", "时标", "方位", "频点", "带宽", "功率", "干扰"]
                                             Text {
                                                 width: parent.width / 7
                                                 text: modelData + "  "
