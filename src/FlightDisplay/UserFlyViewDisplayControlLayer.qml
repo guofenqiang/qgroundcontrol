@@ -796,8 +796,12 @@ Rectangle {
 
                                 RadioDelegate  {
                                     width: historyList.width
-                                    text : index + "       " + modelData.timeScale + "    " + modelData.azimuth +
-                                        "    " + modelData.freq + "    " + modelData.bandWidth + "    " + modelData.signalPower
+                                    text : index +
+                                           "       " + secondsToTime(modelData.timeScale) +
+                                           "    " + modelData.azimuth.toFixed(2) +
+                                           "    " + modelData.freq.toFixed(2) +
+                                           "    " + modelData.bandWidth.toFixed(2) +
+                                           "    " + modelData.signalPower
 
                                     onClicked: {
                                         if (checked) {

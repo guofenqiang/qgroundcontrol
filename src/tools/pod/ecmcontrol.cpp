@@ -21,6 +21,7 @@ ECMControl::~ECMControl()
 void ECMControl::_initSignle()
 {
     curMode = STANDBY;
+    setCurModeState("待机");
     connect(qgcApp()->toolbox()->mavlinkProtocol(), &MAVLinkProtocol::messageReceived, this, &ECMControl::_mavlinkMessageReceived);
     connect(this, &ECMControl::scoutResult, this, &ECMControl::_parseScoutResult);
     connect(this, &ECMControl::sigContinueScoutFlow, this, &ECMControl::slotContinueScout);
@@ -100,10 +101,10 @@ void ECMControl::_parseScoutResult(scoutResult_t &scoutResult)
         bandWidth = scoutResult.targetInfo[i].bandWidth;
         signalPower = scoutResult.targetInfo[i].signalPower;
 
-        QObject* data = new ScoutTargetInfo(timeScale,
-                                            round(azimuth),
-                                            round(freq),
-                                            round(bandWidth),
+        QObject* data = new ScoutTargetInfo(timeScale / 1000,
+                                            azimuth,
+                                            freq,
+                                            bandWidth,
                                             signalPower);
         temp.append(data);
     }
