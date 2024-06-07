@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
  *
  * (c) 2009-2020 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
  *
@@ -374,7 +374,7 @@ int main(int argc, char *argv[])
     }
 
 #ifdef Q_OS_LINUX
-    QApplication::setWindowIcon(QIcon(":/res/resources/icons/tianyuanzhihang.ico"));
+    QApplication::setWindowIcon(QIcon(":/res/resources/icons/groundcontrolstation.ico"));
 #endif /* Q_OS_LINUX */
 
     // There appears to be a threading issue in qRegisterMetaType which can cause it to throw a qWarning

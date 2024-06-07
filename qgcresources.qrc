@@ -1,4 +1,4 @@
-<RCC>
+﻿<RCC>
     <qresource prefix="/fonts">
         <file alias="opensans">resources/fonts/OpenSans-Regular.ttf</file>
         <file alias="opensans-demibold">resources/fonts/OpenSans-Semibold.ttf</file>
@@ -38,7 +38,7 @@
         <file alias="Play">resources/Play.svg</file>
         <file alias="PowerButton">resources/PowerButton.svg</file>
         <file alias="QGCLogoBlack">resources/QGCLogoBlack.svg</file>
-        <file alias="QGCLogoFull">resources/QGCLogoFull_TYZH.svg</file>
+        <file alias="QGCLogoFull">resources/groundcontrolstation_LogoFull.svg</file>
         <file alias="QGCLogoWhite">resources/QGCLogoWhite.svg</file>
         <file alias="QGCLogoArrow">resources/QGCLogoArrow.svg</file>
         <file alias="QGroundControlConnect">resources/QGroundControlConnect.svg</file>
@@ -59,8 +59,10 @@
         <file alias="GripperRelease.svg">resources/GripperRelease.svg</file>
         <file alias="GripperGrab.svg">resources/GripperGrab.svg</file>
         <file>resources/icons/qgroundcontrol.ico</file>
-        <file>resources/icons/tianyuanzhihang.ico</file>
-        <file alias="TYZH_ECM.svg">resources/TYZH_ECM.svg</file>
+        <file>resources/icons/groundcontrolstation.ico</file>
+        <file alias="groundcontrolstation_ECM.svg">resources/groundcontrolstation_ECM.svg</file>
+        <file alias="groundcontrolstation.svg">resources/groundcontrolstation.svg</file>
+        <file alias="groundcontrolstation_NoVideoBackground.jpg">resources/groundcontrolstation_NoVideoBackground.jpg</file>
     </qresource>
     <qresource prefix="/res/firmware">
         <file alias="3drradio.png">resources/firmware/3drradio.png</file>

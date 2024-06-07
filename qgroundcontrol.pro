@@ -27,7 +27,7 @@ message(Qt version $$[QT_VERSION])
 
 include(QGCCommon.pri)
 
-TARGET   = TianYuanZhiHang
+TARGET   = groundcontrolstation
 TEMPLATE = app
 QGCROOT  = $$PWD
 
@@ -53,7 +53,7 @@ LinuxBuild {
 }
 
 WindowsBuild {
-    RC_ICONS = resources/icons/tianyuanzhihang.ico
+    RC_ICONS = resources/icons/groundcontrolstation.ico
     CONFIG += resources_big
 }
 
@@ -359,7 +359,7 @@ CustomBuild {
         RESOURCES += $$PWD/resources/InstrumentValueIcons/InstrumentValueIcons.qrc
     }
 } else {
-    DEFINES += QGC_APPLICATION_NAME=\"\\\"TianYuanZhiHang\\\"\"
+    DEFINES += QGC_APPLICATION_NAME=\"\\\"groundcontrolstation\\\"\"
     DEFINES += QGC_ORG_NAME=\"\\\"QGroundControl.org\\\"\"
     DEFINES += QGC_ORG_DOMAIN=\"\\\"org.qgroundcontrol\\\"\"
     RESOURCES += \
@@ -1461,7 +1461,7 @@ LinuxBuild {
     share_qgroundcontrol.files = $${IN_PWD}/resources/
 
     share_icons.path = $${PREFIX}/share/icons/hicolor/128x128/apps/
-    share_icons.files = $${IN_PWD}/resources/icons/tianyuanzhihang.png
+    share_icons.files = $${IN_PWD}/resources/icons/groundcontrolstation.png
     share_metainfo.path = $${PREFIX}/share/metainfo/
     share_metainfo.files = $${IN_PWD}/deploy/org.mavlink.qgroundcontrol.metainfo.xml
     share_applications.path = $${PREFIX}/share/applications/

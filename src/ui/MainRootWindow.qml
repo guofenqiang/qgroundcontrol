@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
  *
  * (c) 2009-2020 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
  *
@@ -169,7 +169,7 @@ ApplicationWindow {
     }
 
     function showUserSettingsTool() {
-        showTool(qsTr("User Settings"), "qrc:/qml/UserTools/ui/UserSettings.qml", "/res/TYZH_ECM")
+        showTool(qsTr("User Settings"), "qrc:/qml/UserTools/ui/UserSettings.qml", "/res/groundcontrolstation_ECM.svg")
         console.log("btn click")
     }
 
@@ -356,7 +356,7 @@ ApplicationWindow {
                         height:             toolSelectDialog._toolButtonHeight
                         Layout.fillWidth:   true
                         text:               qsTr("User Settings")
-                        imageResource:      "/res/TYZH_ECM"
+                        imageResource:      "/res/groundcontrolstation_ECM.svg"
                         imageColor:         "transparent"
                         visible:            !QGroundControl.corePlugin.options.combineSettingsAndSetup
                         onClicked: {
