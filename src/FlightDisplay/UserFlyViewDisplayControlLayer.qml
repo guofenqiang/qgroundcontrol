@@ -65,6 +65,14 @@ Rectangle {
         }
     }
 
+    function secondsToTime(seconds) {
+        var hours = Math.floor(seconds / 3600);
+        var minutes = Math.floor((seconds % 3600) / 60);
+        var secs = seconds % 60;
+
+        return (hours < 10 ? "0" : "") + hours + ":" + (minutes < 10 ? "0" : "") + minutes + ":" + (secs < 10 ? "0" : "") + secs;
+    }
+
     Rectangle {
         id: innerRect
         anchors.fill: parent
@@ -174,7 +182,7 @@ Rectangle {
                                 radius: outRect._sideRadius
                                 CustomText {
                                     anchors.centerIn: parent
-                                    text: "飞行时间: " + _flightTime.toFixed(0) + " s"
+                                    text: "飞行时间: " + secondsToTime(_flightTime.toFixed(0))
                                 }
                             }
                             Rectangle {
