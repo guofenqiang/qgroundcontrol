@@ -1,4 +1,4 @@
-#include "ecmcontrol.h"
+﻿#include "ecmcontrol.h"
 #include "QGCApplication.h"
 
 ECMControl::ECMControl(QObject *parent)
@@ -21,7 +21,7 @@ ECMControl::~ECMControl()
 void ECMControl::_initSignle()
 {
     curMode = STANDBY;
-    setCurModeState("待机");
+    setCurModeState(QStringLiteral("待机状态"));
     connect(qgcApp()->toolbox()->mavlinkProtocol(), &MAVLinkProtocol::messageReceived, this, &ECMControl::_mavlinkMessageReceived);
     connect(this, &ECMControl::scoutResult, this, &ECMControl::_parseScoutResult);
     connect(this, &ECMControl::sigContinueScoutFlow, this, &ECMControl::slotContinueScout);
@@ -200,22 +200,22 @@ void ECMControl::_message_decode(QByteArray data)
 void ECMControl::_standbyCmdAck(ecm_message_t message)
 {
     qDebug() << "_standbyCmdAck";
-    setCurModeState("待机");
+    setCurModeState(QStringLiteral("待机状态"));
 }
 void ECMControl::_resetCmdAck(ecm_message_t message)
 {
     qDebug() << "_resetCmdAck";
-    setCurModeState("复位");
+    setCurModeState(QStringLiteral("复位状态"));
 }
 void ECMControl::_scoutCmdAck(ecm_message_t message)
 {
     qDebug() << "_scoutCmdAck";
-    setCurModeState("侦察");
+    setCurModeState(QStringLiteral("侦察状态"));
 }
 void ECMControl::_jammingCmdAck(ecm_message_t message)
 {
     qDebug() << "_jammingCmdAck";
-    setCurModeState("干扰");
+    setCurModeState(QStringLiteral("干扰状态"));
 }
 
 void ECMControl::_scoutResultAck(ecm_message_t message)
