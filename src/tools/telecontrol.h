@@ -1,4 +1,4 @@
-#ifndef TELECONTROL_H
+﻿#ifndef TELECONTROL_H
 #define TELECONTROL_H
 
 #include "Vehicle.h"
@@ -78,7 +78,7 @@ private:
     void dataYaw(float num);
     void set_armed(quint16 num0);
     void set_flight_mode(quint16 num0);
-    void _CalculateStaticError(QList<quint16> numList);
+    bool _isFinishCalculateStaticError(QList<quint16> numList);
     void read();
     void parseBuffer(const char* buffer, qint64 length);
     int findPacketDelimiter(const QByteArray& data);

@@ -1,4 +1,4 @@
-#include "telecontrol.h"
+﻿#include "telecontrol.h"
 #include "QGCApplication.h"
 #include <iostream>
 
@@ -98,7 +98,9 @@ void Telecontrol::dataProcess(QList<quint16> numList)
     thrust: [0, 1]
 */
     //启动后计算出一个静态误差
-    _CalculateStaticError(numList);
+    if (!_isFinishCalculateStaticError(numList)) {
+        return;
+    }
 
     float roll = ((static_cast<float>(numList.at(RIGHT_X)) / 2048) - 1);
     float pitch = ((static_cast<float>(numList.at(RIGHT_Y)) / 2048) - 1);
@@ -239,21 +241,23 @@ void Telecontrol::_updateJoystickTime()
     }
 }
 
-void Telecontrol::_CalculateStaticError(QList<quint16> numList)
+bool Telecontrol::_isFinishCalculateStaticError(QList<quint16> numList)
 {
     static int count = 0;
+    if (count > TELE_ADC_BUFF) {
+        return true;
+    }
     if (count == TELE_ADC_BUFF) {
         for (int j = 0; j < TELE_ADC_NUM; j++)
         {
             // 除去头上的第一个数据
+            quint32 temp = 0;
             for(int k = 1; k < TELE_ADC_BUFF; k++){
-                _static_err[j] += _static_err_buff[j][k];
+                temp += _static_err_buff[j][k];
             }
-            _static_err[j] = (_static_err[j] / (TELE_ADC_BUFF - 1) / 2048);
+            _static_err[j] = ((float)temp / (TELE_ADC_BUFF - 1) / 2048);
             qDebug("static_err: %d, %f", j, _static_err[j]);
         }
-    } else if(count > TELE_ADC_BUFF) {
-        return;
     }
 
     for (int i = 0; i < TELE_ADC_NUM; i++)
@@ -262,6 +266,7 @@ void Telecontrol::_CalculateStaticError(QList<quint16> numList)
     }
     count++;
 
+    return false;
 };
 
 void Telecontrol::read()
