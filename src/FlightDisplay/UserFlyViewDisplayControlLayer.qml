@@ -1,4 +1,4 @@
-import QtQuick 2.11
+﻿import QtQuick 2.11
 import QtQuick.Controls             2.5
 import QtQuick.Layouts              1.15
 
@@ -762,7 +762,7 @@ Rectangle {
                                             model: ["威胁度", "时标", "方位", "频点", "带宽", "功率", "干扰"]
                                             Text {
                                                 width: parent.width / 7
-                                                text: modelData + "  "
+                                                text: modelData
                                             }
                                         }
                                     }
@@ -794,15 +794,45 @@ Rectangle {
                             Component {
                                 id: numberDelegate
 
-                                RadioDelegate  {
-                                    width: historyList.width
-                                    text : index +
-                                           "       " + secondsToTime(modelData.timeScale) +
-                                           "    " + modelData.azimuth.toFixed(2) +
-                                           "    " + modelData.freq.toFixed(2) +
-                                           "    " + modelData.bandWidth.toFixed(2) +
-                                           "    " + modelData.signalPower
+                                RadioDelegate {
+                                    width: listView.width
+                                    height: 30
 
+                                    Row {
+                                        anchors.fill: parent
+
+                                        Text {
+                                            anchors.verticalCenter: parent.verticalCenter
+                                            width: parent.width / 7
+                                            text: index
+
+                                        }
+                                        Text {
+                                            anchors.verticalCenter: parent.verticalCenter
+                                            width: parent.width / 7
+                                            text: secondsToTime(modelData.timeScale)
+                                        }
+                                        Text {
+                                            anchors.verticalCenter: parent.verticalCenter
+                                            width: parent.width / 7
+                                            text: modelData.azimuth.toFixed(2)
+                                        }
+                                        Text {
+                                            anchors.verticalCenter: parent.verticalCenter
+                                            width: parent.width / 7
+                                            text: modelData.freq.toFixed(2)
+                                        }
+                                        Text {
+                                            anchors.verticalCenter: parent.verticalCenter
+                                            width: parent.width / 7
+                                            text: modelData.bandWidth.toFixed(2)
+                                        }
+                                        Text {
+                                            anchors.verticalCenter: parent.verticalCenter
+                                            width: parent.width / 7
+                                            text: modelData.signalPower
+                                        }
+                                    }
                                     onClicked: {
                                         if (checked) {
                                             console.log(JSON.stringify(modelData))
