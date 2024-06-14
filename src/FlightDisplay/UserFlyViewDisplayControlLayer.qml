@@ -50,6 +50,8 @@ Rectangle {
     property string _sideTextColor:             "#00FFFF"
     property int    _sideRadius:                10
 
+    property var    _scoutModel:                null
+
     ECMControl {
         id: ecm_control_id
         objectName: "ecm_control_obj"
@@ -724,12 +726,12 @@ Rectangle {
                     }
 
                     /* 处置 */
-                    Rectangle {
-                        border.color: "green"
+                    Column {
 
                         Rectangle {
                             id:                 historyList
-                            anchors.fill:       parent
+                            width:              parent.width
+                            height:             parent.height * 7 / 8
 
                             ListView {
                                 id: listView
@@ -742,7 +744,6 @@ Rectangle {
                                 spacing: 2
 
                                 header: headerComponent
-                                footer: footerComponent
 
                                 ScrollBar.vertical: ScrollBar {}
                                 focus: true
@@ -770,7 +771,9 @@ Rectangle {
                                     MouseArea
                                     {
                                         anchors.fill: parent
-                                        onDoubleClicked: ecm_control_id.getList()
+                                        onDoubleClicked: {
+                                            ecm_control_id.getList()
+                                        }
                                     }
                                 }
                             }
@@ -799,45 +802,70 @@ Rectangle {
                                     height: 30
 
                                     Row {
+                                        id: _modelRow
                                         anchors.fill: parent
-
+                                        property int fontSize: 10
                                         Text {
                                             anchors.verticalCenter: parent.verticalCenter
                                             width: parent.width / 7
+                                            font.pointSize: _modelRow.fontSize
                                             text: index
-
                                         }
                                         Text {
                                             anchors.verticalCenter: parent.verticalCenter
                                             width: parent.width / 7
+                                            font.pointSize: _modelRow.fontSize
                                             text: secondsToTime(modelData.timeScale)
                                         }
                                         Text {
                                             anchors.verticalCenter: parent.verticalCenter
                                             width: parent.width / 7
+                                            font.pointSize: _modelRow.fontSize
                                             text: modelData.azimuth.toFixed(2)
                                         }
                                         Text {
                                             anchors.verticalCenter: parent.verticalCenter
                                             width: parent.width / 7
+                                            font.pointSize: _modelRow.fontSize
                                             text: modelData.freq.toFixed(2)
                                         }
                                         Text {
                                             anchors.verticalCenter: parent.verticalCenter
                                             width: parent.width / 7
+                                            font.pointSize: _modelRow.fontSize
                                             text: modelData.bandWidth.toFixed(2)
                                         }
                                         Text {
                                             anchors.verticalCenter: parent.verticalCenter
                                             width: parent.width / 7
+                                            font.pointSize: _modelRow.fontSize
                                             text: modelData.signalPower
                                         }
                                     }
                                     onClicked: {
                                         if (checked) {
                                             console.log(JSON.stringify(modelData))
-                                            ecm_control_id.jammingCmd(modelData.freq, modelData.bandWidth)
+                                            _scoutModel = modelData
                                         }
+                                    }
+                                }
+                            }
+                        }
+
+                        Rectangle {
+                            width:              parent.width
+                            height:             parent.height * 1 / 8
+                            CustomButton {
+                                anchors.fill: parent
+                                text: "干扰"
+                                onClicked: {
+                                    if (listView.currentIndex >= 0 && _scoutModel != null) {
+//                                        console.log("Selected item:", listView.model.get(listView.currentIndex).modelData)
+                                        // Here you can add code to send the selected item data where needed
+                                        console.log(_scoutModel.freq, _scoutModel.bandWidth)
+                                        ecm_control_id.jammingCmd(_scoutModel.freq, _scoutModel.bandWidth)
+                                    } else {
+                                        console.log("No item selected")
                                     }
                                 }
                             }

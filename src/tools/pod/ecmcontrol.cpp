@@ -73,13 +73,11 @@ QList<QObject*> ECMControl::getList()
         temp.append(data);
     }
 
-    _sortQObjectsByNameLambda(temp);
-    emit _scoutTargetInfo.signalList(temp); //将数据传入QML中，
-
     for (int i = temp.size() - 1; i >=0; --i) {
         dataHistList.push_front(temp[i]);
     }
     _sortQObjectsByNameLambda(dataHistList);
+    emit _scoutTargetInfo.signalList(dataHistList); //将数据传入QML中，
 
     return dataHistList;
 }
@@ -108,8 +106,6 @@ void ECMControl::_parseScoutResult(scoutResult_t &scoutResult)
                                             signalPower);
         temp.append(data);
     }
-
-    _sortQObjectsByNameLambda(temp);
 
     for (int i = temp.size() - 1; i >=0; --i) {
         dataHistList.push_front(temp[i]);
